@@ -10,10 +10,11 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
 const [weekday, setWeekday] = useState()
 const [mealType, setMealType] = useState()
 const [recipes, setRecipes] = useState([])
-const [recipe, setRecipe] = useState(meal.recipe ? meal.recipe.id : '')
+const [recipe, setRecipe] = useState('')
 const [user, setUser] = useState('')
 const [users, setUsers] = useState([])
 
+console.log(recipes)
 
 const submit = (e) => {
 e.preventDefault()
@@ -50,10 +51,13 @@ const remove = (e) => {
 }
 
 useEffect(() => {
-
-
     Recipes.getAll().then(data => {
         setRecipes(data)
+        if (meal.recipe) {
+            setRecipe(meal.recipe.id)
+        } else {
+        setRecipe(data[0].id)
+        }
     })
         setWeekday(meal.day)
         setMealType(meal.meal.value)

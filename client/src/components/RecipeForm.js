@@ -1,12 +1,49 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Recipes from '../services/Recipes'
 import Notification from './Notification'
+import Ingredients from '../services/Ingredients'
+import Select from 'react-select'
 
 const RecipeForm = ({ setMessage, message }) => {
     const [name, setName] = useState('')
-    const [ingredients, setIngredients] = useState('')
+    const [ingredients, setIngredients] = useState([])
+    const [ingredientOptions, setIngredientOptions] = useState([])
     const [duration, setDuration] = useState('')
     const [instructions, setInstructions] = useState('')
+
+
+const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'rs', 'ps']
+
+console.log(ingredients)
+
+useEffect(() => {
+ Ingredients.getAll().then(data => {
+     const options = data.map(i => {
+         return {'value': i.id, 'label': i.name}
+     })
+     setIngredientOptions(options);
+ }).catch(err => {
+     console.log(err);
+ })
+}, [])
+
+const populateQuantity = (target) => {
+    const q = ingredients.map(i => {
+      return i.value == target.id ? 
+      {...i, quantity: parseFloat(target.value)} : i
+    })
+    setIngredients(q)
+}
+
+const populateUnit = (target) => {
+    const q = ingredients.map(i => {
+        return i.value == target.id ? {
+            ...i,
+            unit: target.value
+        } : i
+    })
+    setIngredients(q)
+}
 
 
 const submit = (e) => {
@@ -20,7 +57,7 @@ const submit = (e) => {
    Recipes.create(newRecipe)
    .then(data => {
  setName('')
- setIngredients('')
+ setIngredients([])
  setDuration('')
  setInstructions('')
  setMessage({content: `Luotu uusi resepti "${data.name}"`, type:"success"})
@@ -33,6 +70,7 @@ const submit = (e) => {
  })
 
 }
+
 
 return (
 <div className="form-wrapper">
@@ -49,7 +87,19 @@ Nimi
 </div>
 <div>
 <label>Ainesosat</label>
-<textarea rows="10" cols="50" value={ingredients} onChange={({target}) => setIngredients(target.value)}></textarea>
+<Select onChange={setIngredients} placeholder="Etsi ainesosia" options={ingredientOptions} isMulti={true} 
+isSearchable={true}/>
+</div>
+<div>
+<ul>
+{ingredients.map(i => <li key={i.value}>{i.label}
+    <input type="number" step="0.1" id={i.value} placeholder="Määrä" className="quantity-input" 
+    onChange={({ target }) => populateQuantity(target)}/>
+    <select id={i.value} onChange={({target})=>populateUnit(target)}>
+    {units.map(u => <option value={u}>{u}</option>)}
+    </select>
+    </li>)}
+</ul>
 </div>
 <div>
 <label>Valmistuohjeet</label>
