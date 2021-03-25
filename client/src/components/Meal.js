@@ -10,7 +10,8 @@ const dragStartHandler = (e) => {
 
 
     return (
-        <div onDragStart={dragStartHandler} onDoubleClick={toggleModal}  className='meal-card' id={JSON.stringify(meal)} draggable='true'>
+        <div onDragStart={dragStartHandler} onDoubleClick={toggleModal}  
+        className='meal-card' id={JSON.stringify(meal)} draggable='true'>
         {meal.recipe.name}
         </div>
 

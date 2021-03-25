@@ -72,6 +72,7 @@ e.dataTransfer.dropEffect = 'move'
 const toggleModal = (e) => {
 if (!isOpen) {
     const meal = JSON.parse(e.target.id);
+    console.log(meal)
     setMeal(meal)
     setIsOpen(true)
     } else {
@@ -110,8 +111,9 @@ Meals.getAll()
                 meal: {
                     value: meal.value,
                     label: meal.label
-            }
-            })} 
+                    }, 
+                  
+                     })} 
             onDrop={dropHandler} onDragOver={dragOverHandler} onDoubleClick={toggleModal}>
             { 
                 meals.filter(mealObj => (mealObj.day == weekday.value && mealObj.meal.value == meal.value))

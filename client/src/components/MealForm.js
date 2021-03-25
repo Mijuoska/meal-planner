@@ -5,7 +5,7 @@ import Users from '../services/Users'
 
 
 const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
-
+console.log(meal)
 
 const [weekday, setWeekday] = useState()
 const [mealType, setMealType] = useState()
@@ -13,8 +13,6 @@ const [recipes, setRecipes] = useState([])
 const [recipe, setRecipe] = useState('')
 const [user, setUser] = useState('')
 const [users, setUsers] = useState([])
-
-console.log(recipes)
 
 const submit = (e) => {
 e.preventDefault()
@@ -27,6 +25,8 @@ const newMeal = {
 
 if (!meal.id) {
 Meals.create(newMeal).then(data => {
+    const updatedMeals = meals.concat(data);
+    setMeals(updatedMeals)
 }).catch(err => {
     console.log('something went wrong with creating a meal', err)
 })
@@ -44,6 +44,9 @@ setIsOpen(false)
 const remove = (e) => {
     e.preventDefault()
     Meals.remove(meal.id).then(data => {
+        const updatedMeals = meals.filter(m => m.id != meal.id)
+        setMeals(updatedMeals)
+        setIsOpen(false)
     }).catch(err => {
         console.log('something went wrong with removing a meal', err)
     })
@@ -99,7 +102,7 @@ Päivällinen
 <div>
 <label>Vastuuhenkilö</label>
 <select value={user} onChange={({ target }) => setUser(target.value)}>
-{users.map(user => <option value={user.id}>{user.name}</option>)}
+{users.map(user => <option value={user.id}>{user.first_name}</option>)}
 </select>
 </div>
 
