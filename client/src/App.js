@@ -30,6 +30,22 @@ const toggleModal = () => {
   }
 }
 
+const recipeFormModal = (label, recipeID) => {
+return (
+  <Modal
+        isOpen={isOpen}
+        onRequestClose={toggleModal}
+        contentLabel={label}
+        style={modalStyle}
+        
+      >
+       <span className='modal-close' onClick={toggleModal}>X</span>
+   <RecipeForm setMessage={setMessage} message={message} recipeID={recipeID}/>
+       
+      </Modal>
+
+)
+}
 
 
   return (
@@ -53,20 +69,9 @@ const toggleModal = () => {
    </div>
    </header>
    
-   <Recipes show={page === 'recipes'}/>
+   <Recipes show={page === 'recipes'} modal={recipeFormModal} toggleModal={toggleModal}/>
    <WeeklyCalendar show={page === 'weekly-calendar'}/>
-<Modal
-        isOpen={isOpen}
-        onRequestClose={toggleModal}
-        contentLabel="Uusi resepti"
-        style={modalStyle}
-        
-      >
-       <span className='modal-close' onClick={toggleModal}>X</span>
-   <RecipeForm setMessage={setMessage} message={message}/>
-       
-      </Modal>
-
+{recipeFormModal('Uusi resepti')}
     </div>
   )
 }

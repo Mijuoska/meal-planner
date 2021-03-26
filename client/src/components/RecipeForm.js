@@ -4,8 +4,8 @@ import Notification from './Notification'
 import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
-const RecipeForm = ({ setMessage, message }) => {
-    const [name, setName] = useState('')
+const RecipeForm = ({ setMessage, message, recipeID }) => {
+    const [name, setName] = useState()
     const [ingredients, setIngredients] = useState([])
     const [ingredientOptions, setIngredientOptions] = useState([])
     const [duration, setDuration] = useState('')
@@ -13,9 +13,7 @@ const RecipeForm = ({ setMessage, message }) => {
 
 
 const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'rs', 'ps']
-
 console.log(ingredients)
-
 useEffect(() => {
  Ingredients.getAll().then(data => {
      const options = data.map(i => {
@@ -25,6 +23,17 @@ useEffect(() => {
  }).catch(err => {
      console.log(err);
  })
+
+ if (recipeID) {
+     Recipes.get(recipeID).then(data => {
+        setName(data[0].name)
+        setDuration(data[0].preparation_time)
+        setInstructions(data[0].instructions)
+        setIngredients(ingredientOptions.filter(option => data[0].ingredients.indexOf(option.value) !== -1))
+     }).catch(err => {
+         console.log(err)
+     })
+ }
 }, [])
 
 const populateQuantity = (target) => {
@@ -87,7 +96,7 @@ Nimi
 </div>
 <div>
 <label>Ainesosat</label>
-<Select onChange={setIngredients} placeholder="Etsi ainesosia" options={ingredientOptions} isMulti={true} 
+<Select onChange={setIngredients} value={ingredients} placeholder="Etsi ainesosia" options={ingredientOptions} isMulti={true} 
 isSearchable={true}/>
 </div>
 <div>
