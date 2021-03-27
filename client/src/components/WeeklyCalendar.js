@@ -11,7 +11,7 @@ const weekdayConfig = [
 {value: 'monday', label: 'Maanantai'},
 {value: 'tuesday', label: 'Tiistai'},
 {value: 'wednesday', label: 'Keskiviikko'},
-{value: 'thurday', label: 'Torstai'},
+{value: 'thursday', label: 'Torstai'},
 {value: 'friday', label: 'Perjantai'},
 {value: 'saturday', label: 'Lauantai'},
 {value: 'sunday', label: 'Sunnuntai'},
@@ -38,13 +38,11 @@ const modalStyle = {
     }
                     }
 
-
-
-
 const [meals, setMeals] = useState([])  
 const [isOpen, setIsOpen] = useState(false)  
 const [meal, setMeal] = useState('')
 
+console.log(meals)
 
 const dropHandler = (e) => {
 e.preventDefault()
@@ -55,7 +53,7 @@ const movedMeal = meals.find(meal => meal.id == mealObj.id)
 // update meal object with new day and meal type details
 const target = JSON.parse(e.target.id);
 movedMeal['day'] = target['day']
-movedMeal['meal']['value'] = target['meal']['value']
+movedMeal['type'] = target['meal']['value']
 // Generate new meals array and update state
 const updatedMeals = meals.filter(meal => meal.id != movedMeal.id).concat(movedMeal)
 setMeals(updatedMeals)
@@ -116,7 +114,7 @@ Meals.getAll()
                      })} 
             onDrop={dropHandler} onDragOver={dragOverHandler} onDoubleClick={toggleModal}>
             { 
-                meals.filter(mealObj => (mealObj.day == weekday.value && mealObj.meal.value == meal.value))
+                meals.filter(mealObj => (mealObj.day == weekday.value && mealObj.type == meal.value))
                 .map(meal => {
                     return <Meal meal={meal} toggleModal={toggleModal}/>})
             }

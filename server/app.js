@@ -22,10 +22,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 
-app.use('/recipes', recipesRouter)
-app.use('/ingredients', ingredientsRouter)
-app.use('/meals', mealsRouter)
-app.use('/users', usersRouter)
+app.use('/api/recipes', recipesRouter)
+app.use('/api/ingredients', ingredientsRouter)
+app.use('/api/meals', mealsRouter)
+app.use('/api/users', usersRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

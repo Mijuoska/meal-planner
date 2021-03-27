@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3000/ingredients'
+const baseUrl = 'http://localhost:3000/api/ingredients'
 
 
 const getAll = async () => {

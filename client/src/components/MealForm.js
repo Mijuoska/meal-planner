@@ -5,34 +5,38 @@ import Users from '../services/Users'
 
 
 const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
-console.log(meal)
 
-const [weekday, setWeekday] = useState()
-const [mealType, setMealType] = useState()
+
+const [day, setDay] = useState('')
+const [mealType, setMealType] = useState('')
 const [recipes, setRecipes] = useState([])
 const [recipe, setRecipe] = useState('')
 const [user, setUser] = useState('')
 const [users, setUsers] = useState([])
 
+
 const submit = (e) => {
 e.preventDefault()
 const recipeObj = recipes.find(r => r.id == recipe)
 const newMeal = {
-    day: weekday,
-    meal: {value: mealType},
-    recipe: {name: recipeObj.name, id: recipeObj.id}
+    day: day,
+    type: mealType.value ? mealType.value : mealType,
+    recipe_id: recipe,
+    recipe_name: recipeObj.name,
+    assigned_to: user.id
 }
 
 if (!meal.id) {
 Meals.create(newMeal).then(data => {
-    const updatedMeals = meals.concat(data);
+    const updatedMeals = meals.concat(newMeal);
     setMeals(updatedMeals)
 }).catch(err => {
     console.log('something went wrong with creating a meal', err)
 })
 } else {
     Meals.update(newMeal, meal.id).then(data => {
-     const updatedMeals = meals.filter(m => m.id != meal.id).concat(data);
+     const updatedMeals = meals.filter(m => m.id != meal.id).concat(newMeal);
+     console.log(updatedMeals)
      setMeals(updatedMeals)
     }).catch(err => {
         console.log('something went wrong with updating a meal', err)
@@ -56,17 +60,19 @@ const remove = (e) => {
 useEffect(() => {
     Recipes.getAll().then(data => {
         setRecipes(data)
-        if (meal.recipe) {
-            setRecipe(meal.recipe.id)
+        if (meal.recipe_id) {
+            setRecipe(meal.recipe_id)
         } else {
         setRecipe(data[0].id)
         }
     })
-        setWeekday(meal.day)
-        setMealType(meal.meal.value)
+        setDay(meal.day)
+        setMealType(meal.meal ? meal.meal : meal.type)
+
 
     Users.getAll().then(data => {
         setUsers(data)
+        setUser(data[0])
     })
 
 }, [])
@@ -78,7 +84,7 @@ useEffect(() => {
 <form className="meal-form">
 <div>
 <label>Viikonpäivä</label>
-<select value={weekday} onChange={({ target }) => setWeekday(target.value)}>
+<select value={day} onChange={({ target }) => setDay(target.value)}>
 {weekdays.map(weekday => <option value={weekday.value}>{weekday.label}</option>)}
 </select>
 </div>
