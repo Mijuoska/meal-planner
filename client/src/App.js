@@ -11,7 +11,7 @@ const App = () => {
 const [page, setPage] = useState('weekly-calendar')
 const [message, setMessage] = useState('')
 const [isOpen, setIsOpen] = useState(false)
-
+console.log(isOpen)
 
 const modalStyle = {
   content: {
@@ -30,20 +30,21 @@ const toggleModal = () => {
   }
 }
 
-const recipeFormModal = (label, recipeID) => {
+const recipeFormModal = (label, recipe) => {
+  
 return (
   <Modal
         isOpen={isOpen}
         onRequestClose={toggleModal}
+        shouldCloseOnOverlayClick={false}
         contentLabel={label}
         style={modalStyle}
         
       >
        <span className='modal-close' onClick={toggleModal}>X</span>
-   <RecipeForm setMessage={setMessage} message={message} recipeID={recipeID}/>
+   <RecipeForm setMessage={setMessage} message={message} recipe={recipe}/>
        
       </Modal>
-
 )
 }
 
@@ -69,7 +70,7 @@ return (
    </div>
    </header>
    
-   <Recipes show={page === 'recipes'} modal={recipeFormModal} toggleModal={toggleModal}/>
+   <Recipes show={page === 'recipes'} recipeFormModal={recipeFormModal} toggleModal={toggleModal}/>
    <WeeklyCalendar show={page === 'weekly-calendar'}/>
 {recipeFormModal('Uusi resepti')}
     </div>

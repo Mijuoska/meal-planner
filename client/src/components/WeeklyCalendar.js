@@ -42,7 +42,7 @@ const [meals, setMeals] = useState([])
 const [isOpen, setIsOpen] = useState(false)  
 const [meal, setMeal] = useState('')
 
-console.log(meals)
+
 
 const dropHandler = (e) => {
 e.preventDefault()
@@ -70,7 +70,6 @@ e.dataTransfer.dropEffect = 'move'
 const toggleModal = (e) => {
 if (!isOpen) {
     const meal = JSON.parse(e.target.id);
-    console.log(meal)
     setMeal(meal)
     setIsOpen(true)
     } else {

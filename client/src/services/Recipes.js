@@ -8,6 +8,11 @@ const getAll = async () => {
     return req.then(response => response.data)
 }
 
+const getIngredients = async (ID) => {
+    const req = axios.get(`${baseUrl}/${ID}/ingredients`)
+    return req.then(response => response.data)
+}
+
 const get = async (ID) => {
     const req = axios.get(`${baseUrl}/${ID}`);
     return req.then(response => response.data)
@@ -25,4 +30,4 @@ const update = async (ID, updatedRecipe) => {
 
 
 
-export default { getAll, get, create, update }
+export default { getAll, getIngredients, get, create, update }

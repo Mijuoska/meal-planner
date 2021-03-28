@@ -4,7 +4,7 @@ import Notification from './Notification'
 import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
-const RecipeForm = ({ setMessage, message, recipeID }) => {
+const RecipeForm = ({ setMessage, message, recipe }) => {
     const [name, setName] = useState()
     const [ingredients, setIngredients] = useState([])
     const [ingredientOptions, setIngredientOptions] = useState([])
@@ -12,29 +12,45 @@ const RecipeForm = ({ setMessage, message, recipeID }) => {
     const [instructions, setInstructions] = useState('')
 
 
+
 const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'rs', 'ps']
-console.log(ingredients)
+
+/**
+ * Ingredient options are fetched and default quantities and units need to be populated
+ */
+
+
 useEffect(() => {
  Ingredients.getAll().then(data => {
      const options = data.map(i => {
-         return {'value': i.id, 'label': i.name}
+         return {'value': i.value, 'label': i.label, 'quantity': 1, 'unit': 'tl'}
      })
      setIngredientOptions(options);
  }).catch(err => {
      console.log(err);
  })
 
- if (recipeID) {
-     Recipes.get(recipeID).then(data => {
-        setName(data[0].name)
-        setDuration(data[0].preparation_time)
-        setInstructions(data[0].instructions)
-        setIngredients(ingredientOptions.filter(option => data[0].ingredients.indexOf(option.value) !== -1))
-     }).catch(err => {
-         console.log(err)
-     })
- }
+ /**
+  * I an existing recipe is opened, we populate the form values, fetching ingredients from the server
+  */
+   if (recipe) {
+         setName(recipe.name)
+         setDuration(recipe.preparation_time)
+         setInstructions(recipe.instructions)
+         Recipes.getIngredients(recipe.id).then(data => {
+            setIngredients(data)
+         }).catch(error => {
+             console.log(error);
+         })
+    
+   }
 }, [])
+
+
+/**
+ * Populating ingredients state with the quantity and unit data each time 
+ * user modifies these
+ */
 
 const populateQuantity = (target) => {
     const q = ingredients.map(i => {
@@ -102,16 +118,16 @@ isSearchable={true}/>
 <div>
 <ul>
 {ingredients.map(i => <li key={i.value}>{i.label}
-    <input type="number" step="0.1" id={i.value} placeholder="Määrä" className="quantity-input" 
+    <input type="number" step="0.1" id={i.value} value={i.quantity} placeholder="Määrä" className="quantity-input" 
     onChange={({ target }) => populateQuantity(target)}/>
-    <select id={i.value} onChange={({target})=>populateUnit(target)}>
+    <select id={i.value} value={i.unit} onChange={({target})=>populateUnit(target)}>
     {units.map(u => <option value={u}>{u}</option>)}
     </select>
     </li>)}
 </ul>
 </div>
 <div>
-<label>Valmistuohjeet</label>
+<label>Valmistusohjeet</label>
 <textarea rows="10" cols="50" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
 </div>
 <button type="submit" onClick={submit}>Lähetä</button>
