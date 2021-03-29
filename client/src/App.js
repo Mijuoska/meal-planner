@@ -7,7 +7,6 @@ import Modal from 'react-modal'
 
 const App = () => {
 
-
 const [page, setPage] = useState('weekly-calendar')
 const [message, setMessage] = useState('')
 const [isOpen, setIsOpen] = useState(false)
@@ -22,6 +21,25 @@ const modalStyle = {
   }
 }
 
+const RecipeFormModal = (label, recipe, callback) => {
+
+  return (
+     <Modal
+        isOpen={isOpen}
+        onRequestClose={toggleModal}
+        shouldCloseOnOverlayClick={false}
+        contentLabel={label}
+        style={modalStyle}
+        onAfterClose={callback}
+      >
+       <span className='modal-close' onClick={toggleModal}>X</span>
+   <RecipeForm setMessage={setMessage} message={message} recipe={recipe}/>
+       
+      </Modal>
+  )
+
+}
+
 const toggleModal = () => {
   if (!isOpen) {
     setIsOpen(true)
@@ -30,23 +48,7 @@ const toggleModal = () => {
   }
 }
 
-const recipeFormModal = (label, recipe) => {
-  
-return (
-  <Modal
-        isOpen={isOpen}
-        onRequestClose={toggleModal}
-        shouldCloseOnOverlayClick={false}
-        contentLabel={label}
-        style={modalStyle}
-        
-      >
-       <span className='modal-close' onClick={toggleModal}>X</span>
-   <RecipeForm setMessage={setMessage} message={message} recipe={recipe}/>
-       
-      </Modal>
-)
-}
+
 
 
   return (
@@ -70,10 +72,12 @@ return (
    </div>
    </header>
    
-   <Recipes show={page === 'recipes'} recipeFormModal={recipeFormModal} toggleModal={toggleModal}/>
-   <WeeklyCalendar show={page === 'weekly-calendar'}/>
-{recipeFormModal('Uusi resepti')}
+   <Recipes show={page === 'recipes'} toggleModal={toggleModal} RecipeFormModal={RecipeFormModal}/>
+   <WeeklyCalendar show={page === 'weekly-calendar'}/> 
+   {RecipeFormModal('Luo uusi resepti', null)}
+
     </div>
+
   )
 }
 

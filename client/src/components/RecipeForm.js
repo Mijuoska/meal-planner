@@ -74,10 +74,10 @@ const populateUnit = (target) => {
 const submit = (e) => {
     e.preventDefault();
    const newRecipe = {
-       name: name,
-       duration: Number(duration),
-       ingredients: ingredients,
-       instructions: instructions,
+       name,
+       ingredients,
+       instructions,
+       duration: Number(duration)
    }
    Recipes.create(newRecipe)
    .then(data => {
@@ -99,7 +99,8 @@ const submit = (e) => {
 
 return (
 <div className="form-wrapper">
-<form id="recipe-form">
+<h2>{!recipe ? 'Luo uusi resepti' : 'Muokkaa reseptiä'}</h2>
+<form>
 <div>
 <label>
 Nimi
