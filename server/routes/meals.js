@@ -46,8 +46,12 @@ router.get('/:id/ingredients', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     const { body } = req
     try {
-        const result = await db.query(`INSERT INTO meals (day, type, recipe_id, assigned_to) 
-        VALUES ($1, $2, $3, $4) RETURNING *`, [body.day, body.type, body.recipe_id, body.assigned_to])
+        const result = await db.query(`WITH created AS 
+        (INSERT INTO meals (day, type, recipe_id, assigned_to) 
+        VALUES ($1, $2, $3, $4) RETURNING *)
+        SELECT created.*, recipes.name AS recipe_name FROM
+        created INNER JOIN recipes ON created.recipe_id = recipes.id`, 
+        [body.day, body.type, body.recipe_id, body.assigned_to])
         res.status(201).send(result.rows)
     } catch (err) {
         res.status(500).send({error: err.toString()})

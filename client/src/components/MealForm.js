@@ -12,7 +12,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   const [recipe, setRecipe] = useState("");
   const [user, setUser] = useState("");
   const [users, setUsers] = useState([]);
-
+console.log(user)
 
   const submit = (e) => {
     e.preventDefault();
@@ -87,7 +87,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
     Users.getAll().then((data) => {
       setUsers(data)
       if (editMode) {
-      setUser({id: meal.assigned_to, first_name: meal.assigned_to.first_name});
+      setUser({id: meal.assigned_to, first_name: meal.assigned_to_name});
     } else {
     setUser(data[0])
         }
