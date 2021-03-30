@@ -7,7 +7,7 @@ router.get('/', async (req, res, next) => {
   try {
     const {
       rows
-    } = await db.query('SELECT * FROM users')
+    } = await db.query('SELECT id, first_name FROM users')
     res.send(rows)
   } catch (err) {
     console.error(err)

@@ -57,9 +57,11 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
     const { body } = req
     try {
-        const result = await db.query(`UPDATE meals 
-        SET day = $1, type = $2, recipe_id = $3, assigned_to = $4
-        WHERE id = $5 RETURNING *`,
+        const result = await db.query(`WITH updated AS 
+        (UPDATE meals SET day = $1, type = $2, recipe_id = $3, assigned_to = $4
+        WHERE id = $5 RETURNING *) 
+        SELECT updated.*, recipes.name AS recipe_name FROM
+        updated INNER JOIN recipes ON updated.recipe_id = recipes.id`,
         [body.day, body.type, body.recipe_id, body.assigned_to, req.params.id])
         res.status(200).send(result.rows)
     } catch (err) {

@@ -4,14 +4,15 @@ import Recipes from "../services/Recipes";
 import Users from "../services/Users";
 
 const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
-  console.log(meals);
 
+  const [editMode, setEditMode] = useState(meal.id ? true : false)
   const [day, setDay] = useState("");
   const [mealType, setMealType] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [recipe, setRecipe] = useState("");
   const [user, setUser] = useState("");
   const [users, setUsers] = useState([]);
+
 
   const submit = (e) => {
     e.preventDefault();
@@ -24,11 +25,11 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
       assigned_to: user.id,
     };
 
-    if (!meal.id) {
+    if (!editMode) {
       Meals.create(newMeal)
         .then((data) => {
-          newMeal.assigned_to_name = user.first_name;
-          const updatedMeals = meals.concat(newMeal);
+          data[0].assigned_to_name = user.first_name;
+          const updatedMeals = meals.concat(data[0]);
           setMeals(updatedMeals);
         })
         .catch((err) => {
@@ -37,11 +38,11 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
     } else {
       Meals.update(newMeal, meal.id)
         .then((data) => {
-        newMeal.assigned_to_name = user.first_name;
+            console.log(data[0])
+        data[0].assigned_to_name = user.first_name;
           const updatedMeals = meals
             .filter((m) => m.id != meal.id)
-            .concat(newMeal);
-          console.log(updatedMeals);
+            .concat(data[0]);
           setMeals(updatedMeals);
         })
         .catch((err) => {
@@ -65,9 +66,16 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   };
 
   useEffect(() => {
+/**
+ * We're fetching all the recipes to populate the list  
+ * If we're editing an existing meal, we set the default state
+ * based on its values
+ * Same goes for users
+ */
+
     Recipes.getAll().then((data) => {
       setRecipes(data);
-      if (meal.recipe_id) {
+      if (editMode) {
         setRecipe(meal.recipe_id);
       } else {
         setRecipe(data[0].id);
@@ -77,8 +85,12 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
     setMealType(meal.meal ? meal.meal : meal.type);
 
     Users.getAll().then((data) => {
-      setUsers(data);
-      setUser(data[0]);
+      setUsers(data)
+      if (editMode) {
+      setUser({id: meal.assigned_to, first_name: meal.assigned_to.first_name});
+    } else {
+    setUser(data[0])
+        }
     });
   }, []);
 
@@ -119,8 +131,8 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
           <div>
             <label>Vastuuhenkilö</label>
             <select
-              value={user}
-              onChange={({ target }) => setUser(target.value)}
+              value={user.id}
+              onChange={({ target }) => setUser({'id': target.value, 'first_name': target.options[target.selectedIndex].textContent})}
             >
               {users.map((user) => (
                 <option value={user.id}>{user.first_name}</option>
