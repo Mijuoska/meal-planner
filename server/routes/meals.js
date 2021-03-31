@@ -46,11 +46,8 @@ router.get('/:id/ingredients', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     const { body } = req
     try {
-        const result = await db.query(`WITH created AS 
-        (INSERT INTO meals (day, type, recipe_id, assigned_to) 
-        VALUES ($1, $2, $3, $4) RETURNING *)
-        SELECT created.*, recipes.name AS recipe_name FROM
-        created INNER JOIN recipes ON created.recipe_id = recipes.id`, 
+        const result = await db.query(`INSERT INTO meals (day, type, recipe_id, assigned_to) 
+        VALUES ($1, $2, $3, $4) RETURNING *`,
         [body.day, body.type, body.recipe_id, body.assigned_to])
         res.status(201).send(result.rows)
     } catch (err) {
@@ -61,11 +58,9 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
     const { body } = req
     try {
-        const result = await db.query(`WITH updated AS 
-        (UPDATE meals SET day = $1, type = $2, recipe_id = $3, assigned_to = $4
-        WHERE id = $5 RETURNING *) 
-        SELECT updated.*, recipes.name AS recipe_name FROM
-        updated INNER JOIN recipes ON updated.recipe_id = recipes.id`,
+        const result = await db.query(`UPDATE meals SET 
+        day = $1, type = $2, recipe_id = $3, assigned_to = $4
+        WHERE id = $5 RETURNING *`,
         [body.day, body.type, body.recipe_id, body.assigned_to, req.params.id])
         res.status(200).send(result.rows)
     } catch (err) {

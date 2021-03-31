@@ -23,13 +23,14 @@ console.log(user)
       recipe_id: recipe,
       recipe_name: recipeObj.name,
       assigned_to: user.id,
+      assigned_to_name: user.first_name
     };
 
     if (!editMode) {
       Meals.create(newMeal)
         .then((data) => {
-          data[0].assigned_to_name = user.first_name;
-          const updatedMeals = meals.concat(data[0]);
+          newMeal.id = data[0].id
+          const updatedMeals = meals.concat(newMeal);
           setMeals(updatedMeals);
         })
         .catch((err) => {
@@ -38,11 +39,10 @@ console.log(user)
     } else {
       Meals.update(newMeal, meal.id)
         .then((data) => {
-            console.log(data[0])
-        data[0].assigned_to_name = user.first_name;
+          newMeal.id = meal.id;
           const updatedMeals = meals
             .filter((m) => m.id != meal.id)
-            .concat(data[0]);
+            .concat(newMeal);
           setMeals(updatedMeals);
         })
         .catch((err) => {
