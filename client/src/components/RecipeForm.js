@@ -134,7 +134,7 @@ return (
 <label>
 Nimi
 </label>
-<input style={{width: 370}} type="text" value={name} onChange={({target}) => setName(target.value)}/>
+<input style={{width: 520}} type="text" value={name} onChange={({target}) => setName(target.value)}/>
 </div>
 <div>
 <label>Valmistusaika</label>
@@ -165,7 +165,7 @@ isSearchable={true}/>
 </div>
 <div>
 <label>Valmistusohjeet</label>
-<textarea rows="10" cols="50" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
+<textarea rows="15" cols="70" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
 </div>
 <button type="submit" onClick={submit}>Lähetä</button>
 </form>
