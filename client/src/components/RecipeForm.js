@@ -12,14 +12,12 @@ const RecipeForm = ({ setMessage, message, recipes, setRecipes, recipeID }) => {
     const [duration, setDuration] = useState('')
     const [instructions, setInstructions] = useState('')
 
-console.log(recipeID)
-console.log(recipe)
 const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'rs', 'ps']
 
 /**
  * Ingredient options are fetched and default quantities and units need to be populated
  */
-
+console.log(ingredients)
 
 useEffect(() => {
  Ingredients.getAll().then(data => {
@@ -114,10 +112,10 @@ const submit = (e) => {
        instructions,
        duration: Number(duration)
    }
-if (!recipe.id) {
+if (!recipeID) {
     createRecipe(newRecipe)
 } else {
-    updateRecipe(recipe.id, newRecipe)
+    updateRecipe(recipeID, newRecipe)
 }
    
 

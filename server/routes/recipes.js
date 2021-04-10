@@ -18,7 +18,9 @@ router.get("/:id", async (req, res, next) => {
   try {
     const { rows } = await db.query(
       `SELECT recipes.id, recipes.name, instructions, preparation_time, created_by, 
-    ingredients.id AS ingredient_id, ingredients.name AS ingredient_name, ingredient_quantity.id AS iq_id, ingredient_quantity.unit, ingredient_quantity.quantity, ingredient_quantity.recipe_id
+    ingredients.id AS ingredient_id, ingredients.name AS ingredient_name, 
+    ingredient_quantity.id AS iq_id, ingredient_quantity.unit, 
+    ingredient_quantity.quantity
     FROM recipes 
     INNER JOIN ingredient_quantity ON ingredient_quantity.id = ANY(recipes.ingredients)
     INNER JOIN ingredients ON ingredients.id = ingredient_quantity.ingredient
@@ -116,7 +118,7 @@ router.put("/:id", async (req, res, next) => {
         [ingredient.id, ingredient.value, ingredient.quantity, ingredient.unit]
       );
     });
-    const ingredientIDs = body.ingredients.map((i) => i.value);
+    const ingredients = body.ingredients.map((i) => i.id);
     const { rows } = await db.query(
       `UPDATE recipes SET name = $1, preparation_time = $2, 
     ingredients = $3, instructions = $4 WHERE id = $5
@@ -124,13 +126,12 @@ router.put("/:id", async (req, res, next) => {
       [
         body.name,
         body.duration,
-        ingredientIDs,
+        ingredients,
         body.instructions,
         req.params.id,
       ]
     );
     res.send(rows);
-    console.log(rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({
