@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import WeeklyCalendar from './components/WeeklyCalendar'
 import Recipes from './components/Recipes'
-import RecipesService from './services/Recipes'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -9,13 +9,7 @@ const App = () => {
 const [page, setPage] = useState('weekly-calendar')
 const [message, setMessage] = useState('')
 const [isOpen, setIsOpen] = useState(false)
-const [recipes, setRecipes] = useState([])
 
-useEffect(() => {
-RecipesService.getAll().then(data => {
-  setRecipes(data)
-})
-}, [])
 
 // const RecipeFormModal = (label, recipes, recipeID) => {
 
@@ -67,10 +61,10 @@ const toggleModal = () => {
 
    </ul>
    </div>
+      <Notification message={message}/>
    </header>
    
-   <Recipes show={page === 'recipes'} recipes={recipes} 
-   setRecipes={setRecipes}
+   <Recipes show={page === 'recipes'} 
    message={message}
    setMessage={setMessage}
    toggleModal={toggleModal}

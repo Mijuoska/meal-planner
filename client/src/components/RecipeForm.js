@@ -4,7 +4,7 @@ import Notification from './Notification'
 import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
-const RecipeForm = ({ setMessage, message, recipes, setRecipes, recipeID }) => {
+const RecipeForm = ({ setMessage, message, toggleModal, recipes, setRecipes, recipeID }) => {
     const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
     const [name, setName] = useState()
     const [ingredients, setIngredients] = useState([])
@@ -46,9 +46,7 @@ useEffect(() => {
 }, [recipe])
 
 
-const toggleInput = (id) => {
-    console.log(id)
-}
+
 
 /**
  * Populating ingredients state with the quantity and unit data each time 
@@ -107,6 +105,21 @@ const updateRecipe = (id, recipe) => {
  }, 3000);
 }
 
+const deleteRecipe = (e, recipeID) => {
+    e.preventDefault()
+    Recipes.remove(recipeID).then(data => {
+        const updatedRecipes = recipes.filter(r => r.id != recipeID)
+        setRecipes(updatedRecipes)
+        setMessage({content: 'Resepti poistettu', type: 'success'})
+        toggleModal()
+    }).catch(err => {
+        console.log(err)
+        setMessage({content: 'Reseptin poistaminen epäonnistui', type: 'error'})
+    })
+    setTimeout(() => {
+        setMessage('')
+    }, 3000);
+}
 
 const submit = (e) => {
     e.preventDefault();
@@ -167,9 +180,9 @@ isSearchable={true}/>
 <label>Valmistusohjeet</label>
 <textarea rows="15" cols="70" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
 </div>
-<button type="submit" onClick={submit}>Lähetä</button>
+<button className="submit-button" type="submit" onClick={submit}>Tallenna resepti</button>
+{recipeID ? <button className="delete-button" onClick={(e) => deleteRecipe(e, recipeID)}>Poista resepti</button> : null}
 </form>
-<Notification message={message}/>
 </div>
 )
 

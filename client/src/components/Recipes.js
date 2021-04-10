@@ -46,15 +46,19 @@ return (
   <Modal
         isOpen={isOpen}
         onRequestClose={toggleModal}
-        shouldCloseOnOverlayClick={false}
+        shouldCloseOnOverlayClick={true}
         contentLabel={'Muokkaa reseptiä'}
         style={modalStyle}
         onAfterClose={() => selectRecipe('')}
       >
        <span className='modal-close' onClick={toggleModal}>X</span>
    <RecipeForm setMessage={setMessage} 
-   message={message} recipes={recipes} 
-   setRecipes={setRecipes} recipeID={selectedRecipe}/>
+   message={message} 
+   toggleModal={toggleModal}
+   recipes={recipes} 
+   setRecipes={setRecipes} recipeID={selectedRecipe}
+   
+   />
        
       </Modal>
 

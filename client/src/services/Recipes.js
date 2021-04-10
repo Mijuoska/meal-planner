@@ -28,6 +28,11 @@ const update = async (ID, updatedRecipe) => {
     return req.then(response => response.data)
 }
 
+const remove = async (ID) => {
+    const req = axios.delete(`${baseUrl}/${ID}`)
+    return req.then(response => response.data)
+}
 
 
-export default { getAll, getIngredients, get, create, update }
+
+export default { getAll, getIngredients, get, create, update, remove }

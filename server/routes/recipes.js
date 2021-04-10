@@ -140,4 +140,18 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
+router.delete('/:id', (req, res, next) => {
+  try {
+  db.query('DELETE FROM recipes WHERE id = $1', [req.params.id])
+  res.status(204).send(
+    `recipe with the id  ${req.params.id} deleted`
+  )
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({
+      error: err.toString(),
+    });
+  }
+})
+
 module.exports = router;
