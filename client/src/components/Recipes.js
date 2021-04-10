@@ -4,7 +4,7 @@ import RecipeForm from './RecipeForm'
 import Recipes from '../services/Recipes'
 
 
-const RecipesList = ( { show, message, setMessage, toggleModal, isOpen } ) => {
+const RecipesList = ( { show, setMessage, toggleModal, isOpen } ) => {
 
 const [recipes, setRecipes] = useState([])
 const [selectedRecipe, selectRecipe] = useState('')
@@ -53,7 +53,6 @@ return (
       >
        <span className='modal-close' onClick={toggleModal}>X</span>
    <RecipeForm setMessage={setMessage} 
-   message={message} 
    toggleModal={toggleModal}
    recipes={recipes} 
    setRecipes={setRecipes} recipeID={selectedRecipe}

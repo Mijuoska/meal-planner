@@ -1,10 +1,9 @@
 import {useEffect, useState} from 'react'
 import Recipes from '../services/Recipes'
-import Notification from './Notification'
 import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
-const RecipeForm = ({ setMessage, message, toggleModal, recipes, setRecipes, recipeID }) => {
+const RecipeForm = ({ setMessage, toggleModal, recipes, setRecipes, recipeID }) => {
     const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
     const [name, setName] = useState()
     const [ingredients, setIngredients] = useState([])
@@ -78,6 +77,7 @@ const createRecipe = (recipe) => {
  setIngredients([])
  setDuration('')
  setInstructions('')
+ toggleModal()
  setMessage({content: `Luotu uusi resepti "${data[0].name}"`, type:"success"})
  }).catch(err => {
      setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})
@@ -95,6 +95,7 @@ const updateRecipe = (id, recipe) => {
  setName(data[0].name)
  setDuration(data[0].preparation_time)
  setInstructions(data[0].instructions)
+ toggleModal()
  setMessage({content: `Tallennettu muutokset reseptiin "${data[0].name}"`, type:"success"})
  }).catch(err => {
      setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})

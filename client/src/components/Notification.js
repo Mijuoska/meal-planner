@@ -7,7 +7,7 @@ const Notification = ({ message }) => {
     }
 
     return (
-<div className={`message-banner ${message.type}`}>
+<div className={`message-banner banner-${message.type}`}>
 {message.content}
 </div>
 
