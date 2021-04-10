@@ -24,7 +24,7 @@ const create = async (newRecipe) => {
 }
 
 const update = async (ID, updatedRecipe) => {
-    const req = axios.post(`${baseUrl}/${ID}`, updatedRecipe)
+    const req = axios.put(`${baseUrl}/${ID}`, updatedRecipe)
     return req.then(response => response.data)
 }
 

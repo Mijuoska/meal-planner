@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import RecipeForm from './components/RecipeForm'
+import { useEffect, useState } from 'react'
 import WeeklyCalendar from './components/WeeklyCalendar'
 import Recipes from './components/Recipes'
-import Modal from 'react-modal'
+import RecipesService from './services/Recipes'
 
 
 const App = () => {
@@ -10,35 +9,33 @@ const App = () => {
 const [page, setPage] = useState('weekly-calendar')
 const [message, setMessage] = useState('')
 const [isOpen, setIsOpen] = useState(false)
-console.log(isOpen)
+const [recipes, setRecipes] = useState([])
 
-const modalStyle = {
-  content: {
-    width: '50%',
-    margin: 'auto',
-    height: 'auto',
+useEffect(() => {
+RecipesService.getAll().then(data => {
+  setRecipes(data)
+})
+}, [])
 
-  }
-}
+// const RecipeFormModal = (label, recipes, recipeID) => {
 
-const RecipeFormModal = (label, recipe, callback) => {
-
-  return (
-     <Modal
-        isOpen={isOpen}
-        onRequestClose={toggleModal}
-        shouldCloseOnOverlayClick={false}
-        contentLabel={label}
-        style={modalStyle}
-        onAfterClose={callback}
-      >
-       <span className='modal-close' onClick={toggleModal}>X</span>
-   <RecipeForm setMessage={setMessage} message={message} recipe={recipe}/>
+//   return (
+//      <Modal
+//         isOpen={isOpen}
+//         onRequestClose={toggleModal}
+//         shouldCloseOnOverlayClick={false}
+//         contentLabel={label}
+//         style={modalStyle}
+//       >
+//        <span className='modal-close' onClick={toggleModal}>X</span>
+//    <RecipeForm setMessage={setMessage} 
+//    message={message} recipes={recipes} 
+//    setRecipes={setRecipes} recipeID={recipeID}/>
        
-      </Modal>
-  )
+//       </Modal>
+//   )
 
-}
+// }
 
 const toggleModal = () => {
   if (!isOpen) {
@@ -72,9 +69,15 @@ const toggleModal = () => {
    </div>
    </header>
    
-   <Recipes show={page === 'recipes'} toggleModal={toggleModal} RecipeFormModal={RecipeFormModal}/>
+   <Recipes show={page === 'recipes'} recipes={recipes} 
+   setRecipes={setRecipes}
+   message={message}
+   setMessage={setMessage}
+   toggleModal={toggleModal}
+   isOpen={isOpen}
+   />
    <WeeklyCalendar show={page === 'weekly-calendar'}/> 
-   {RecipeFormModal('Luo uusi resepti', null)}
+   
 
     </div>
 

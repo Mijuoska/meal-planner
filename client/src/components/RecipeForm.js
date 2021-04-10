@@ -4,15 +4,16 @@ import Notification from './Notification'
 import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
-const RecipeForm = ({ setMessage, message, recipe }) => {
+const RecipeForm = ({ setMessage, message, recipes, setRecipes, recipeID }) => {
+    const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
     const [name, setName] = useState()
     const [ingredients, setIngredients] = useState([])
     const [ingredientOptions, setIngredientOptions] = useState([])
     const [duration, setDuration] = useState('')
     const [instructions, setInstructions] = useState('')
 
-
-
+console.log(recipeID)
+console.log(recipe)
 const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'rs', 'ps']
 
 /**
@@ -44,12 +45,12 @@ useEffect(() => {
          })
     
    }
-}, [])
+}, [recipe])
 
 
 /**
  * Populating ingredients state with the quantity and unit data each time 
- * user modifies these
+ * the user modifies these
  */
 
 const populateQuantity = (target) => {
@@ -70,6 +71,40 @@ const populateUnit = (target) => {
     setIngredients(q)
 }
 
+const createRecipe = (recipe) => {
+    Recipes.create(recipe).then(data => {
+    setRecipes(recipes.concat(data[0]))
+ setName('')
+ setIngredients([])
+ setDuration('')
+ setInstructions('')
+ setMessage({content: `Luotu uusi resepti "${data[0].name}"`, type:"success"})
+ }).catch(err => {
+     setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})
+     console.log(err)
+ })
+setTimeout(() => {
+    setMessage('')
+}, 3000);
+}
+
+const updateRecipe = (id, recipe) => {
+    Recipes.update(id, recipe).then(data => {
+    const updatedRecipes = recipes.filter(r => r.id != data[0].id).concat(data[0])
+    setRecipes(updatedRecipes)
+ setName(data[0].name)
+ setDuration(data[0].preparation_time)
+ setInstructions(data[0].instructions)
+ setMessage({content: `Tallennettu muutokset reseptiin "${data[0].name}"`, type:"success"})
+ }).catch(err => {
+     setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})
+     console.log(err)
+ })
+ setTimeout(() => {
+     setMessage('')
+ }, 3000);
+}
+
 
 const submit = (e) => {
     e.preventDefault();
@@ -79,20 +114,12 @@ const submit = (e) => {
        instructions,
        duration: Number(duration)
    }
-   Recipes.create(newRecipe)
-   .then(data => {
- setName('')
- setIngredients([])
- setDuration('')
- setInstructions('')
- setMessage({content: `Luotu uusi resepti "${data.name}"`, type:"success"})
- setTimeout(() => {
-     setMessage('')
- }, 3000);
- }).catch(err => {
-     setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})
-     console.log(err)
- })
+if (!recipe.id) {
+    createRecipe(newRecipe)
+} else {
+    updateRecipe(recipe.id, newRecipe)
+}
+   
 
 }
 
