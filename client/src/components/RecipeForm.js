@@ -46,6 +46,10 @@ useEffect(() => {
 }, [recipe])
 
 
+const toggleInput = (id) => {
+    console.log(id)
+}
+
 /**
  * Populating ingredients state with the quantity and unit data each time 
  * the user modifies these
@@ -134,7 +138,7 @@ Nimi
 </div>
 <div>
 <label>Valmistusaika</label>
-<input style={{width: 100}} type="number" value={duration} onChange={({target}) => setDuration(target.value)}/>
+<input style={{width: 100}} type="number" value={duration} onChange={({target}) => setDuration(target.value)}/> min
 </div>
 <div>
 <label>Ainesosat</label>
@@ -142,13 +146,20 @@ Nimi
 isSearchable={true}/>
 </div>
 <div>
-<ul>
-{ingredients.map(i => <li key={i.value}>{i.label}
-    <input type="number" step="0.1" id={i.value} value={i.quantity} placeholder="Määrä" className="quantity-input" 
+<ul style={{listStyle: 'none'}}>
+{ingredients.map(i => <li key={i.value} style={{width: '60%', borderBottom: '1px solid gray', margin: '0.5rem 0 0.5rem 0'}}> 
+    
+    <input type="number" style={{border: 'none', width: '3rem', marginRight: '5px'}} step="0.1" id={i.value} 
+    value={i.quantity} className="quantity-input" 
     onChange={({ target }) => populateQuantity(target)}/>
-    <select id={i.value} value={i.unit} onChange={({target})=>populateUnit(target)}>
+
+    <select id={i.value} style={{border: 'none', width: '2.5rem', paddingLeft: '0.5rem',
+    marginRight: '5px', webkitAppearance: 'none'}} value={i.unit} onChange={({target})=>populateUnit(target)}>
     {units.map(u => <option value={u}>{u}</option>)}
     </select>
+    
+    {i.label}
+    
     </li>)}
 </ul>
 </div>
