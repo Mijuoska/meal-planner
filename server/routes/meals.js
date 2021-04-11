@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
     try {
-    const { rows } = await db.query(`SELECT meals.id, day, type, assigned_to, users.first_name AS assigned_to_name, recipe_id, recipes.name AS recipe_name FROM meals 
+    const { rows } = await db.query(`SELECT meals.id, day, type, assigned_to, users.first_name AS assigned_to_name, users.tag_color AS tag_color, recipe_id, recipes.name AS recipe_name FROM meals 
                                 INNER JOIN recipes ON recipes.id = meals.recipe_id
                                 INNER JOIN users ON meals.assigned_to = users.id`);
       res.send(rows);

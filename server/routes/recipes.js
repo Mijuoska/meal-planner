@@ -143,6 +143,23 @@ router.put('/:id', async (req, res, next) => {
 })
 
 
+router.delete('/:id', async (req, res, next) => {
+  try {
+// get the ingredients array and delete matching ingredient instances
+// delete the ingredient
+await db.query(`DELETE from ingredient_quantity WHERE id IN 
+(SELECT UNNEST(ingredients) FROM recipes WHERE id = $1)`, [req.params.id])
+
+  await db.query(`DELETE FROM recipes WHERE id = $1`, [req.params.id])
+  res.status(204).send(`Successfully deleted recipe with the id ${req.params.id}`)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Something went wrong')
+  }
+
+})
+
+
 
 
 module.exports = router;

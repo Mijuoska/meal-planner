@@ -4,6 +4,7 @@ const Meal = ({ meal, toggleModal }) => {
     e.dataTransfer.dropEffect = "move";
   };
 
+
   return (
     <div
       onDragStart={dragStartHandler}
@@ -14,7 +15,7 @@ const Meal = ({ meal, toggleModal }) => {
     >
       {meal.recipe_name}
       <div className="meal-card-body">
-        <span className="meal-assigned-to">{meal.assigned_to_name}</span>
+        <span className="meal-assigned-to" style={{backgroundColor: meal.tag_color}}>{meal.assigned_to_name}</span>
       </div>
     </div>
   );
