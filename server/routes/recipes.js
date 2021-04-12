@@ -58,9 +58,7 @@ router.get('/:id', async (req, res, next) => {
 
 /** 
  * Get ingredients for a specific recipe from the ingredient_quantity table
- * 
 */
-
 
 router.get('/:id/ingredients', async (req, res, next) => {
   try {
@@ -116,6 +114,29 @@ router.put('/:id', async (req, res, next) => {
   } = req
   try {
     const ingredientIDs = []
+
+/**
+ *  First we have to compare the ingredients in the request list to the one in the db so that we can
+ *  delete removed ingredient instances from the db
+ */
+
+    const existingIngredientsResult = await db.query(`SELECT UNNEST(ingredients) 
+    FROM recipes WHERE id = $1`, [req.params.id])
+
+    deletedIngredient = existingIngredientsResult.rows
+    .filter(r => body.ingredients.map(i => i.id).indexOf(r.unnest) == -1)
+
+    if (deletedIngredient.length > 0) {
+      deletedIngredient.forEach(async (ingredient) => {
+        await db.query(`DELETE FROM ingredient_quantity WHERE id = $1`, [ingredient.unnest])
+      })
+    }
+
+    /**
+     * We then have to either add new ingredient instances or update them (if quantity or units have changed)
+     * 
+     */
+
     body.ingredients.forEach(async (ingredient) => {
       if (!ingredient.id) {
       const ingredientsResult = await db.query(`INSERT INTO ingredient_quantity (ingredient, quantity, unit) 
@@ -129,6 +150,10 @@ router.put('/:id', async (req, res, next) => {
       }
     
     })
+
+    /**
+     * Finally, we update the recipe
+     */
 
     const { rows } = await db.query(`UPDATE recipes SET name = $1, preparation_time = $2, 
     ingredients = $3, instructions = $4 WHERE id = $5 RETURNING *`, 
