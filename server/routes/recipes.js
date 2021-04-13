@@ -62,7 +62,6 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/:id/ingredients', async (req, res, next) => {
   try {
-    // TO DO: make this query more efficient once we can store recipe_id in ingredients
     const {
       rows
     } = await db.query(`SELECT ingredient_quantity.id, ingredient AS value, quantity, unit, name AS label FROM ingredient_quantity 
@@ -85,7 +84,6 @@ router.post('/', async (req, res, next) => {
    /**
     *  We store the ingredient IDs in an array that is saved in the recipe's ingredients field in the DB.
     *  For each ingredient, we save an entry into the ingredient_quantity table. 
-    * Each of these also has a reference to the recipe they are associated with (recipe_id)
     */
 
      const ingredientIDs = []
@@ -112,9 +110,11 @@ router.put('/:id', async (req, res, next) => {
   const {
     body
   } = req
-  try {
-    const ingredientIDs = []
 
+  const ingredientIDs = []
+
+  try {
+   
 /**
  *  First we have to compare the ingredients in the request list to the one in the db so that we can
  *  delete removed ingredient instances from the db
@@ -134,22 +134,22 @@ router.put('/:id', async (req, res, next) => {
 
     /**
      * We then have to either add new ingredient instances or update them (if quantity or units have changed)
-     * 
      */
 
-    body.ingredients.forEach(async (ingredient) => {
+    for (ingredient of body.ingredients) {
+      let ingredientsResult 
       if (!ingredient.id) {
-      const ingredientsResult = await db.query(`INSERT INTO ingredient_quantity (ingredient, quantity, unit) 
+      ingredientsResult = await db.query(`INSERT INTO ingredient_quantity (ingredient, quantity, unit) 
       VALUES ($1, $2, $3) RETURNING id`, [ingredient.value, ingredient.quantity, ingredient.unit])
       ingredientIDs.push(ingredientsResult.rows[0].id)
       } else {
-        await db.query(`UPDATE ingredient_quantity 
+      ingredientsResult = await db.query(`UPDATE ingredient_quantity 
         SET ingredient = $1, quantity = $2, unit = $3 
         WHERE id = $4`, [ingredient.value, ingredient.quantity, ingredient.unit, ingredient.id])
         ingredientIDs.push(ingredient.id)
       }
     
-    })
+    }
 
     /**
      * Finally, we update the recipe
