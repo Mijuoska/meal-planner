@@ -28,7 +28,7 @@ form input, select {
   font-size: large;
 }
 
-form button {
+button {
   padding: 0.4rem 0.5rem 0.3rem 0.5rem;
   font-size: large;
   background-color: lightgrey;

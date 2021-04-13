@@ -46,13 +46,11 @@ const toggleModal = () => {
     <div>
    <header>
    <div className='navbar'>
-    <span className="brand" onClick={() => setPage('weekly-calendar')}>
-   Viikon ruoat
-   </span>
+   
    <ul class="nav">
-  
-   <li id="create-recipe" onClick={() => toggleModal()}>
-   Luo resepti</li>
+ <li className="brand" onClick={() => setPage('weekly-calendar')}>
+   Viikon ruoat
+   </li>
    <li id="all-recipes" onClick={() => setPage('recipes')}>Kaikki reseptit</li>
 <li className="auth" id="login">
    Kirjaudu sisään</li>
