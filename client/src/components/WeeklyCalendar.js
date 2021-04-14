@@ -29,7 +29,7 @@ const [meal, setMeal] = useState("");
 
   const calendarStyle = {
     gridTemplateColumns: `3fr ${weekdayConfig.map((n) => "5fr").join(" ")}`,
-    gridTemplateRows: `50px ${mealConfig.map((n) => "200px").join(" ")}`,
+    gridTemplateRows: `50px ${mealConfig.map((n) => "150px").join(" ")}`,
   };
 
   const modalStyle = {

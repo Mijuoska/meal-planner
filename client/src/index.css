@@ -88,8 +88,8 @@ button {
 }
 
 .calendar {
-   text-align: center;
-  margin-top: 1rem;
+  text-align: center;
+  margin-top: 5rem;
   margin-left: 2rem;
   display: grid;
   
@@ -115,8 +115,8 @@ button {
 }
 
 .meal-card {
-  width: 81%;
-  height: 5rem;
+  width: 100%;
+  height: auto;
   padding: 1rem;
   text-align: center;
   border: 1px solid black;
@@ -158,6 +158,26 @@ button {
 }
 
 .meal-form {
+  margin: auto;
+}
+
+.recipe-form-container {
+  display: flex;
+  justify-content: center;
+}
+
+.recipe-form-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.recipe-form-wrapper > h2 {
+  text-align: center;
+}
+
+.recipe-form {
   margin: auto;
 }
 

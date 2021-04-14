@@ -4,6 +4,7 @@ import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
 const RecipeForm = ({ setMessage, toggleModal, recipes, setRecipes, recipeID }) => {
+    const [showForm, toggleForm] = useState(true)
     const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
     const [name, setName] = useState()
     const [ingredients, setIngredients] = useState([])
@@ -16,7 +17,6 @@ const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'r
 /**
  * Ingredient options are fetched and default quantities and units need to be populated
  */
-console.log(ingredients)
 
 useEffect(() => {
  Ingredients.getAll().then(data => {
@@ -29,9 +29,11 @@ useEffect(() => {
  })
 
  /**
-  * I an existing recipe is opened, we populate the form values, fetching ingredients from the server
+  * I an existing recipe is opened, we populate existing values. Form is not shown by default
+  * 
   */
    if (recipe) {
+        toggleForm(false)
          setName(recipe.name)
          setDuration(recipe.preparation_time)
          setInstructions(recipe.instructions)
@@ -139,11 +141,13 @@ if (!recipeID) {
 
 }
 
-
+if (showForm) {
 return (
-<div className="form-wrapper">
+  
+<div className="recipe-form-container">
+<div className="recipe-form-wrapper">
 <h2>{!recipe ? 'Luo uusi resepti' : 'Muokkaa reseptiä'}</h2>
-<form>
+<form className="recipe-form">
 <div>
 <label>
 Nimi
@@ -185,7 +189,25 @@ isSearchable={true}/>
 {recipeID ? <button className="delete-button" onClick={(e) => deleteRecipe(e, recipeID)}>Poista resepti</button> : null}
 </form>
 </div>
+</div>
+
 )
+} else {
+    return (
+        <div>
+        <h2>{recipe.name}</h2>
+        <p><strong>Valmistusaika:</strong> {recipe.preparation_time}</p>
+        <div>
+        <ul>
+        {ingredients.map(i => <li>{i.quantity} {i.unit} {i.label}</li>)}
+        </ul>
+        </div>
+        <p><strong>Valmistusohjeet:</strong> {recipe.instructions}</p>
+
+        <button onClick={() => toggleForm(true)}>Muokkaa</button>
+        </div>
+    )
+}
 
 }
 

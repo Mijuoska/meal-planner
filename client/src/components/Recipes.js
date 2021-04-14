@@ -3,6 +3,7 @@ import Modal from 'react-modal'
 import RecipeForm from './RecipeForm'
 import RecipeFormModal from './RecipeFormModal'
 import Recipes from '../services/Recipes'
+import Recipe from './Recipe'
 
 
 const RecipesList = ( { show, setMessage, toggleModal, isOpen } ) => {
@@ -63,18 +64,7 @@ onChange={({target})=> setFilter(target.value.toLowerCase())}/>
 
 <ul className='recipes-list-container' style={gridStyle}>
 {recipes.filter(recipe => recipe.name.toLowerCase().indexOf(filter) != -1)
-    .map(recipe => <li class='recipes-list-card' onClick={({ currentTarget })=> {
-                    selectRecipe(currentTarget.id)
-                    toggleModal()
-                        
-                    }}
-                    id={recipe.id} key={recipe.id}>
-    {recipe.name}
-    <div className="recipe-list-card-details">Valmistusaika: {recipe.preparation_time} min</div>
-    
- 
-
-    </li>)}
+    .map(recipe => <Recipe recipe={recipe} selectRecipe={selectRecipe} toggleModal={toggleModal}/>)}
 
 </ul>
 
