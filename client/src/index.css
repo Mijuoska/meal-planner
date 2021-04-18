@@ -239,10 +239,22 @@ button {
   margin-top: 1rem;
 }
 
+
 #create-recipe {
   background-color: green;
   border-radius: 2px;
   color: white;
   padding: 1rem;
 
+}
+
+.edit-recipe-link {
+font-size: 0.8em;
+margin-top: 0.2em;
+color: white;
+}
+
+.edit-recipe-link:hover {
+color: black;
+transition: linear 0.5s;
 }

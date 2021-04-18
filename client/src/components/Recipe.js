@@ -7,7 +7,7 @@ const Recipe = ( { recipe, selectRecipe, toggleModal }) => {
     {recipe.name}
     <div className="recipe-list-card-details">Valmistusaika: {recipe.preparation_time} min</div>
 
-    <span id={recipe.id} onClick={({ currentTarget })=> {
+    <span className="edit-recipe-link" id={recipe.id} onClick={({ currentTarget })=> {
                     selectRecipe(currentTarget.id)
                     toggleModal()
                         
