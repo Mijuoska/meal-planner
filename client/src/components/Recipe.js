@@ -3,16 +3,16 @@
 const Recipe = ( { recipe, selectRecipe, toggleModal }) => {
 
     return (
-        <li class='recipes-list-card' key={recipe.id}>
-    {recipe.name}
-    <div className="recipe-list-card-details">Preparation time: {recipe.preparation_time} min</div>
-
-    <span className="edit-recipe-link" id={recipe.id} onClick={({ currentTarget })=> {
+        <li class='recipes-list-card' id={recipe.id} key={recipe.id} onClick={({ currentTarget })=> {
                     selectRecipe(currentTarget.id)
                     toggleModal()
                         
-                    }}
->Edit</span>
+                    }}>
+    {recipe.name}
+    <div className="recipe-list-card-details">Preparation time: {recipe.preparation_time} min</div>
+
+    <span className="edit-recipe"  
+>Click to view</span>
 </li>
 
     )

@@ -252,8 +252,21 @@ button {
    border: 1px solid black;
    margin: 1rem;
    /* width: fit-content; */
-   height: fit-content;
+   height: 6rem;
 }
+
+.recipes-list-card:hover > .edit-recipe {
+  display: inline;
+  transition: 0.5s ease-in;
+}
+
+.edit-recipe {
+  font-size: 0.8em;
+  margin-top: 0.2em;
+  display: none;
+}
+
+
 
 .recipe-list-card-details {
   font-size: small;
@@ -269,13 +282,4 @@ button {
 
 }
 
-.edit-recipe-link {
-font-size: 0.8em;
-margin-top: 0.2em;
-color: white;
-}
 
-.edit-recipe-link:hover {
-color: black;
-transition: linear 0.5s;
-}
