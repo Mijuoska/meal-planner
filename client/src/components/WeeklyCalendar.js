@@ -34,6 +34,8 @@ const [meal, setMeal] = useState("");
 
   const modalStyle = {
     content: {
+      position: 'fixed',
+      zIndex:2,
       width: "50%",
       margin: "auto",
       height: "26rem",
@@ -124,6 +126,8 @@ const [meal, setMeal] = useState("");
             .map((meal) => {
               return <Meal meal={meal} toggleModal={toggleModal} />;
             })}
+
+           <span id="create-new-meal">Double click to create new meal</span> 
         </div>
       )
     );
