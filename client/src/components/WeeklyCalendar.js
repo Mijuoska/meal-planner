@@ -50,9 +50,13 @@ const [meal, setMeal] = useState("");
     // get the dragged meal object from state
     const mealObj = JSON.parse(e.dataTransfer.getData("text/plain"));
     const movedMeal = meals.find((meal) => meal.id == mealObj.id);
+    
     // update meal object with new day and meal type details
     const target = JSON.parse(e.target.id);
-    movedMeal["day"] = target["day"];
+    if (meals.some(meal => meal.day === target.day && meal.type === target.meal.value))
+      return
+
+      movedMeal["day"] = target["day"];
     movedMeal["type"] = target["meal"]["value"];
     // Generate new meals array and update state
     const updatedMeals = meals
