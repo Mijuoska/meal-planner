@@ -12,25 +12,6 @@ const [message, setMessage] = useState('')
 const [isOpen, setIsOpen] = useState(false)
 
 
-// const RecipeFormModal = (label, recipes, recipeID) => {
-
-//   return (
-//      <Modal
-//         isOpen={isOpen}
-//         onRequestClose={toggleModal}
-//         shouldCloseOnOverlayClick={false}
-//         contentLabel={label}
-//         style={modalStyle}
-//       >
-//        <span className='modal-close' onClick={toggleModal}>X</span>
-//    <RecipeForm setMessage={setMessage} 
-//    message={message} recipes={recipes} 
-//    setRecipes={setRecipes} recipeID={recipeID}/>
-       
-//       </Modal>
-//   )
-
-// }
 
 const toggleModal = () => {
   if (!isOpen) {
