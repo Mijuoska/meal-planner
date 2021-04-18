@@ -12,19 +12,19 @@ const [meal, setMeal] = useState("");
 
 
   const weekdayConfig = [
-    { value: "monday", label: "Maanantai" },
-    { value: "tuesday", label: "Tiistai" },
-    { value: "wednesday", label: "Keskiviikko" },
-    { value: "thursday", label: "Torstai" },
-    { value: "friday", label: "Perjantai" },
-    { value: "saturday", label: "Lauantai" },
-    { value: "sunday", label: "Sunnuntai" },
+    { value: "monday", label: "Monday" },
+    { value: "tuesday", label: "Tuesday" },
+    { value: "wednesday", label: "Wednesday" },
+    { value: "thursday", label: "Thursday" },
+    { value: "friday", label: "Friday" },
+    { value: "saturday", label: "Saturday" },
+    { value: "sunday", label: "Sunday" },
   ];
 
   const mealConfig = [
     // {value: 'breakfast', label: 'Aamiainen'},
-    { value: "lunch", label: "Lounas" },
-    { value: "dinner", label: "Päivällinen" },
+    { value: "lunch", label: "Lunch" },
+    { value: "dinner", label: "Dinner" },
   ];
 
   const calendarStyle = {

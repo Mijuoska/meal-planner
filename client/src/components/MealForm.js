@@ -96,10 +96,10 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   return (
     <div className="form-container">
       <div className="form-wrapper" id="meal-form-wrapper">
-        <h2>{!meal.id ? "Luo uusi ateria" : "Päivitä ateria"}</h2>
+        <h2>{!meal.id ? "Create new meal" : "Update meal"}</h2>
         <form className="meal-form">
           <div>
-            <label>Viikonpäivä</label>
+            <label>Weekday</label>
             <select value={day} onChange={({ target }) => setDay(target.value)}>
               {weekdays.map((weekday) => (
                 <option value={weekday.value}>{weekday.label}</option>
@@ -107,17 +107,17 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
             </select>
           </div>
           <div>
-            <label>Ateria</label>
+            <label>Meal</label>
             <select
               value={mealType}
               onChange={({ target }) => setMealType(target.value)}
             >
-              <option value="lunch">Lounas</option>
-              <option value="dinner">Päivällinen</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
             </select>
           </div>
           <div>
-            <label>Resepti</label>
+            <label>Recipe</label>
             <select
               value={recipe}
               onChange={({ target }) => setRecipe(target.value)}
@@ -128,7 +128,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
             </select>
           </div>
           <div>
-            <label>Vastuuhenkilö</label>
+            <label>Assignee</label>
             <select
               value={user.id}
               onChange={({ target }) => setUser({'id': target.value, 'first_name': target.options[target.selectedIndex].textContent})}
@@ -140,11 +140,11 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
           </div>
 
           <button type="submit" className="submit-button" onClick={submit}>
-            {!meal.id ? "Lähetä" : "Päivitä"}
+            {!meal.id ? "Submit" : "Save changes"}
           </button>
           {meal.id ? (
             <button className="delete-button" type="delete" onClick={remove}>
-              Poista
+              Delete
             </button>
           ) : null}
         </form>

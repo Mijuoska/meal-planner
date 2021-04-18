@@ -80,9 +80,9 @@ const createRecipe = (recipe) => {
  setDuration('')
  setInstructions('')
  toggleModal()
- setMessage({content: `Luotu uusi resepti "${data[0].name}"`, type:"success"})
+ setMessage({content: `Created new recipe "${data[0].name}"`, type:"success"})
  }).catch(err => {
-     setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})
+     setMessage({content: 'Something went wrong with saving the recipe', type:"error"})
      console.log(err)
  })
 setTimeout(() => {
@@ -98,9 +98,9 @@ const updateRecipe = (id, recipe) => {
  setDuration(data[0].preparation_time)
  setInstructions(data[0].instructions)
  toggleModal()
- setMessage({content: `Tallennettu muutokset reseptiin "${data[0].name}"`, type:"success"})
+ setMessage({content: `Saved changes to "${data[0].name}"`, type:"success"})
  }).catch(err => {
-     setMessage({content: 'Jokin meni vikaan reseptin tallentamisessa', type:"error"})
+     setMessage({content: 'Something went wrong with saving the recipe', type:"error"})
      console.log(err)
  })
  setTimeout(() => {
@@ -113,11 +113,11 @@ const deleteRecipe = (e, recipeID) => {
     Recipes.remove(recipeID).then(data => {
         const updatedRecipes = recipes.filter(r => r.id != recipeID)
         setRecipes(updatedRecipes)
-        setMessage({content: 'Resepti poistettu', type: 'success'})
+        setMessage({content: 'Recipe deleted', type: 'success'})
         toggleModal()
     }).catch(err => {
         console.log(err)
-        setMessage({content: 'Reseptin poistaminen epäonnistui', type: 'error'})
+        setMessage({content: 'Failed deleting recipe', type: 'error'})
     })
     setTimeout(() => {
         setMessage('')
@@ -146,21 +146,21 @@ return (
   
 <div className="form-container">
 <div className="form-wrapper" id="recipe-form-wrapper">
-<h2>{!recipe ? 'Luo uusi resepti' : 'Muokkaa reseptiä'}</h2>
+<h2>{!recipe ? 'Create new recipe' : 'Edit recipe'}</h2>
 <form className="recipe-form">
 <div>
 <label>
-Nimi
+Name
 </label>
 <input style={{width: 520}} type="text" value={name} onChange={({target}) => setName(target.value)}/>
 </div>
 <div>
-<label>Valmistusaika</label>
+<label>Preparation time</label>
 <input style={{width: 100}} type="number" value={duration} onChange={({target}) => setDuration(target.value)}/> min
 </div>
 <div>
-<label>Ainesosat</label>
-<Select onChange={setIngredients} value={ingredients} placeholder="Etsi ainesosia" options={ingredientOptions} isMulti={true} 
+<label>Ingredients</label>
+<Select onChange={setIngredients} value={ingredients} placeholder="Search ingredients" options={ingredientOptions} isMulti={true} 
 isSearchable={true}/>
 </div>
 <div>
@@ -182,11 +182,11 @@ isSearchable={true}/>
 </ul>
 </div>
 <div>
-<label>Valmistusohjeet</label>
+<label>Instructions</label>
 <textarea rows="15" cols="70" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
 </div>
-<button className="submit-button" type="submit" onClick={submit}>Tallenna resepti</button>
-{recipeID ? <button className="delete-button" onClick={(e) => deleteRecipe(e, recipeID)}>Poista resepti</button> : null}
+<button className="submit-button" type="submit" onClick={submit}>Save</button>
+{recipeID ? <button className="delete-button" onClick={(e) => deleteRecipe(e, recipeID)}>Delete</button> : null}
 </form>
 </div>
 </div>
@@ -196,15 +196,15 @@ isSearchable={true}/>
     return (
         <div>
         <h2>{recipe.name}</h2>
-        <p><strong>Valmistusaika:</strong> {recipe.preparation_time}</p>
+        <p><strong>Preparation time:</strong> {recipe.preparation_time}</p>
         <div>
         <ul>
         {ingredients.map(i => <li>{i.quantity} {i.unit} {i.label}</li>)}
         </ul>
         </div>
-        <p><strong>Valmistusohjeet:</strong> {recipe.instructions}</p>
+        <p><strong>Instructions:</strong> {recipe.instructions}</p>
 
-        <button onClick={() => toggleForm(true)}>Muokkaa</button>
+        <button onClick={() => toggleForm(true)}>Edit</button>
         </div>
     )
 }

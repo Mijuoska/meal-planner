@@ -50,13 +50,13 @@ const toggleModal = () => {
    
    <ul class="nav">
  <li className="brand" onClick={() => setPage('weekly-calendar')}>
-   Viikon ruoat
+   Weekly planner
    </li>
-   <li id="all-recipes" onClick={() => setPage('recipes')}>Kaikki reseptit</li>
+   <li id="all-recipes" onClick={() => setPage('recipes')}>All recipes</li>
 <li className="auth" id="login" onClick={() => setPage('login')}>
-   Kirjaudu sisään</li>
+   Login</li>
    <li className="auth" id="logout">
-   Kirjaudu ulos</li>
+   Logout</li>
 
    </ul>
    </div>

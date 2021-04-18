@@ -54,10 +54,10 @@ setMessage={setMessage}
 />
  
 
-<input type="text" className='search-box' placeholder="Hae reseptiä" 
+<input type="text" className='search-box' placeholder="Search recipes" 
 onChange={({target})=> setFilter(target.value.toLowerCase())}/>
 
-<button style={{marginLeft: '1rem'}} id="create-recipe" onClick={() => toggleModal()}>Luo uusi resepti</button>
+<button style={{marginLeft: '1rem'}} id="create-recipe" onClick={() => toggleModal()}>Create new recipe</button>
 
 
 <ul className='recipes-list-container' style={gridStyle}>
