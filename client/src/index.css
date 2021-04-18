@@ -97,8 +97,9 @@ button {
 
 .calendar > div {
   border-right: 1px solid black;
-
 }
+
+
 
 .calendar>div:nth-child(n) {
   border-bottom: 1px solid black;
@@ -112,6 +113,11 @@ button {
 .meal-slot {
   display: flex;
   justify-content: center;
+}
+
+.meal-slot:hover {
+  background-color: lightgrey;
+  cursor: pointer;
 }
 
 .meal-card {
