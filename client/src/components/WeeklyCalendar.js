@@ -52,7 +52,8 @@ const [meal, setMeal] = useState("");
     const movedMeal = meals.find((meal) => meal.id == mealObj.id);
     
     // update meal object with new day and meal type details
-    const target = JSON.parse(e.target.id);
+    const target = JSON.parse(e.currentTarget.id);
+    console.log(target)
     if (meals.some(meal => meal.day === target.day && meal.type === target.meal.value))
       return
 
