@@ -1,10 +1,7 @@
-import { useState } from 'react'
 import Modal from 'react-modal'
 import RecipeForm from './RecipeForm'
 
 const RecipeFormModal = (props) => {
-
-const [mode, setMode] = useState('view')
 
     return (
   <Modal
@@ -22,7 +19,6 @@ const [mode, setMode] = useState('view')
    setRecipes={props.setRecipes} recipeID={props.selectedRecipe}
    /> 
        </Modal>
-
     )
 }
 

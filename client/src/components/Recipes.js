@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import Modal from 'react-modal'
-import RecipeForm from './RecipeForm'
 import RecipeFormModal from './RecipeFormModal'
 import Recipes from '../services/Recipes'
 import Recipe from './Recipe'
