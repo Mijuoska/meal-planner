@@ -2,6 +2,7 @@ import { useState } from 'react'
 import WeeklyCalendar from './components/WeeklyCalendar'
 import Recipes from './components/Recipes'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 
 
 const App = () => {
@@ -52,7 +53,7 @@ const toggleModal = () => {
    Viikon ruoat
    </li>
    <li id="all-recipes" onClick={() => setPage('recipes')}>Kaikki reseptit</li>
-<li className="auth" id="login">
+<li className="auth" id="login" onClick={() => setPage('login')}>
    Kirjaudu sisään</li>
    <li className="auth" id="logout">
    Kirjaudu ulos</li>
@@ -69,6 +70,7 @@ const toggleModal = () => {
    isOpen={isOpen}
    />
    <WeeklyCalendar show={page === 'weekly-calendar'}/> 
+   <LoginForm show={page === 'login'}/>
    
 
     </div>

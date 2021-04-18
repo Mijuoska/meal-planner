@@ -144,8 +144,8 @@ if (!recipeID) {
 if (showForm) {
 return (
   
-<div className="recipe-form-container">
-<div className="recipe-form-wrapper">
+<div className="form-container">
+<div className="form-wrapper" id="recipe-form-wrapper">
 <h2>{!recipe ? 'Luo uusi resepti' : 'Muokkaa reseptiä'}</h2>
 <form className="recipe-form">
 <div>

@@ -16,6 +16,10 @@ code {
     monospace;
 }
 
+form {
+margin: auto;
+}
+
 
 form label {
 display: block;
@@ -146,46 +150,44 @@ button {
 }
 
 
-
-.meal-form-container {
+.form-container {
   display: flex;
   justify-content: center;
 }
 
-.meal-form-wrapper {
+.form-wrapper {
   display: flex;
   justify-content: center;
   flex-direction: column;
   width: 50%;
 }
 
-.meal-form-wrapper > h2 {
+#meal-form-wrapper {
+  width: 50%;
+}
+
+#meal-form-wrapper > h2 {
   text-align: center;
 }
 
-.meal-form {
-  margin: auto;
-}
 
-.recipe-form-container {
-  display: flex;
-  justify-content: center;
-}
-
-.recipe-form-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+#recipe-form-wrapper {
   width: 100%;
 }
 
-.recipe-form-wrapper > h2 {
-  text-align: center;
+#login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.recipe-form {
-  margin: auto;
+#login-form-wrapper {
+  align-items: center;
+  width: 50%;
 }
+
+
+
 
 .submit-button {
   background-color: #008800;

@@ -12,7 +12,6 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   const [recipe, setRecipe] = useState("");
   const [user, setUser] = useState("");
   const [users, setUsers] = useState([]);
-console.log(user)
 
   const submit = (e) => {
     e.preventDefault();
@@ -95,8 +94,8 @@ console.log(user)
   }, []);
 
   return (
-    <div className="meal-form-container">
-      <div className="meal-form-wrapper">
+    <div className="form-container">
+      <div className="form-wrapper" id="meal-form-wrapper">
         <h2>{!meal.id ? "Luo uusi ateria" : "Päivitä ateria"}</h2>
         <form className="meal-form">
           <div>
