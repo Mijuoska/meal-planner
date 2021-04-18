@@ -1,21 +1,31 @@
 
 import { useState } from 'react'
+import Users from '../services/Users'
 
-const LoginForm = ( { show } ) => {
+const SignUpForm = ( { show } ) => {
 
 const [username, setUsername] = useState('')
 const [password, setPassword] = useState('')
 
-const handleLogin = (e) => {
+const createUser = (e) => {
     e.preventDefault()
-
+    const newUser = {
+        username, 
+        password
+    }
+    Users.create(newUser).then(data => {
+        // set local storage
+        console.log(data)
+    }).catch(err => {
+        console.log(err)
+    })
 }
 
 if (show) {
     return (
     <div className="form-container">
     <div className="form-wrapper" id="login-form-wrapper">
-      <form id="login-form" onSubmit={handleLogin}>
+      <form id="sign-up-form" onSubmit={createUser}>
         <div>
         <label>
           username
@@ -26,7 +36,7 @@ if (show) {
             name="username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
+          </div>
         <div>
         <label>
           password
@@ -38,7 +48,7 @@ if (show) {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id="login-button" type="submit">login</button>
+        <button id="sign-up-button" type="submit">Create account</button>
       </form>
       </div>
     </div>
@@ -51,4 +61,4 @@ if (show) {
 
 
 
-export default LoginForm
+export default SignUpForm

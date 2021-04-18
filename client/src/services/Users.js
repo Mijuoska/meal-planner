@@ -7,4 +7,13 @@ const getAll = async () => {
     return req.then(response => response.data)
 }
 
-export default { getAll }
+const get = async (ID) => {
+    const req = axios.get(`${baseUrl}/${ID}`)
+    return req.then(response => response.data)
+}
+
+const create = async (user) => {
+    const req = axios.post(`${baseUrl}`, user)
+    return req.then(response => response.data)
+}
+export default { getAll, get, create }
