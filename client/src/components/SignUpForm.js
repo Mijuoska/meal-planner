@@ -5,6 +5,8 @@ import Users from '../services/Users'
 const SignUpForm = ( { show } ) => {
 
 const [username, setUsername] = useState('')
+const [firstName, setFirstName] = useState('')
+const [email, setEmail] = useState('')
 const [password, setPassword] = useState('')
 
 const createUser = (e) => {
@@ -28,7 +30,7 @@ if (show) {
       <form id="sign-up-form" onSubmit={createUser}>
         <div>
         <label>
-          username
+          Username
           </label>
           <input id='username'
             type="text"
@@ -37,9 +39,31 @@ if (show) {
             onChange={({ target }) => setUsername(target.value)}
           />
           </div>
+          <div>
+            <label>
+          First name
+          </label>
+          <input id='first-name'
+            type="text"
+            value={firstName}
+            name="firstName"
+            onChange={({ target }) => setFirstName(target.value)}
+          />
+          </div>
+           <div>
+            <label>
+          Email
+          </label>
+          <input id='first-name'
+            type="email"
+            value={email}
+            name="email"
+            onChange={({ target }) => setEmail(target.value)}
+          />
+          </div>
         <div>
         <label>
-          password
+          Password
           </label>
           <input id='password'
             type="password"
