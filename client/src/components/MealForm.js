@@ -13,6 +13,8 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   const [user, setUser] = useState("");
   const [users, setUsers] = useState([]);
 
+console.log(mealType)
+
   const submit = (e) => {
     e.preventDefault();
     const recipeObj = recipes.find((r) => r.id == recipe);
@@ -81,7 +83,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
       }
     });
     setDay(meal.day);
-    setMealType(meal.meal ? meal.meal : meal.type);
+    setMealType(meal.meal ? meal.meal.value : meal.type);
 
     Users.getAll().then((data) => {
       setUsers(data)
