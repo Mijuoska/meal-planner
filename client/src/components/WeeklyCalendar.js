@@ -4,7 +4,7 @@ import Meals from "../services/Meals";
 import Modal from "react-modal";
 import MealForm from "./MealForm";
 
-const WeeklyCalendar = ({ show }) => {
+const WeeklyCalendar = ({ displayMessage, show }) => {
 
 const [meals, setMeals] = useState([]);
 const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +87,10 @@ const [meal, setMeal] = useState("");
   useEffect(() => {
     Meals.getAll().then((data) => {
       setMeals(data);
-    });
+    }).catch(err => {
+      console.log(err)
+      displayMessage("We're having trouble retrieving your meal plan. Please try again later", "error", 5)
+    })
   }, []);
 
   const generateHeader = () => {

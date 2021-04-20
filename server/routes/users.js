@@ -39,11 +39,7 @@ router.post('/', async(req, res, next) => {
     (username, password) VALUES ($1, $2) RETURNING username`, [body.username, body.password])
   res.status(201).send(rows)
   } catch (err) {
-    res.status(500).json({
-      message: 'Something went wrong with creating a user',
-      err: err.toString()
-    })
-    console.log(err)
+   next(err)
   }
 })
 

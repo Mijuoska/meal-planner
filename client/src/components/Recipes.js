@@ -4,7 +4,7 @@ import Recipes from '../services/Recipes'
 import Recipe from './Recipe'
 
 
-const RecipesList = ( { show, setMessage, toggleModal, isOpen } ) => {
+const RecipesList = ( { show, displayMessage, toggleModal, isOpen } ) => {
 
 const [recipes, setRecipes] = useState([])
 const [selectedRecipe, selectRecipe] = useState('')
@@ -30,6 +30,9 @@ const modalStyle = {
 useEffect(() => {
     Recipes.getAll().then(data => {
         setRecipes(data)
+    }).catch(err => {
+        console.log(err)
+        displayMessage("We're having trouble fetching recipes. Please try again later", "error", 5)
     })
 }, [])
 
@@ -50,7 +53,7 @@ selectRecipe={selectRecipe}
 selectedRecipe={selectedRecipe}
 recipes={recipes}
 setRecipes={setRecipes}
-setMessage={setMessage}
+displayMessage={displayMessage}
 />
  
 

@@ -14,6 +14,13 @@ const [isOpen, setIsOpen] = useState(false)
 const [user, setUser] = useState(null)
 
 
+const displayMessage = (content, type, secondsDuration) => {
+  setMessage({content, type})
+  setTimeout(() => {
+    setMessage('')
+  }, secondsDuration * 1000);
+}
+
 
 const toggleModal = () => {
   if (!isOpen) {
@@ -51,11 +58,11 @@ const toggleModal = () => {
    
    <Recipes show={page === 'recipes'} 
    message={message}
-   setMessage={setMessage}
+   displayMessage={displayMessage}
    toggleModal={toggleModal}
    isOpen={isOpen}
    />
-   <WeeklyCalendar show={page === 'weekly-calendar'}/> 
+   <WeeklyCalendar displayMessage={displayMessage} show={page === 'weekly-calendar'}/> 
    <LoginForm setPage={setPage} show={page === 'login'}/>
    <SignUpForm show={page === 'sign-up'}/>
    

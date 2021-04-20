@@ -3,7 +3,7 @@ import Recipes from '../services/Recipes'
 import Ingredients from '../services/Ingredients'
 import Select from 'react-select'
 
-const RecipeForm = ({ setMessage, toggleModal, recipes, setRecipes, recipeID }) => {
+const RecipeForm = ({ displayMessage, toggleModal, recipes, setRecipes, recipeID }) => {
     const [showForm, toggleForm] = useState(true)
     const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
     const [name, setName] = useState()
@@ -25,8 +25,9 @@ useEffect(() => {
      })
      setIngredientOptions(options);
  }).catch(err => {
-     console.log(err);
- })
+      console.log(err);
+     displayMessage('Something went wrong with fetching ingredients', 'error', 5)
+    })
 
  /**
   * I an existing recipe is opened, we populate existing values. Form is not shown by default
@@ -39,8 +40,9 @@ useEffect(() => {
          setInstructions(recipe.instructions)
          Recipes.getIngredients(recipe.id).then(data => {
             setIngredients(data)
-         }).catch(error => {
-             console.log(error);
+         }).catch(err => {
+            console.log(err);
+             displayMessage('Something went wrong with fetching ingredients', 'error', 5)
          })
     
    }
@@ -80,14 +82,13 @@ const createRecipe = (recipe) => {
  setDuration('')
  setInstructions('')
  toggleModal()
- setMessage({content: `Created new recipe "${data[0].name}"`, type:"success"})
+ displayMessage(`Created new recipe "${data[0].name}"`,"success", 5)
  }).catch(err => {
-     setMessage({content: 'Something went wrong with saving the recipe', type:"error"})
      console.log(err)
+     displayMessage('Something went wrong with saving the recipe',"error", 5)
+  
  })
-setTimeout(() => {
-    setMessage('')
-}, 3000);
+
 }
 
 const updateRecipe = (id, recipe) => {
@@ -98,14 +99,12 @@ const updateRecipe = (id, recipe) => {
  setDuration(data[0].preparation_time)
  setInstructions(data[0].instructions)
  toggleModal()
- setMessage({content: `Saved changes to "${data[0].name}"`, type:"success"})
+ displayMessage(`Saved changes to "${data[0].name}"`,"success",5)
  }).catch(err => {
-     setMessage({content: 'Something went wrong with saving the recipe', type:"error"})
      console.log(err)
+     displayMessage('Something went wrong with saving the recipe',"error", 5)
  })
- setTimeout(() => {
-     setMessage('')
- }, 3000);
+
 }
 
 const deleteRecipe = (e, recipeID) => {
@@ -113,15 +112,12 @@ const deleteRecipe = (e, recipeID) => {
     Recipes.remove(recipeID).then(data => {
         const updatedRecipes = recipes.filter(r => r.id != recipeID)
         setRecipes(updatedRecipes)
-        setMessage({content: 'Recipe deleted', type: 'success'})
+        displayMessage('Recipe deleted','success', 5)
         toggleModal()
     }).catch(err => {
         console.log(err)
-        setMessage({content: 'Failed deleting recipe', type: 'error'})
+        displayMessage('Failed deleting recipe', 'error', 5)
     })
-    setTimeout(() => {
-        setMessage('')
-    }, 3000);
 }
 
 const submit = (e) => {

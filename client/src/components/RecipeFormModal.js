@@ -13,7 +13,7 @@ const RecipeFormModal = (props) => {
         onAfterClose={() => props.selectRecipe('')}
       >
        <span className='modal-close' onClick={props.toggleModal}>X</span>
-    <RecipeForm setMessage={props.setMessage} 
+    <RecipeForm displayMessage={props.displayMessage} 
    toggleModal={props.toggleModal}
    recipes={props.recipes} 
    setRecipes={props.setRecipes} recipeID={props.selectedRecipe}
