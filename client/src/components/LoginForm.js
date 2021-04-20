@@ -6,7 +6,8 @@ const LoginForm = ( { show } ) => {
 const [username, setUsername] = useState('')
 const [password, setPassword] = useState('')
 
-const handleLogin = () => {
+const handleLogin = (e) => {
+    e.preventDefault()
 
 }
 
@@ -22,7 +23,7 @@ if (show) {
           <input id='username'
             type="text"
             value={username}
-            name="Username"
+            name="username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>

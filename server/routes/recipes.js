@@ -3,7 +3,6 @@ const db = require('../db');
 const router = express.Router();
 
 
-
 router.get('/', async (req, res, next) => {
   try {
     const {
@@ -11,10 +10,8 @@ router.get('/', async (req, res, next) => {
     } = await db.query('SELECT * FROM recipes')
     res.send(rows)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      error: err.toString()
-    })
+     next(err)
+
   }
 })
 
@@ -50,9 +47,8 @@ router.get('/:id', async (req, res, next) => {
     res.send(result)
 
   } catch (err) {
-    res.status(500).json({
-      err: err.toString()
-    })
+    next(err)
+
   }
 });
 
@@ -71,7 +67,7 @@ router.get('/:id/ingredients', async (req, res, next) => {
       WHERE recipes.id = $1)`, [req.params.id])
     res.send(rows)
   } catch (err) {
-    res.status(500).send({error: err.toString()})
+     next(err)
   }
 })
 
@@ -99,10 +95,7 @@ router.post('/', async (req, res, next) => {
 
     res.status(201).send(rows)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      error: err.toString()
-    })
+  next(err)
   }
 })
 
@@ -160,10 +153,8 @@ router.put('/:id', async (req, res, next) => {
     [body.name, body.duration, ingredientIDs, body.instructions, req.params.id])
     res.send(rows)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      error: err.toString()
-    })
+     next(err)
+
   }
 })
 
@@ -178,8 +169,8 @@ await db.query(`DELETE from ingredient_quantity WHERE id IN
   await db.query(`DELETE FROM recipes WHERE id = $1`, [req.params.id])
   res.status(204).send(`Successfully deleted recipe with the id ${req.params.id}`)
   } catch (err) {
-    console.error(err)
-    res.status(500).send('Something went wrong')
+     next(err)
+
   }
 
 })

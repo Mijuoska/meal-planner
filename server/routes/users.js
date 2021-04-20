@@ -31,4 +31,16 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+
+router.post('/', async(req, res, next) => {
+  const { body } = req
+  try {
+    const { rows } = await db.query(`INSERT INTO users 
+    (username, password) VALUES ($1, $2) RETURNING username`, [body.username, body.password])
+  res.status(201).send(rows)
+  } catch (err) {
+   next(err)
+  }
+})
+
 module.exports = router;
