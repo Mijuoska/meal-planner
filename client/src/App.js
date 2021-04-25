@@ -57,7 +57,7 @@ const toggleModal = () => {
    />
    <WeeklyCalendar show={page === 'weekly-calendar'}/> 
    <LoginForm setPage={setPage} show={page === 'login'}/>
-   <SignUpForm show={page === 'sign-up'}/>
+   <SignUpForm show={page === 'sign-up'} setUser={setUser}/>
    
 
     </div>
