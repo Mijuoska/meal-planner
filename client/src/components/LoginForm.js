@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Auth from '../services/Auth'
 
-const LoginForm = ( { show, setUser, setPage } ) => {
+const LoginForm = ( { show, setUser, setPage, displayMessage } ) => {
 
 const [username, setUsername] = useState('')
 const [password, setPassword] = useState('')
@@ -11,6 +11,7 @@ const handleLogin = (e) => {
     e.preventDefault()
     Auth.login({username, password})
     .then(data => {
+      displayMessage(`Successfully logged in as ${data.name}`, 'success', 5)
       window.localStorage.setItem('loggedInUser', JSON.stringify(data))
       setUser(data)
       setUsername('')

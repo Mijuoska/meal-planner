@@ -91,15 +91,9 @@ const AuthLinks = () => {
    toggleModal={toggleModal}
    isOpen={isOpen}
    />
-<<<<<<< HEAD
-   <WeeklyCalendar displayMessage={displayMessage} show={page === 'weekly-calendar'}/> 
-   <LoginForm setPage={setPage} show={page === 'login'}/>
-   <SignUpForm show={page === 'sign-up'}/>
-=======
    <WeeklyCalendar show={page === 'weekly-calendar'}/> 
-   <LoginForm setPage={setPage} show={page === 'login'} setUser={setUser} setPage={setPage}/>
-   <SignUpForm show={page === 'sign-up'} setUser={setUser} setPage={setPage}/>
->>>>>>> auth
+   <LoginForm setPage={setPage} show={page === 'login'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
+   <SignUpForm show={page === 'sign-up'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
    
 
     </div>

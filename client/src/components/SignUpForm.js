@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Auth from '../services/Auth'
 
-const SignUpForm = ( { show, setUser, setPage } ) => {
+const SignUpForm = ( { show, setUser, setPage, displayMessage } ) => {
 
 const [username, setUsername] = useState('')
 const [firstName, setFirstName] = useState('')
@@ -20,6 +20,7 @@ const createUser = (e) => {
     Auth.register(newUser).then(data => {
         // set local storage
        window.localStorage.setItem('loggedInUser', JSON.stringify(data))
+        displayMessage(`Welcome ${data.name}! You are now logged in`, 'success', 5)
        setUser(data)
        setUsername('')
        setPassword('')
