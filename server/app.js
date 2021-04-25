@@ -24,6 +24,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
+// Extract token from response
+app.use(middleware.tokenExtractor)
+// app.use(middleware.verifyToken)
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
@@ -33,8 +36,6 @@ app.use('/api/auth', authRouter)
 
 
 
-// Extract token from response
-app.use(middleware.tokenExtractor)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -47,9 +48,6 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
 });
 
 app.listen(port, function () {

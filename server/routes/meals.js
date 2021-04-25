@@ -1,8 +1,9 @@
 const express = require('express');
 const db = require('../db');
 const router = express.Router();
+const middleware = require('../middleware')
 
-
+const { verifyToken } = middleware
 
 
 router.get('/', async (req, res, next) => {
