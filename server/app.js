@@ -4,15 +4,18 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const config = require('./config')
+const middleware = require('./middleware')
 
 const usersRouter = require('./routes/users')
+const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
 const mealsRouter = require('./routes/meals')
 const ingredientsRouter = require('./routes/ingredients')
 
 const app = express();
 
-const port = 3000 
+const port = config.PORT 
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,6 +29,12 @@ app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
 app.use('/api/meals', mealsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/auth', authRouter)
+
+
+
+// Extract token from response
+app.use(middleware.tokenExtractor)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
