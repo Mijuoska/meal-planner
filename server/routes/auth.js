@@ -22,6 +22,8 @@ router.post('/register', async (req, res, next) => {
         return res.status(400).send('Please provide a password of at least 6 characters long')
     }
 
+
+
     const saltRounds = 10
     const passwordHash =  await bcrypt.hash(password, saltRounds)
 
@@ -41,7 +43,7 @@ router.post('/register', async (req, res, next) => {
 
         const token = jwt.sign(userForToken, process.env.SECRET)
 
-        res.status(201).send({
+        res.status(201).json({
             token,
             username: user.username,
             name: user.first_name,
@@ -65,6 +67,7 @@ router.post('/login', async (req, res, next) => {
     let passwordCorrect = ''
     if (user) {
         passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.password)
+    console.log(passwordCorrect)
     } else {
         return res.status(401).json({
             error: 'invalid username or password'
@@ -84,10 +87,10 @@ router.post('/login', async (req, res, next) => {
 
     const token = jwt.sign(userForToken, process.env.SECRET)
 
-    res.status(200).send({
+    res.status(200).json({
         token,
         username: user.username,
-        name: user.name,
+        name: user.first_name,
         id: user.id
     })
 
