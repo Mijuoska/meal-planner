@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import WeeklyCalendar from './components/WeeklyCalendar'
 import Recipes from './components/Recipes'
 import Notification from './components/Notification'
@@ -20,6 +20,13 @@ const displayMessage = (content, type, secondsDuration) => {
     setMessage('')
   }, secondsDuration * 1000);
 }
+useEffect(() => {
+  const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
+  if (loggedInUser) {
+    setUser(loggedInUser)
+  }
+  
+}, [])
 
 
 const toggleModal = () => {
@@ -30,6 +37,34 @@ const toggleModal = () => {
   }
 }
 
+const logOut = () => {
+  window.localStorage.removeItem('loggedInUser')
+  setUser(null)
+  setPage('login')
+}
+
+const AuthLinks = () => {
+
+  if (user) {
+    return (
+      <ul className="nav">
+      <li>Logged in as {user.name}</li>
+       <li className="auth" id="logout" onClick={() => logOut()}>
+   Logout </li>
+   
+</ul>
+    )
+    } else {
+      return (
+        <ul className="nav">
+<li className="auth" id="login" onClick={() => setPage('login')}>
+   Login</li> 
+<li className="auth" id="sign-up" onClick={() => setPage('sign-up')}>
+   Sign up</li> 
+   </ul>
+      )
+    }
+}
 
 
 
@@ -38,20 +73,14 @@ const toggleModal = () => {
    <header>
    <div className='navbar'>
    
-   <ul class="nav">
+   <ul className="nav">
  <li className="brand" onClick={() => setPage('weekly-calendar')}>
    Weekly planner
    </li>
    <li id="all-recipes" onClick={() => setPage('recipes')}>All recipes</li>
-  
- { !user ? <li className="auth" id="login" onClick={() => setPage('login')}>
-   Login</li> : null}
-  {!user ?  <li className="auth" id="sign-up" onClick={() => setPage('sign-up')}>
-   Sign up</li> :
- <li className="auth" id="logout">
-   Logout </li> }
 
    </ul>
+   {AuthLinks()}
    </div>
       <Notification message={message}/>
    </header>
@@ -62,9 +91,15 @@ const toggleModal = () => {
    toggleModal={toggleModal}
    isOpen={isOpen}
    />
+<<<<<<< HEAD
    <WeeklyCalendar displayMessage={displayMessage} show={page === 'weekly-calendar'}/> 
    <LoginForm setPage={setPage} show={page === 'login'}/>
    <SignUpForm show={page === 'sign-up'}/>
+=======
+   <WeeklyCalendar show={page === 'weekly-calendar'}/> 
+   <LoginForm setPage={setPage} show={page === 'login'} setUser={setUser} setPage={setPage}/>
+   <SignUpForm show={page === 'sign-up'} setUser={setUser} setPage={setPage}/>
+>>>>>>> auth
    
 
     </div>

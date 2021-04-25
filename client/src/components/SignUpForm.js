@@ -1,8 +1,8 @@
 
 import { useState } from 'react'
-import Users from '../services/Users'
+import Auth from '../services/Auth'
 
-const SignUpForm = ( { show } ) => {
+const SignUpForm = ( { show, setUser, setPage } ) => {
 
 const [username, setUsername] = useState('')
 const [firstName, setFirstName] = useState('')
@@ -13,12 +13,20 @@ const createUser = (e) => {
     e.preventDefault()
     const newUser = {
         username, 
+        firstName,
+        email,
         password
     }
-    Users.create(newUser).then(data => {
+    Auth.register(newUser).then(data => {
         // set local storage
-        console.log(data)
-    }).catch(err => {
+       window.localStorage.setItem('loggedInUser', JSON.stringify(data))
+       setUser(data)
+       setUsername('')
+       setPassword('')
+       setFirstName('')
+       setEmail('')
+       setPage('weekly-calendar')
+      }).catch(err => {
         console.log(err)
     })
 }
