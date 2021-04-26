@@ -1,23 +1,21 @@
 const express = require('express');
 const db = require('../db');
 const router = express.Router();
+const helper = require('../utils/helpers')
 
+const { asyncWrapper } = helper
 
-router.get('/', async (req, res, next) => {
-  try {
+router.get('/', asyncWrapper(async (req, res, next) => {
+  
     const {
       rows
     } = await db.query('SELECT * FROM recipes')
     res.send(rows)
-  } catch (err) {
-     next(err)
 
-  }
-})
+}))
 
 
-router.get('/:id', async (req, res, next) => {
-  try {
+router.get('/:id', asyncWrapper(async (req, res, next) => {
     const {
       rows
     } = await db.query(`SELECT recipes.id, recipes.name, instructions, preparation_time, created_by, 
@@ -46,18 +44,14 @@ router.get('/:id', async (req, res, next) => {
     }
     res.send(result)
 
-  } catch (err) {
-    next(err)
-
-  }
-});
+  
+}));
 
 /** 
  * Get ingredients for a specific recipe from the ingredient_quantity table
 */
 
-router.get('/:id/ingredients', async (req, res, next) => {
-  try {
+router.get('/:id/ingredients', asyncWrapper(async(req, res, next) => {
     const {
       rows
     } = await db.query(`SELECT ingredient_quantity.id, ingredient AS value, quantity, unit, name AS label FROM ingredient_quantity 
@@ -66,17 +60,15 @@ router.get('/:id/ingredients', async (req, res, next) => {
       (SELECT UNNEST(ingredients) FROM recipes 
       WHERE recipes.id = $1)`, [req.params.id])
     res.send(rows)
-  } catch (err) {
-     next(err)
-  }
-})
+  
+}))
 
 
-router.post('/', async (req, res, next) => {
+router.post('/', asyncWrapper(async (req, res, next) => {
   const {
     body
   } = req
-  try {
+ 
    /**
     *  We store the ingredient IDs in an array that is saved in the recipe's ingredients field in the DB.
     *  For each ingredient, we save an entry into the ingredient_quantity table. 
@@ -94,19 +86,15 @@ router.post('/', async (req, res, next) => {
     values ($1,$2,$3,$4) RETURNING *`, [body.name, body.duration, ingredientIDs, body.instructions])
 
     res.status(201).send(rows)
-  } catch (err) {
-  next(err)
-  }
-})
+ 
+}))
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', asyncWrapper(async (req, res, next) => {
   const {
     body
   } = req
 
   const ingredientIDs = []
-
-  try {
    
 /**
  *  First we have to compare the ingredients in the request list to the one in the db so that we can
@@ -152,15 +140,11 @@ router.put('/:id', async (req, res, next) => {
     ingredients = $3, instructions = $4 WHERE id = $5 RETURNING *`, 
     [body.name, body.duration, ingredientIDs, body.instructions, req.params.id])
     res.send(rows)
-  } catch (err) {
-     next(err)
-
-  }
-})
+  
+}))
 
 
-router.delete('/:id', async (req, res, next) => {
-  try {
+router.delete('/:id', asyncWrapper(async (req, res, next) => {
 // get the ingredients array and delete matching ingredient instances
 // delete the ingredient
 await db.query(`DELETE from ingredient_quantity WHERE id IN 
@@ -168,12 +152,8 @@ await db.query(`DELETE from ingredient_quantity WHERE id IN
 
   await db.query(`DELETE FROM recipes WHERE id = $1`, [req.params.id])
   res.status(204).send(`Successfully deleted recipe with the id ${req.params.id}`)
-  } catch (err) {
-     next(err)
-
-  }
-
-})
+ 
+}))
 
 
 

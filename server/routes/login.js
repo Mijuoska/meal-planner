@@ -1,25 +1,18 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
-<<<<<<< HEAD
-const User = require('../models/user')
-=======
->>>>>>> error_handling
 const db = require('../db')
+const helper = require('../utils/helpers')
 
-router.post('/', async (req, res, next) => {
+const { asyncWrapper } = helper
+
+router.post('/', asyncWrapper(async (req, res, next) => {
     const { body } = req
     const { rows } = await db.query(`SELECT username, password FROM users WHERE username = $1`, [body.username])
-<<<<<<< HEAD
-    let passwordCorrect = ''
-    if (user) {
-        passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.passwordHash)
-=======
     const user = rows[0]
     let passwordCorrect = ''
     if (user) {
         passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.password)
->>>>>>> error_handling
     } else {
         return response.status(401).json({
             error: 'invalid username or password'
@@ -34,11 +27,7 @@ router.post('/', async (req, res, next) => {
 
     const userForToken = {
         username: user.username,
-<<<<<<< HEAD
-        id: user._id,
-=======
         id: user.id,
->>>>>>> error_handling
     }
 
     const token = jwt.sign(userForToken, process.env.SECRET)
@@ -47,20 +36,11 @@ router.post('/', async (req, res, next) => {
         token,
         username: user.username,
         name: user.name,
-<<<<<<< HEAD
-        id: user._id
-    })
-
-})
-
-module.exports = loginRouter
-=======
         id: user.id
     })
 
    
 
-}) 
+})) 
 
 module.exports = router
->>>>>>> error_handling

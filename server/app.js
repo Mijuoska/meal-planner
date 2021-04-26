@@ -4,7 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const config = require('./config')
+const config = require('./utils/config')
 const middleware = require('./middleware')
 
 const usersRouter = require('./routes/users')
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 // Extract token from response
-app.use(middleware.tokenExtractor)
+// app.use(middleware.tokenExtractor)
 // app.use(middleware.verifyToken)
 
 app.use('/api/recipes', recipesRouter)
@@ -35,8 +35,6 @@ app.use('/api/users', usersRouter)
 app.use('/api/auth', authRouter)
 
 
-
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -44,9 +42,15 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log(err)
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.status = err.status ? err.status : 500
+  res.locals.error = process.env.NODE_ENV === 'dev' ? err : {};
+  res.status(res.locals.status).send({
+    message: res.locals.message,
+    error: res.locals.error
+  })
 });
 
 app.listen(port, function () {
