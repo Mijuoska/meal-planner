@@ -2,9 +2,15 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
 const db = require('../db/index')
+const helper = require('../utils/helpers')
+
+const {
+    asyncWrapper
+} = helper
 
 
-router.post('/register', async (req, res, next) => {
+
+router.post('/register', asyncWrapper(async (req, res, next) => {
     const {
         body
     } = req
@@ -28,13 +34,11 @@ router.post('/register', async (req, res, next) => {
     const passwordHash =  await bcrypt.hash(password, saltRounds)
 
 
-    try {
-        const {
-            rows
-        } = await db.query(`INSERT INTO users 
+
+        const user = await db.query(`INSERT INTO users 
     (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
 
-        const user = rows[0]
+        const user = user.rows[0]
 
         const userForToken = {
             username: user.username,
@@ -43,20 +47,20 @@ router.post('/register', async (req, res, next) => {
 
         const token = jwt.sign(userForToken, process.env.SECRET)
 
+
+
         res.status(201).json({
             token,
             username: user.username,
             name: user.first_name,
             id: user.id
         })
-    } catch (err) {
-        next(err)
-    }
-})
+    
+}))
 
 
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', asyncWrapper(async (req, res, next) => {
     const {
         body
     } = req
@@ -96,6 +100,6 @@ router.post('/login', async (req, res, next) => {
 
 
 
-})
+}))
 
 module.exports = router
