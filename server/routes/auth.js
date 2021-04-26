@@ -9,7 +9,6 @@ const {
 } = helper
 
 
-
 router.post('/register', asyncWrapper(async (req, res, next) => {
     const {
         body
@@ -35,10 +34,10 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
 
 
-        const user = await db.query(`INSERT INTO users 
+        const userResult = await db.query(`INSERT INTO users 
     (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
 
-        const user = user.rows[0]
+        const user = userResult.rows[0]
 
         const userForToken = {
             username: user.username,
