@@ -28,6 +28,7 @@ const createUser = (e) => {
        setEmail('')
        setPage('weekly-calendar')
       }).catch(err => {
+        displayMessage(`Registration failed: ${err.response.data.message}`, 'error', 5)
         console.log(err)
     })
 }

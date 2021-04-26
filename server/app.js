@@ -47,7 +47,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.status = err.status ? err.status : 500
   res.locals.error = process.env.NODE_ENV === 'dev' ? err : {};
-  res.status(res.locals.status).send({
+  res.status(res.locals.status).json({
     message: res.locals.message,
     error: res.locals.error
   })

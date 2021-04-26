@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const router = require('express').Router()
 const db = require('../db/index')
 const helper = require('../utils/helpers')
+const AppError = require('../AppError')
 
 const {
     asyncWrapper
@@ -22,23 +23,20 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
     } = body
 
     if (!username) {
-        return res.status(400).send('Please provide a username')
+        return next(new AppError('Please provide a username', 403))
     }
-    if (!password || password.length < 6) {
-        return res.status(400).send('Please provide a password of at least 6 characters long')
+    if (!password || password.length < 8) {
+        return next(new AppError('Please provide a password that is at least 8 characters long', 403))
     }
-
 
 
     const saltRounds = 10
     const passwordHash =  await bcrypt.hash(password, saltRounds)
 
-
-
-        const user = await db.query(`INSERT INTO users 
+        const userResult = await db.query(`INSERT INTO users 
     (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
 
-        const user = user.rows[0]
+        const user = userResult.rows[0]
 
         const userForToken = {
             username: user.username,
@@ -71,17 +69,12 @@ router.post('/login', asyncWrapper(async (req, res, next) => {
     let passwordCorrect = ''
     if (user) {
         passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.password)
-    console.log(passwordCorrect)
     } else {
-        return res.status(401).json({
-            error: 'invalid username or password'
-        })
+        return next(new AppError('Invalid username or password',401))
     }
 
     if (!passwordCorrect) {
-        return res.status(401).json({
-            error: 'invalid username or password'
-        })
+        return next(new AppError('Invalid username or password', 401))
     }
 
     const userForToken = {
