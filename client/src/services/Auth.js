@@ -12,4 +12,9 @@ const login = async (user) => {
     return req.then(response => response.data)
 }
 
-export default { register, login }
+const logout = async () => {
+     const req = axios.post(`${baseUrl}/logout`)
+     return req.then(response => response.data)
+}
+
+export default { register, login, logout }

@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 const db = require('../db/index')
 const helper = require('../utils/helpers')
@@ -29,9 +29,7 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
         return next(new AppError('Please provide a password that is at least 8 characters long', 403))
     }
 
-
-    const saltRounds = 10
-    const passwordHash =  await bcrypt.hash(password, saltRounds)
+    const passwordHash =  await bcrypt.hash(password, process.env.SALT_ROUNDS)
 
         const userResult = await db.query(`INSERT INTO users 
     (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
@@ -40,18 +38,16 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
         const userForToken = {
             username: user.username,
-            id: user.id,
+            userId: user.id
         }
 
         const token = jwt.sign(userForToken, process.env.SECRET)
 
 
-
         res.status(201).json({
-            token,
-            username: user.username,
-            name: user.first_name,
-            id: user.id
+          token, 
+          name: user.first_name,
+          username: user.username
         })
     
 }))
@@ -75,24 +71,29 @@ router.post('/login', asyncWrapper(async (req, res, next) => {
 
     if (!passwordCorrect) {
         return next(new AppError('Invalid username or password', 401))
-    }
+    } 
 
-    const userForToken = {
-        username: user.username,
-        id: user.id,
-    }
+const userForToken = {
+    username: user.username,
+    userId: user.id
+}
 
-    const token = jwt.sign(userForToken, process.env.SECRET)
+const token = jwt.sign(userForToken, process.env.SECRET)
 
+    res.status(200).json(
+        {token, 
+            name: user.first_name, 
+            username: user.username
+        })
+
+}))
+
+
+router.post('/logout', asyncWrapper(async(req, res, next) =>{
+    req.session.destroy()
     res.status(200).json({
-        token,
-        username: user.username,
-        name: user.first_name,
-        id: user.id
+        success: `Logged out user`
     })
-
-
-
 }))
 
 module.exports = router
