@@ -1,7 +1,15 @@
 import axios from 'axios'
-
+import helpers from '../helpers/helpers'
 
 const baseUrl = 'http://localhost:3000/api/meals'
+
+console.log(helpers)
+
+const config = {
+    headers: {
+        authorization: helpers.extractToken()
+    }
+}
 
 const getAll = async () => {
     const req = axios.get(`${baseUrl}`)
@@ -20,8 +28,8 @@ const update = async (meal, id) => {
 }
 
 
-const remove = async (id) => {
-   const req = axios.delete(`${baseUrl}/${id}`)
+const remove = async (id, config) => {
+   const req = axios.delete(`${baseUrl}/${id}`, config)
    return req.then(response => response.data)
 }
 export default { getAll, create, update, remove }
