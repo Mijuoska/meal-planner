@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
 const config = require('./utils/config')
-
+const middleware = require('./middleware')
 
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
@@ -26,6 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
+app.use(middleware.tokenExtractor)
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)

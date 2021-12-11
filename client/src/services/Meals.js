@@ -3,7 +3,6 @@ import helpers from '../helpers/helpers'
 
 const baseUrl = 'http://localhost:3000/api/meals'
 
-console.log(helpers)
 
 const config = {
     headers: {
@@ -11,19 +10,21 @@ const config = {
     }
 }
 
+console.log(config)
+
 const getAll = async () => {
-    const req = axios.get(`${baseUrl}`)
+    const req = axios.get(`${baseUrl}`, config)
     return req.then(response => response.data)
 
 }
 
 const create = async (newMeal) => {
-    const req = axios.post(`${baseUrl}`, newMeal)
+    const req = axios.post(`${baseUrl}`, newMeal, config)
     return req.then(response => response.data)
 }
 
 const update = async (meal, id) => {
-    const req = axios.put(`${baseUrl}/${id}`, meal)
+    const req = axios.put(`${baseUrl}/${id}`, meal, config)
     return req.then(response => response.data)
 }
 
