@@ -1,16 +1,12 @@
+import helpers from '../helpers/helpers'
+
 const Meal = ({ meal, toggleModal }) => {
   const dragStartHandler = (e) => {
     e.dataTransfer.setData("text/plain", e.target.id);
     e.dataTransfer.dropEffect = "move";
   };
 
-const shortenRecipeName = (name) => {
-  if (name.length > 30) {
-  return name.substring(0,30) + '...'
-  } else {
-    return name;
-  }
-}
+const { shortenString } = helpers
 
   return (
     <div
@@ -21,7 +17,7 @@ const shortenRecipeName = (name) => {
       draggable="true"
     >
       {
-        shortenRecipeName(meal.recipe_name)
+        shortenString(meal.recipe_name, 30)
       }
       <div className="meal-card-body">
         <span className="meal-assigned-to" style={{backgroundColor: meal.tag_color}}>{meal.assigned_to_name}</span>

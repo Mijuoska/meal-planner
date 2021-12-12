@@ -17,5 +17,13 @@ const createAuthHeader = () => {
 }
 
 
-export default { extractToken, createAuthHeader }
+const shortenString = (str, maxLength) => {
+    if (str.length > maxLength) {
+        return str.substring(0, maxLength) + '...'
+    } else {
+        return str;
+    }
+}
+
+export default { extractToken, createAuthHeader, shortenString }
 
