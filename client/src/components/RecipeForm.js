@@ -92,10 +92,17 @@ const createRecipe = (recipe) => {
 }
 
 const createNewIngredient = (name) => {
-    var newIngredient = {'name': name}
+    const newIngredient = {'name': name}
     Ingredients.create(newIngredient).then(data => {
-        setIngredientOptions([...ingredientOptions, data])
-        console.log(data)
+       const createdIngredient =  {
+            'value': data[0].id,
+            'label': data[0].name,
+            'quantity': 1,
+            'unit': 'tl'
+        }
+      
+        setIngredientOptions([...ingredientOptions, createdIngredient])
+        setIngredients([...ingredients, createdIngredient])
     }).catch(err => {
         console.log(err)
         displayMessage('Something went wrong with creating a new ingredient', "error", 5)
