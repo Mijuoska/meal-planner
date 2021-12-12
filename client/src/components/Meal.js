@@ -4,6 +4,13 @@ const Meal = ({ meal, toggleModal }) => {
     e.dataTransfer.dropEffect = "move";
   };
 
+const shortenRecipeName = (name) => {
+  if (name.length > 30) {
+  return name.substring(0,30) + '...'
+  } else {
+    return name;
+  }
+}
 
   return (
     <div
@@ -13,7 +20,9 @@ const Meal = ({ meal, toggleModal }) => {
       id={JSON.stringify(meal)}
       draggable="true"
     >
-      {meal.recipe_name}
+      {
+        shortenRecipeName(meal.recipe_name)
+      }
       <div className="meal-card-body">
         <span className="meal-assigned-to" style={{backgroundColor: meal.tag_color}}>{meal.assigned_to_name}</span>
       </div>
