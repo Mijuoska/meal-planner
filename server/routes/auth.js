@@ -31,10 +31,6 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
     const passwordHash =  await bcrypt.hash(password, process.env.SALT_ROUNDS)
 
 
-    const saltRounds = 10
-    const passwordHash =  await bcrypt.hash(password, saltRounds)
-
-
 
         const userResult = await db.query(`INSERT INTO users 
     (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
