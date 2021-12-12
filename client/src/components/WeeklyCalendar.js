@@ -22,7 +22,6 @@ const [meal, setMeal] = useState("");
   ];
 
   const mealConfig = [
-    // {value: 'breakfast', label: 'Aamiainen'},
     { value: "lunch", label: "Lunch" },
     { value: "dinner", label: "Dinner" },
   ];
@@ -75,7 +74,6 @@ const [meal, setMeal] = useState("");
 
   const toggleModal = (e) => {
     if (!isOpen) {
-        console.log(e.currentTarget)
       const meal = JSON.parse(e.currentTarget.id);
       setMeal(meal);
       setIsOpen(true);
@@ -85,10 +83,10 @@ const [meal, setMeal] = useState("");
   };
 
   useEffect(() => {
-    Meals.getAll().then((data) => {
+    Meals.getAll()
+    .then((data) => {
       setMeals(data);
     }).catch(err => {
-      console.log(err)
       displayMessage("We're having trouble retrieving your meal plan. Please try again later", "error", 5)
     })
   }, []);
