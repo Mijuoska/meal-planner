@@ -11,15 +11,14 @@ const handleLogin = (e) => {
     e.preventDefault()
     Auth.login({username, password})
     .then(data => {
-      displayMessage(`Successfully logged in as ${data.name}`, 'success', 5)
+      displayMessage(` Successfully logged in as ${data.name}`, 'success', 5)
       window.localStorage.setItem('loggedInUser', JSON.stringify(data))
       setUser(data)
       setUsername('')
       setPassword('')
       setPage('weekly-calendar')
     }).catch(err => {
-      displayMessage(`Login failed:  ${err.response.data.message}`, 'error', 5)
-      console.log(err)
+      displayMessage(`Login failed:  ${err.response.data.error.message}`, 'error', 5)
     })
 
 }

@@ -65,11 +65,13 @@ router.post('/login', asyncWrapper(async (req, res, next) => {
     let passwordCorrect = ''
     if (user) {
         passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.password)
+
     } else {
         return next(new AppError('Invalid username or password',401))
     }
 
     if (!passwordCorrect) {
+
         return next(new AppError('Invalid username or password', 401))
     } 
 
@@ -79,8 +81,7 @@ const userForToken = {
 }
 
 const token = jwt.sign(userForToken, process.env.SECRET)
-
-    res.status(200).json(
+   return res.status(200).json(
         {token, 
             name: user.first_name, 
             username: user.username

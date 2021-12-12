@@ -6,6 +6,11 @@ const baseUrl = 'http://localhost:3000/api/meals'
 const config = helpers.createAuthHeader()
 
 const getAll = async () => {
+ // If user is not logged in, return an empty array without call to server
+
+    if (!config) {
+        return []
+    }
     const req = axios.get(`${baseUrl}`, config)
     return req.then(response => response.data)
 
@@ -22,7 +27,8 @@ const update = async (meal, id) => {
 }
 
 
-const remove = async (id, config) => {
+const remove = async (id) => {
+    console.log(config)
    const req = axios.delete(`${baseUrl}/${id}`, config)
    return req.then(response => response.data)
 }
