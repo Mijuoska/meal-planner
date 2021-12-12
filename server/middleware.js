@@ -1,14 +1,22 @@
 const jwt = require('jsonwebtoken')
 
-const tokenExtractor = (req, res, next) => {
+const authorizeRequest = (req, res, next) => {
+    if (req.originalUrl.startsWith('/api/auth')) {
+        return next()
+        }
+    tokenExtractor(req, res)
+    verifyToken(req, res)
+    return next()
+}
+
+const tokenExtractor = (req, res) => {
     const authorization = req.get('authorization')
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         req.token = authorization.substring(7)
     }
-    next()
 }
 
-const verifyToken = (req, res, next) => {
+const verifyToken = (req, res) => {
     let decodedToken 
     if (req.token) {
      decodedToken = jwt.verify(req.token, process.env.SECRET)
@@ -17,15 +25,14 @@ const verifyToken = (req, res, next) => {
              error: 'token missing or invalid'
          })
     }
-     if (!req.token || !decodedToken.userId) {
+     if (!decodedToken.userId) {
          return res.status(401).send({
              error: 'token missing or invalid'
          })
      } else {
          req.user_id = decodedToken.userId
-         next()
      }
     
 }
 
-module.exports = { tokenExtractor, verifyToken }
+module.exports = { authorizeRequest }

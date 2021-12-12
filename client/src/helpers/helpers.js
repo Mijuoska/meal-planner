@@ -5,11 +5,17 @@ const extractToken = () => {
 }
 
 const createAuthHeader = () => {
+    var token = extractToken();
+    if (token) {
     return { headers:  {
         authorization: 'bearer ' + extractToken()
+    } 
+}
+    } else {
+        return null;
     }
 }
-}
+
 
 export default { extractToken, createAuthHeader }
 
