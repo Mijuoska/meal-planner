@@ -18,6 +18,16 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 }));
 
 
+router.post('/', asyncWrapper(async (req, res, next) => {
+    var { body } = req
+    try {
+        const { rows } = await db.query('INSERT INTO ingredients (name) VALUES($1) RETURNING *', [body.name])
+        res.status(200).send(rows);
+    } catch(err) {
+        next(err)
+    }
+}))
+
     
 
 module.exports = router

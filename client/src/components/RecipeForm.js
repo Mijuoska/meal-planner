@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import Recipes from '../services/Recipes'
 import Ingredients from '../services/Ingredients'
-import Select from 'react-select'
+import CreatableSelect from 'react-select/creatable';
 
 const RecipeForm = ({ displayMessage, toggleModal, recipes, setRecipes, recipeID }) => {
     const [showForm, toggleForm] = useState(true)
@@ -91,6 +91,17 @@ const createRecipe = (recipe) => {
 
 }
 
+const createNewIngredient = (name) => {
+    var newIngredient = {'name': name}
+    Ingredients.create(newIngredient).then(data => {
+        setIngredientOptions([...ingredientOptions, data])
+        console.log(data)
+    }).catch(err => {
+        console.log(err)
+        displayMessage('Something went wrong with creating a new ingredient', "error", 5)
+    }) 
+}
+
 const updateRecipe = (id, recipe) => {
     Recipes.update(id, recipe).then(data => {
     const updatedRecipes = recipes.filter(r => r.id != data[0].id).concat(data[0])
@@ -156,7 +167,7 @@ Name
 </div>
 <div>
 <label>Ingredients</label>
-<Select onChange={setIngredients} value={ingredients} placeholder="Search ingredients" options={ingredientOptions} isMulti={true} 
+<CreatableSelect onCreateOption={createNewIngredient} onChange={setIngredients} value={ingredients} placeholder="Search ingredients" options={ingredientOptions} isMulti={true} 
 isSearchable={true}/>
 </div>
 <div>
