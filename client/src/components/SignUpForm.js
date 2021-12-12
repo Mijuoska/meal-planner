@@ -18,9 +18,8 @@ const createUser = (e) => {
         password
     }
     Auth.register(newUser).then(data => {
-        // set local storage
-       window.localStorage.setItem('loggedInUser', JSON.stringify(data))
-        displayMessage(`Welcome ${data.name}! You are now logged in`, 'success', 5)
+       displayMessage(`Welcome ${data.name}! You are now logged in`, 'success', 5)
+      window.localStorage.setItem('loggedInUser', JSON.stringify(data))
        setUser(data)
        setUsername('')
        setPassword('')
@@ -28,6 +27,7 @@ const createUser = (e) => {
        setEmail('')
        setPage('weekly-calendar')
       }).catch(err => {
+        displayMessage(`Registration failed: ${err.response.data.message}`, 'error', 5)
         console.log(err)
     })
 }

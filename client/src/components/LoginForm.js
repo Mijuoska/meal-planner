@@ -18,6 +18,7 @@ const handleLogin = (e) => {
       setPassword('')
       setPage('weekly-calendar')
     }).catch(err => {
+      displayMessage(`Login failed:  ${err.response.data.message}`, 'error', 5)
       console.log(err)
     })
 

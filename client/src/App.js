@@ -4,6 +4,7 @@ import Recipes from './components/Recipes'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import SignUpForm from './components/SignUpForm'
+import Auth from './services/Auth'
 
 
 const App = () => {
@@ -24,6 +25,8 @@ useEffect(() => {
   const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
   if (loggedInUser) {
     setUser(loggedInUser)
+  } else {
+    setPage('login')
   }
   
 }, [])
@@ -38,9 +41,12 @@ const toggleModal = () => {
 }
 
 const logOut = () => {
+  Auth.logout().then(data => {
   window.localStorage.removeItem('loggedInUser')
   setUser(null)
   setPage('login')
+  displayMessage('Successfully logged out', 'success', 5)
+  })
 }
 
 const AuthLinks = () => {
@@ -74,10 +80,10 @@ const AuthLinks = () => {
    <div className='navbar'>
    
    <ul className="nav">
- <li className="brand" onClick={() => setPage('weekly-calendar')}>
+ { user ? <li className="brand" onClick={() => setPage('weekly-calendar')}>
    Weekly planner
-   </li>
-   <li id="all-recipes" onClick={() => setPage('recipes')}>All recipes</li>
+   </li> : null}
+  { user ? <li id="all-recipes" onClick={() => setPage('recipes')}>All recipes</li> : null }
 
    </ul>
    {AuthLinks()}
@@ -91,7 +97,7 @@ const AuthLinks = () => {
    toggleModal={toggleModal}
    isOpen={isOpen}
    />
-   <WeeklyCalendar show={page === 'weekly-calendar'}/> 
+   <WeeklyCalendar show={page === 'weekly-calendar'} displayMessage={displayMessage}/> 
    <LoginForm setPage={setPage} show={page === 'login'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
    <SignUpForm show={page === 'sign-up'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
    

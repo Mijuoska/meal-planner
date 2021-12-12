@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require('express-session')
 const config = require('./utils/config')
 const middleware = require('./middleware')
 
@@ -17,6 +18,7 @@ const app = express();
 
 const port = config.PORT 
 
+app.use(session({secret: process.env.SECRET, cookie: {maxAge: 600000000}}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,9 +26,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
-// Extract token from response
-// app.use(middleware.tokenExtractor)
-// app.use(middleware.verifyToken)
+app.use(middleware.tokenExtractor)
+app.use(middleware.verifyToken)
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
@@ -47,7 +48,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.status = err.status ? err.status : 500
   res.locals.error = process.env.NODE_ENV === 'dev' ? err : {};
-  res.status(res.locals.status).send({
+  res.status(res.locals.status).json({
     message: res.locals.message,
     error: res.locals.error
   })
