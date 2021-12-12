@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import WeeklyCalendar from './components/WeeklyCalendar'
-import Recipes from './components/Recipes'
+import WeeklyCalendar from './pages/WeeklyCalendar'
+import Recipes from './pages/Recipes'
 import Notification from './components/Notification'
-import LoginForm from './components/LoginForm'
-import SignUpForm from './components/SignUpForm'
+import LoginForm from './pages/LoginForm'
+import SignUpForm from './pages/SignUpForm'
 import Auth from './services/Auth'
 
 

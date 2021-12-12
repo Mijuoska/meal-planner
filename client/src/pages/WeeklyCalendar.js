@@ -1,8 +1,8 @@
-import Meal from "./Meal";
+import Meal from "../components/Meal";
 import { useEffect, useState } from "react";
 import Meals from "../services/Meals";
 import Modal from "react-modal";
-import MealForm from "./MealForm";
+import MealForm from "../components/MealForm";
 
 const WeeklyCalendar = ({ displayMessage, show }) => {
 

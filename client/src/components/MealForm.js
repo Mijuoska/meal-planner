@@ -13,7 +13,6 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   const [user, setUser] = useState("");
   const [users, setUsers] = useState([]);
 
-console.log(mealType)
 
   const submit = (e) => {
     e.preventDefault();

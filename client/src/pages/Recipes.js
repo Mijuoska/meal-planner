@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import RecipeFormModal from './RecipeFormModal'
+import RecipeFormModal from '../components/RecipeFormModal'
 import Recipes from '../services/Recipes'
-import Recipe from './Recipe'
+import Recipe from '../components/Recipe'
 
 
 const RecipesList = ( { show, displayMessage, toggleModal, isOpen } ) => {
