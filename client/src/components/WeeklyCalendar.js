@@ -88,7 +88,7 @@ const [meal, setMeal] = useState("");
     }).catch(err => {
       displayMessage("We're having trouble retrieving your meal plan. Please try again later", "error", 5)
     })
-  }, []);
+  }, [show]);
 
   const generateHeader = () => {
     // Make a copy and create one empty slot
