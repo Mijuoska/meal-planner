@@ -1,8 +1,6 @@
 const express = require('express');
 const db = require('../db');
-const jwt = require('jsonwebtoken')
 const router = express.Router();
-const middleware = require('../middleware')
 const helpers = require('../utils/helpers')
 
 const { asyncWrapper } = helpers
@@ -34,14 +32,6 @@ router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
 
 router.post('/', asyncWrapper(async (req, res, next) => {
     const { body } = req
-    const token = req.headers.authorization;
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken.userId) {
-        return res.status(401).json({
-            error: 'token missing or invalid '
-        })
-    }
-   
         const result = await db.query(`INSERT INTO meals (day, type, recipe_id, assigned_to) 
         VALUES ($1, $2, $3, $4) RETURNING *`,
         [body.day, body.type, body.recipe_id, body.assigned_to])

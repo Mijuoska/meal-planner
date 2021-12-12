@@ -52,7 +52,6 @@ const [meal, setMeal] = useState("");
     
     // update meal object with new day and meal type details
     const target = JSON.parse(e.currentTarget.id);
-    console.log(target)
     if (meals.some(meal => meal.day === target.day && meal.type === target.meal.value))
       return
 

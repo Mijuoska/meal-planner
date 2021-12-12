@@ -3,14 +3,7 @@ import helpers from '../helpers/helpers'
 
 const baseUrl = 'http://localhost:3000/api/meals'
 
-
-const config = {
-    headers: {
-        authorization: helpers.extractToken()
-    }
-}
-
-console.log(config)
+const config = helpers.createAuthHeader()
 
 const getAll = async () => {
     const req = axios.get(`${baseUrl}`, config)

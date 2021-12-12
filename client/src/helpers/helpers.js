@@ -1,10 +1,15 @@
-
-
 const extractToken = () => {
     let user = JSON.parse(window.localStorage.getItem('loggedInUser')) 
     const token = user ? user.token : null
     return token
 }
 
-export default { extractToken }
+const createAuthHeader = () => {
+    return { headers:  {
+        authorization: 'bearer ' + extractToken()
+    }
+}
+}
+
+export default { extractToken, createAuthHeader }
 

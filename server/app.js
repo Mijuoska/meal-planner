@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 app.use(middleware.tokenExtractor)
+app.use(middleware.verifyToken)
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)

@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 
 const tokenExtractor = (req, res, next) => {
-    console.log('helo')
     const authorization = req.get('authorization')
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         req.token = authorization.substring(7)
@@ -13,13 +12,17 @@ const verifyToken = (req, res, next) => {
     let decodedToken 
     if (req.token) {
      decodedToken = jwt.verify(req.token, process.env.SECRET)
+    } else {
+         return res.status(401).send({
+             error: 'token missing or invalid'
+         })
     }
-     if (!req.token || !decodedToken.id) {
+     if (!req.token || !decodedToken.userId) {
          return res.status(401).send({
              error: 'token missing or invalid'
          })
      } else {
-         req.user_id = decodedToken.id
+         req.user_id = decodedToken.userId
          next()
      }
     
