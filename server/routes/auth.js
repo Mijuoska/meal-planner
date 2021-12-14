@@ -28,7 +28,7 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
         return next(new AppError('Please provide a password that is at least 8 characters long', 403))
     }
 
-    const passwordHash =  await bcrypt.hash(password, process.env.SALT_ROUNDS)
+    const passwordHash = await bcrypt.hash(password, 10)
 
 
 
@@ -47,6 +47,7 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
         res.status(201).json({
           token, 
+          id: user.id,
           name: user.first_name,
           username: user.username
         })
@@ -65,8 +66,8 @@ router.post('/login', asyncWrapper(async (req, res, next) => {
     const user = rows[0]
     let passwordCorrect = ''
     if (user) {
-        passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.password)
-
+        passwordCorrect = await bcrypt.compare(body.password, user.password)
+        console.log(passwordCorrect)
     } else {
         return next(new AppError('Invalid username or password',401))
     }
@@ -84,6 +85,7 @@ const userForToken = {
 const token = jwt.sign(userForToken, process.env.SECRET)
    return res.status(200).json(
         {token, 
+            id: user.id,
             name: user.first_name, 
             username: user.username
         })
@@ -97,5 +99,44 @@ router.post('/logout', asyncWrapper(async(req, res, next) =>{
         success: `Logged out user`
     })
 }))
+
+router.put('/reset_password', asyncWrapper(async(req, res, next) => {
+     const {
+         body
+     } = req
+
+
+     const {
+         rows
+     } = await db.query(`SELECT id, first_name, username, password FROM users WHERE id = $1`, [body.user_id])
+     const user = rows[0]
+     let passwordCorrect = ''
+          const {
+              old_password
+          } = body;
+
+     if (user) {
+         passwordCorrect = await bcrypt.compare(old_password, user.password)
+     } else {
+         return next(new AppError('Invalid user or password', 401))
+     }
+     if (!passwordCorrect) {
+         return next(new AppError('Invalid user or password', 401))
+     }
+
+    const { new_password } = body
+if (!new_password || new_password.length < 8) {
+    return next(new AppError('Please provide a password that is at least 8 characters long', 403))
+}
+
+const passwordHash = await bcrypt.hash(new_password, 10)
+const { user_id } = body
+
+const { userRows } = await db.query('UPDATE users SET password = $1 WHERE id = $2', [passwordHash, user_id])
+
+res.status(201).send(userRows[0])
+
+}))
+
 
 module.exports = router

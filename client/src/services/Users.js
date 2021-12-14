@@ -25,4 +25,10 @@ const create = async (user) => {
     const req = axios.post(`${baseUrl}`, user, config)
     return req.then(response => response.data)
 }
-export default { getAll, get, create }
+
+const update = async (ID, user) => {
+    const req = axios.put(`${baseUrl}/${ID}`, user, config)
+    return req.then(response => response.data)
+}
+
+export default { getAll, get, create, update }
