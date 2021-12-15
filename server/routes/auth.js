@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
 const router = require('express').Router()
 const db = require('../db/index')
 const helper = require('../utils/helpers')
@@ -9,6 +11,44 @@ const {
     asyncWrapper
 } = helper
 
+
+passport.use(new LocalStrategy(
+async (username, password, done) => {
+    try {
+       const { rows } = await db.query('SELECT * FROM users WHERE username = $1', [username])
+       let user
+
+       if (rows.length == 0) {
+                 return done(null, false, {
+                     message: 'Incorrect username.'
+                 });
+
+       } else {
+            user = rows[0]
+       }
+
+       let passwordCorrect = await bcrypt.compare(password, user.password)
+       if (!passwordCorrect) {
+        return done(null, false, {
+            message: 'Incorrect password.'
+        });
+       }
+    return done(null, user);
+   
+    
+    } catch (ex) {
+        return done(ex)
+    }
+    }
+))
+
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
 
 router.post('/register', asyncWrapper(async (req, res, next) => {
     const {
@@ -56,41 +96,44 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
 
 
-router.post('/login', asyncWrapper(async (req, res, next) => {
-    const {
-        body
-    } = req
-    const {
-        rows
-    } = await db.query(`SELECT id, first_name, username, password FROM users WHERE username = $1`, [body.username])
-    const user = rows[0]
-    let passwordCorrect = ''
-    if (user) {
-        passwordCorrect = await bcrypt.compare(body.password, user.password)
-        console.log(passwordCorrect)
-    } else {
-        return next(new AppError('Invalid username or password',401))
-    }
-
-    if (!passwordCorrect) {
-
-        return next(new AppError('Invalid username or password', 401))
-    } 
-
-const userForToken = {
-    username: user.username,
-    userId: user.id
-}
-
-const token = jwt.sign(userForToken, process.env.SECRET)
-   return res.status(200).json(
-        {token, 
-            id: user.id,
-            name: user.first_name, 
-            username: user.username
-        })
-
+router.post('/login', passport.authenticate('local'), asyncWrapper(async (req, res, next) => {
+    const { user } = req
+    console.log(user)
+    res.json({'name': req.user.first_name})
 }))
+
+
+   
+//     const {
+//         rows
+//     } = await db.query(`SELECT id, first_name, username, password FROM users WHERE username = $1`, [body.username])
+//     const user = rows[0]
+//     let passwordCorrect = ''
+//     if (user) {
+//         passwordCorrect = await bcrypt.compare(body.password, user.password)
+//     } else {
+//         return next(new AppError('Invalid username or password',401))
+//     }
+
+//     if (!passwordCorrect) {
+
+//         return next(new AppError('Invalid username or password', 401))
+//     } 
+
+// const userForToken = {
+//     username: user.username,
+//     userId: user.id
+// }
+
+// const token = jwt.sign(userForToken, process.env.SECRET)
+//    return res.status(200).json(
+//         {token, 
+//             id: user.id,
+//             name: user.first_name, 
+//             username: user.username
+//         })
+
+// }))
 
 
 router.post('/logout', asyncWrapper(async(req, res, next) =>{

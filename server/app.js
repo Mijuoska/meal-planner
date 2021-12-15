@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const passport = require('passport')
 const logger = require('morgan');
 const session = require('express-session')
 const config = require('./utils/config')
@@ -19,6 +20,8 @@ const app = express();
 const port = config.PORT 
 
 app.use(session({secret: process.env.SECRET, cookie: {maxAge: 600000000}}))
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
