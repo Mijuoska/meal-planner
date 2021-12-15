@@ -6,7 +6,6 @@ const Account = ( { show, displayMessage }) => {
 
 const [userDetails, setUserDetails] = useState({})
 const [editMode, setEditMode] = useState({})
-console.log(editMode)
 
 
 const enableEditing = (event) => {
