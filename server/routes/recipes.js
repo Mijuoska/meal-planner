@@ -82,8 +82,8 @@ router.post('/', asyncWrapper(async (req, res, next) => {
     VALUES($1, $2, $3) RETURNING id`, [ingredient.value, ingredient.quantity, ingredient.unit])
       ingredientIDs.push(rows[0].id)
      })
-    const { rows } = await db.query(`INSERT INTO recipes (name, preparation_time, ingredients, instructions) 
-    values ($1,$2,$3,$4) RETURNING *`, [body.name, body.duration, ingredientIDs, body.instructions])
+    const { rows } = await db.query(`INSERT INTO recipes (name, preparation_time, ingredients, instructions, created_by) 
+    values ($1,$2,$3,$4, $5) RETURNING *`, [body.name, body.duration, ingredientIDs, body.instructions, req.user.id])
 
     res.status(201).send(rows)
  
