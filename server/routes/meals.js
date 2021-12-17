@@ -6,7 +6,6 @@ const helpers = require('../utils/helpers')
 const { asyncWrapper } = helpers
 
 router.get('/', asyncWrapper(async (req, res, next) => {
-
     const { rows } = await db.query(`SELECT meals.id, day, type, assigned_to, users.first_name 
     AS assigned_to_name, users.tag_color AS tag_color, recipe_id, recipes.name AS recipe_name FROM meals 
                                 INNER JOIN recipes ON recipes.id = meals.recipe_id

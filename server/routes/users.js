@@ -28,7 +28,8 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
     const {
       rows
     } = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id])
-    res.send(rows[0])
+    res.status(200).send(rows[0])
+    
  
 }));
 

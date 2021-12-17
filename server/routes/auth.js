@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const router = require('express').Router()
@@ -33,7 +32,13 @@ async (username, password, done) => {
             message: 'Incorrect password.'
         });
        }
-    return done(null, user);
+
+       const sessionUser = {
+           'first_name': user.first_name,
+           'username': user.username,
+           'id': user.id
+       }
+    return done(null, sessionUser);
    
     
     } catch (ex) {
@@ -49,6 +54,8 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
+
+
 
 router.post('/register', asyncWrapper(async (req, res, next) => {
     const {
@@ -71,26 +78,24 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
     const passwordHash = await bcrypt.hash(password, 10)
 
 
-
         const userResult = await db.query(`INSERT INTO users 
     (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
 
         const user = userResult.rows[0]
 
-        const userForToken = {
-            username: user.username,
-            userId: user.id
-        }
+       req.login(user, function(err) {
+           if (err) {
+           return next(new AppError('Something went wrong with loggin you in', 500))
+           }
+           return res.status(201).json({
+               id: user.id,
+               name: user.first_name,
+               username: user.username
+           })
+       })
 
-        const token = jwt.sign(userForToken, process.env.SECRET)
 
 
-        res.status(201).json({
-          token, 
-          id: user.id,
-          name: user.first_name,
-          username: user.username
-        })
     
 }))
 
@@ -98,45 +103,14 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
 router.post('/login', passport.authenticate('local'), asyncWrapper(async (req, res, next) => {
     const { user } = req
-    console.log(user)
-    res.json({'name': req.user.first_name})
+    console.log(req.user)
+    res.status(200).json({id: user.id, 'name': user.first_name})
 }))
 
 
-   
-//     const {
-//         rows
-//     } = await db.query(`SELECT id, first_name, username, password FROM users WHERE username = $1`, [body.username])
-//     const user = rows[0]
-//     let passwordCorrect = ''
-//     if (user) {
-//         passwordCorrect = await bcrypt.compare(body.password, user.password)
-//     } else {
-//         return next(new AppError('Invalid username or password',401))
-//     }
-
-//     if (!passwordCorrect) {
-
-//         return next(new AppError('Invalid username or password', 401))
-//     } 
-
-// const userForToken = {
-//     username: user.username,
-//     userId: user.id
-// }
-
-// const token = jwt.sign(userForToken, process.env.SECRET)
-//    return res.status(200).json(
-//         {token, 
-//             id: user.id,
-//             name: user.first_name, 
-//             username: user.username
-//         })
-
-// }))
-
 
 router.post('/logout', asyncWrapper(async(req, res, next) =>{
+    req.logout()
     req.session.destroy()
     res.status(200).json({
         success: `Logged out user`

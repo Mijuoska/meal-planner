@@ -8,37 +8,33 @@ const config = helpers.createAuthHeader()
 
 
 const getAll = async () => {
-    // If user is not logged in, return an empty array without call to server
-        if (!config) {
-            return [];
-        }
 
-    const req = axios.get(`${baseUrl}`, config);
+    const req = axios.get(`${baseUrl}`);
     return req.then(response => response.data)
 }
 
 const getIngredients = async (ID) => {
-    const req = axios.get(`${baseUrl}/${ID}/ingredients`, config)
+    const req = axios.get(`${baseUrl}/${ID}/ingredients`)
     return req.then(response => response.data)
 }
 
 const get = async (ID) => {
-    const req = axios.get(`${baseUrl}/${ID}`, config);
+    const req = axios.get(`${baseUrl}/${ID}`);
     return req.then(response => response.data)
 }
 
 const create = async (newRecipe) => {
-    const req = axios.post(`${baseUrl}`, newRecipe, config)
+    const req = axios.post(`${baseUrl}`, newRecipe)
     return req.then(response => response.data)
 }
 
 const update = async (ID, updatedRecipe) => {
-    const req = axios.put(`${baseUrl}/${ID}`, updatedRecipe, config)
+    const req = axios.put(`${baseUrl}/${ID}`, updatedRecipe)
     return req.then(response => response.data)
 }
 
 const remove = async (ID) => {
-    const req = axios.delete(`${baseUrl}/${ID}`, config)
+    const req = axios.delete(`${baseUrl}/${ID}`)
     return req.then(response => response.data)
 }
 

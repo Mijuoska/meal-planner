@@ -7,27 +7,22 @@ const config = helpers.createAuthHeader()
 
 
 const getAll = async () => {
-    // If user is not logged in, return an empty array without call to server
-
-    if (!config) {
-        return []
-    }
-    const req = axios.get(`${baseUrl}`, config)
+    const req = axios.get(`${baseUrl}`)
     return req.then(response => response.data)
 }
 
 const get = async (ID) => {
-    const req = axios.get(`${baseUrl}/${ID}`, config)
+    const req = axios.get(`${baseUrl}/${ID}`)
     return req.then(response => response.data)
 }
 
 const create = async (user) => {
-    const req = axios.post(`${baseUrl}`, user, config)
+    const req = axios.post(`${baseUrl}`, user)
     return req.then(response => response.data)
 }
 
 const update = async (ID, user) => {
-    const req = axios.put(`${baseUrl}/${ID}`, user, config)
+    const req = axios.put(`${baseUrl}/${ID}`, user)
     return req.then(response => response.data)
 }
 
