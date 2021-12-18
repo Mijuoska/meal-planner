@@ -273,6 +273,20 @@ button {
   display: none;
 }
 
+.edit-save-field:hover {
+  color: black;
+  transition: 0.3s ease-in;
+
+}
+
+.edit-save-field {
+  margin-left: 0.5rem;
+  color: transparent;
+
+}
+
+
+
 
 
 .recipe-list-card-details {

@@ -1,6 +1,8 @@
 import axios from 'axios'
 
+
 const baseUrl = 'http://localhost:3000/api/auth'
+
 
 const register = async (newUser) => {
     const req = axios.post(`${baseUrl}/register`, newUser)
@@ -17,4 +19,9 @@ const logout = async () => {
      return req.then(response => response.data)
 }
 
-export default { register, login, logout }
+const resetPassword = async (body) => {
+const req = axios.put(`${baseUrl}/reset_password`, body);
+return req.then(response => response.data)
+}
+
+export default { register, login, logout, resetPassword }
