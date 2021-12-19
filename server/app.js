@@ -21,7 +21,16 @@ app.disable('x-powered-by')
 const port = config.PORT 
 
 
-app.use(session({secret: process.env.SECRET}))
+app.use(session({
+  secret: config.SECRET,
+  saveUnitialized: false,
+  resaved: false,
+  cookie: {
+    sameSite: true,
+    secure: config.NODE_ENV === 'production',
+    maxAge: parseInt(config.SESSION_AGE)
+  }
+}))
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
