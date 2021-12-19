@@ -103,7 +103,6 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
 router.post('/login', passport.authenticate('local'), asyncWrapper(async (req, res, next) => {
     const { user } = req
-    console.log(req.user)
     res.status(200).json({id: user.id, 'name': user.first_name})
 }))
 
@@ -125,34 +124,23 @@ router.put('/reset_password', asyncWrapper(async(req, res, next) => {
 
      const {
          rows
-     } = await db.query(`SELECT id, first_name, username, password FROM users WHERE id = $1`, [body.user_id])
+     } = await db.query(`SELECT id, first_name, username, password FROM users WHERE id = $1`, [req.user.id])
      const user = rows[0]
-     let passwordCorrect = ''
-          const {
-              old_password
-          } = body;
 
      if (user) {
-         passwordCorrect = await bcrypt.compare(old_password, user.password)
-     } else {
-         return next(new AppError('Invalid user or password', 401))
-     }
-     if (!passwordCorrect) {
-         return next(new AppError('Invalid user or password', 401))
-     }
 
     const { new_password } = body
 if (!new_password || new_password.length < 8) {
-    return next(new AppError('Please provide a password that is at least 8 characters long', 403))
+    throw new AppError('Please provide a password that is at least 8 characters long', 403)
 }
 
 const passwordHash = await bcrypt.hash(new_password, 10)
-const { user_id } = body
 
-const { userRows } = await db.query('UPDATE users SET password = $1 WHERE id = $2', [passwordHash, user_id])
+const { rows } = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING password', [passwordHash, req.user.id])
 
-res.status(201).send(userRows[0])
+return res.status(201).send(rows[0])
 
+}
 }))
 
 

@@ -25,5 +25,18 @@ const shortenString = (str, maxLength) => {
     }
 }
 
-export default { extractToken, createAuthHeader, shortenString }
+const debounce = (callback, wait) => {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout)
+        let context = this;
+        timeout = setTimeout(() => {
+            callback.apply(context, args)
+        }, wait);
+
+    }
+
+}
+
+export default { extractToken, createAuthHeader, shortenString, debounce }
 

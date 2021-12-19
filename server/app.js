@@ -51,12 +51,15 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log(err)
+  console.log('error in error handler', err)
+  console.log('error message in error handler', err.message)
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.status = err.status ? err.status : 500
   res.locals.error = process.env.NODE_ENV === 'dev' ? err : {};
-  res.status(res.locals.status).json({
+  console.log('sending error to client', res.locals.status, res.locals.error);
+  
+  res.status(res.locals.status).send({
     message: res.locals.message,
     error: res.locals.error
   })

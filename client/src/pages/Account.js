@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Users from '../services/Users'
 import Auth from '../services/Auth'
+import helpers from '../helpers/helpers'
 
 const Account = ( { show, displayMessage }) => {
 
+const [formFields, setFormFields] = useState({})
 const [userDetails, setUserDetails] = useState({})
 const [editMode, setEditMode] = useState({})
+
 
 
 const enableEditing = (event) => {
@@ -15,20 +18,24 @@ newState[event.target.parentElement.id] = true
 setEditMode(newState)
 }
 
-const handleChange = (event) => {
+const handleChange = event => {
 const fieldName = event.target.name
-const update = {'value': event.target.value, 'old_value': userDetails[fieldName]['value']}    
-const newState = {...userDetails}
- newState[fieldName] = update
- setUserDetails(newState)
+const newValue = event.target.value
 
+const newState = {
+    ...formFields
 }
+newState[fieldName]['value'] = newValue
+setFormFields(newState)
+}
+
 
 const saveChanges = (event) => {
 event.target.previousElementSibling.disabled = true
 const fieldName = event.target.parentElement.id
-const oldValue = userDetails[fieldName]['old_value']
-const changedValue = userDetails[fieldName]['value']
+const oldValue = userDetails[fieldName]['value']
+const newValue = formFields[fieldName]['value']
+
 
 const newState = {
     ...editMode
@@ -45,26 +52,27 @@ if (!oldValue) {
 const updateBody = 
       {
     'field_name': fieldName,
-     'value': changedValue,
+     'value': newValue,
     
         }
 
 if (fieldName == 'password') {
-    const passwordChange = {
-        user_id: loggedInUser.id,
-        new_password: changedValue,
-        old_password: oldValue,
-    }
 
-
-    Auth.resetPassword(passwordChange).then(data => {
+    Auth.resetPassword({new_password: newValue}).then(data => {
+    const newUserDetails = {...userDetails, password: data.password}
+    setUserDetails(newUserDetails)
+    setFormFields(newUserDetails)
     displayMessage(`Password changed`, 'success', 5)
 }).catch(err => {
-    console.log(err)
+    displayMessage(err.response.data.message, 'error', 5)
+    const oldFormFields = {...formFields, 'password': oldValue}
+    setFormFields(oldFormFields)
+    console.log(err.message)
 })
 } else {       
 
 Users.update(loggedInUser.id, updateBody).then(data => {
+    setUserDetails(formFields)
     displayMessage(`Saved changes`, 'success', 5)
 }).catch(err => {
     console.log(err)
@@ -75,7 +83,7 @@ Users.update(loggedInUser.id, updateBody).then(data => {
 
 const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
 
-useEffect(() => {
+useEffect(() => {    
     if (loggedInUser && loggedInUser.id) {
     Users.get(loggedInUser.id).then(data => {
         const fields = {
@@ -84,6 +92,7 @@ useEffect(() => {
             'password': {'value': data.password},
             'email': {'value': data.email}
         };
+        setFormFields(fields)
         setUserDetails(fields);
     }).catch(err => {
         console.log(err)
@@ -93,14 +102,14 @@ useEffect(() => {
     
 if (show) {
 
-    const { first_name, username, password, email } = userDetails;
+    const { first_name, username, password, email } = formFields;
 
     return (
         <div className='form-container'>
         <div className='form-wrapper'>
         <form>
         <div id="first_name">
-        <label><b>Name:</b></label> <input name='first_name' onChange={(event) => handleChange(event)} value={first_name.value} disabled/>
+        <label><b>Name:</b></label> <input name='first_name'  onChange={handleChange} value={first_name.value} disabled/>
         {!editMode.first_name ? <span className='edit-save-field' id='edit_firstName' onClick={(event) => enableEditing(event)} >Edit</span> : null}
         {editMode.first_name ? <span className='edit-save-field' id='save_firstName' onClick={(event) => saveChanges(event)} >Save</span> : null}
         </div>
