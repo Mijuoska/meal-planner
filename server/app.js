@@ -16,7 +16,10 @@ const ingredientsRouter = require('./routes/ingredients')
 
 const app = express();
 
+app.disable('x-powered-by')
+
 const port = config.PORT 
+
 
 app.use(session({secret: process.env.SECRET}))
 app.use(passport.initialize());
