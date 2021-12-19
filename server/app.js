@@ -7,7 +7,6 @@ const passport = require('passport')
 const logger = require('morgan');
 const session = require('express-session')
 const config = require('./utils/config')
-const middleware = require('./middleware')
 
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
@@ -27,11 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(function (req, res, next) {
-// //   res.header("Access-Control-Allow-Origin", "http://localhost:3001");
-// //   res.header("Access-Control-Allow-Credentials", true);
-// //   next();
-// // });
+
 app.use(cors({
   credentials: true,
   origin: "http://localhost:3001"
@@ -51,8 +46,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log('error in error handler', err)
-  console.log('error message in error handler', err.message)
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.status = err.status ? err.status : 500
