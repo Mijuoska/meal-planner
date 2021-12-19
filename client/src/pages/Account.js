@@ -109,21 +109,21 @@ if (show) {
         <div className='form-wrapper'>
         <form>
         <div id="first_name">
-        <label><b>Name:</b></label> <input name='first_name'  onChange={handleChange} value={first_name.value} disabled/>
+        <label><b>Name:</b></label> <input name='first_name'  onChange={handleChange} value={first_name ? first_name.value : ''} disabled/>
         {!editMode.first_name ? <span className='edit-save-field' id='edit_firstName' onClick={(event) => enableEditing(event)} >Edit</span> : null}
         {editMode.first_name ? <span className='edit-save-field' id='save_firstName' onClick={(event) => saveChanges(event)} >Save</span> : null}
         </div>
                 <div id="username">
 
-        <label><b>Username:</b></label> <input name='username' value={username.value} disabled/>
+        <label><b>Username:</b></label> <input name='username' value={username ? username.value : ''} disabled/>
         </div>
          <div id="password">
-        <label><b>Password:</b></label> <input name='password' type='password' onChange={(event) => handleChange(event)} value={password.value} disabled/>
+        <label><b>Password:</b></label> <input name='password' type='password' onChange={(event) => handleChange(event)} value={password ? password.value : ''} disabled/>
          {!editMode.password ? <span className='edit-save-field' id='edit_password' onClick={(event) => enableEditing(event)} >Edit</span> : null}
         {editMode.password ? <span className='edit-save-field' id='save_password' onClick={(event) => saveChanges(event)} >Save</span> : null}
         </div>
         <div id="email">
-        <label><b>Email:</b></label> <input name='email' onChange={(event) => handleChange(event)} value={email.value} disabled/>
+        <label><b>Email:</b></label> <input name='email' onChange={(event) => handleChange(event)} value={email ? email.value : ''} disabled/>
          {!editMode.email ? <span className='edit-save-field' id='edit_email' onClick={(event) => enableEditing(event)} >Edit</span> : null}
         {editMode.email ? <span className='edit-save-field' id='save_email' onClick={(event) => saveChanges(event)} >Save</span> : null}
        </div>
