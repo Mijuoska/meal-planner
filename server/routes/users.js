@@ -24,10 +24,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 }));
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
-  
-  
+
     const {
       rows
     } = await db.query('SELECT * FROM users WHERE id = $1', [req.user.id])

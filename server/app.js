@@ -7,7 +7,7 @@ const passport = require('passport')
 const logger = require('morgan');
 const session = require('express-session')
 const config = require('./utils/config')
-
+const middleware = require('./middleware')
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
@@ -23,8 +23,8 @@ const port = config.PORT
 
 app.use(session({
   secret: config.SECRET,
-  saveUnitialized: false,
-  resaved: false,
+  saveUninitialized: false,
+  resave: false,
   cookie: {
     sameSite: true,
     secure: config.NODE_ENV === 'production',
@@ -43,6 +43,7 @@ app.use(cors({
   credentials: true,
   origin: "http://localhost:3001"
 }))
+
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
