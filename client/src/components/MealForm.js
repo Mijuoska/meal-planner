@@ -14,6 +14,11 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
   const [users, setUsers] = useState([]);
 
 
+  const getAndSetUser = (id) => {    
+     const user = users.find((user) => user.id == id.toString())
+    setUser(user)
+  }
+
   const submit = (e) => {
     e.preventDefault();
     const recipeObj = recipes.find((r) => r.id == recipe);
@@ -23,8 +28,11 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
       recipe_id: recipe,
       recipe_name: recipeObj.name,
       assigned_to: user.id,
-      assigned_to_name: user.first_name
+      assigned_to_name: user.first_name,
+      tag_color: user.tag_color
     };
+
+    
 
     if (!editMode) {
       Meals.create(newMeal)
@@ -132,7 +140,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
             <label>Assignee</label>
             <select
               value={user.id}
-              onChange={({ target }) => setUser({'id': target.value, 'first_name': target.options[target.selectedIndex].textContent})}
+              onChange={({ target }) => getAndSetUser(target.value)}
             >
               {users.map((user) => (
                 <option value={user.id}>{user.first_name}</option>
