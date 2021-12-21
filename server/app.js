@@ -17,6 +17,7 @@ const ingredientsRouter = require('./routes/ingredients')
 const app = express();
 
 app.disable('x-powered-by')
+app.disable('etag')
 
 const port = config.PORT 
 
@@ -63,7 +64,6 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.status = err.status ? err.status : 500
   res.locals.error = process.env.NODE_ENV === 'dev' ? err : {};
-  console.log('sending error to client', res.locals.status, res.locals.error);
   
   res.status(res.locals.status).send({
     message: res.locals.message,
