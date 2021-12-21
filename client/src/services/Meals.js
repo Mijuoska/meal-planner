@@ -1,5 +1,4 @@
 import axios from 'axios'
-import helpers from '../helpers/helpers'
 
 const baseUrl = 'http://localhost:3000/api/meals'
 
@@ -8,7 +7,6 @@ axios.defaults.withCredentials = true
 const getAll = async () => {
     const req = axios.get(`${baseUrl}`)
     return req.then(response => response.data)
-
 }
 
 const create = async (newMeal) => {

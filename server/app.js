@@ -8,7 +8,6 @@ const logger = require('morgan');
 const session = require('express-session')
 const config = require('./utils/config')
 const middleware = require('./middleware')
-
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
@@ -17,9 +16,21 @@ const ingredientsRouter = require('./routes/ingredients')
 
 const app = express();
 
+app.disable('x-powered-by')
+
 const port = config.PORT 
 
-app.use(session({secret: process.env.SECRET}))
+
+app.use(session({
+  secret: config.SECRET,
+  saveUninitialized: false,
+  resave: false,
+  cookie: {
+    sameSite: true,
+    secure: config.NODE_ENV === 'production',
+    maxAge: parseInt(config.SESSION_AGE)
+  }
+}))
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
@@ -27,15 +38,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(function (req, res, next) {
-// //   res.header("Access-Control-Allow-Origin", "http://localhost:3001");
-// //   res.header("Access-Control-Allow-Credentials", true);
-// //   next();
-// // });
+
 app.use(cors({
   credentials: true,
   origin: "http://localhost:3001"
 }))
+
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
@@ -51,8 +59,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log('error in error handler', err)
-  console.log('error message in error handler', err.message)
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.status = err.status ? err.status : 500

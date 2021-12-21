@@ -83,10 +83,12 @@ const [meal, setMeal] = useState("");
 
   useEffect(() => {
     Meals.getAll()
-    .then((data) => {
+    .then((data) => {      
       setMeals(data);
     }).catch(err => {
       displayMessage("We're having trouble retrieving your meal plan. Please try again later", "error", 5)
+      console.log(err);
+      
     })
   }, [show]);
 
