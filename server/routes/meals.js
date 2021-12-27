@@ -10,8 +10,10 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     const { rows } = await db.query(`SELECT meals.id, day, type, assigned_to, users.first_name 
     AS assigned_to_name, users.tag_color AS tag_color, recipe_id, recipes.name AS recipe_name FROM meals 
                                 INNER JOIN recipes ON recipes.id = meals.recipe_id
-                                INNER JOIN users ON meals.assigned_to = users.id`);
-      res.send(rows);
+                                INNER JOIN users ON meals.assigned_to = users.id
+                                WHERE household = $1`, [req.user.households[0]]);
+       
+      res.status(200).send(rows);
 
     
 }))
@@ -32,9 +34,9 @@ router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
 
 router.post('/', asyncWrapper(async (req, res, next) => {
     const { body } = req
-        const result = await db.query(`INSERT INTO meals (day, type, recipe_id, assigned_to) 
-        VALUES ($1, $2, $3, $4) RETURNING *`,
-        [body.day, body.type, body.recipe_id, body.assigned_to])
+        const result = await db.query(`INSERT INTO meals (day, type, recipe_id, assigned_to, household) 
+        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+        [body.day, body.type, body.recipe_id, body.assigned_to, req.user.households[0]])
         return res.status(201).send(result.rows)
 }))
 

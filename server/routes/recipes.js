@@ -9,13 +9,15 @@ router.get('/', asyncWrapper(async (req, res, next) => {
   
     const {
       rows
-    } = await db.query('SELECT * FROM recipes')
+    } = await db.query('SELECT * FROM recipes WHERE household_id = $1', [req.user.households[0]])
     res.send(rows)
 
 }))
 
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
+
+
     const {
       rows
     } = await db.query(`SELECT recipes.id, recipes.name, instructions, preparation_time, created_by, 
@@ -79,11 +81,11 @@ router.post('/', asyncWrapper(async (req, res, next) => {
        const {
          rows
        } = await db.query(`INSERT INTO ingredient_quantity (ingredient, quantity, unit)
-    VALUES($1, $2, $3) RETURNING id`, [ingredient.value, ingredient.quantity, ingredient.unit])
+    VALUES($1, $2, $3, $4) RETURNING id`, [ingredient.value, ingredient.quantity, ingredient.unit, req.user.households[0]])
       ingredientIDs.push(rows[0].id)
      })
     const { rows } = await db.query(`INSERT INTO recipes (name, preparation_time, ingredients, instructions, created_by) 
-    values ($1,$2,$3,$4, $5) RETURNING *`, [body.name, body.duration, ingredientIDs, body.instructions, req.user.id])
+    values ($1,$2,$3,$4, $5, $6) RETURNING *`, [body.name, body.duration, ingredientIDs, body.instructions, req.user.id, req.user.households[0]])
 
     res.status(201).send(rows)
  

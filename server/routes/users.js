@@ -13,7 +13,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
   try {
     const {
       rows
-    } = await db.query('SELECT id, first_name, tag_color FROM users')
+    } = await db.query('SELECT id, first_name, tag_color FROM users WHERE $1 = any(households)', [req.user.households[0]])
     res.send(rows)
   } catch (err) {
     console.error(err)

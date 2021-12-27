@@ -10,7 +10,7 @@ const {
 
 router.get('/', asyncWrapper(async (req, res, next) => {
     try {
-    const { rows } = await db.query('SELECT id AS value, name AS label FROM ingredients');
+    const { rows } = await db.query('SELECT id AS value, name AS label FROM ingredients WHERE household = $1', [req.user.households[0]]);
     res.send(rows)
 } catch (err) {
     next(err)
