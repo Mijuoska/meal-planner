@@ -1,10 +1,8 @@
 import axios from 'axios'
-import helpers from '../helpers/helpers'
 
 
 const baseUrl = 'http://localhost:3000/api/recipes'
 
-const config = helpers.createAuthHeader()
 
 
 const getAll = async () => {

@@ -28,9 +28,7 @@ function createUser (e)  {
        setFirstName('')
        setEmail('')
        setPage('weekly-calendar')
-      // Creating a default household for the user
-      createHouseholdForUser(data)
-       
+     
        }).catch(err => {
              displayMessage(`Registration failed: ${err.response.data.message}`, 'error', 5)
              console.log(err)
@@ -39,30 +37,6 @@ function createUser (e)  {
      
 }
 
-function createHouseholdForUser (user) {
-const household = {
-  name: `${user.name}'s household`,
-  members: [user.id]
-}
-Households.create(household).then(data => {
-  const update = {
-    field_name: 'households',
-    value: [data.id]
-  }
-  Users.update(user.id, update).then(data => {
-    setUser(data)
-    displayMessage(`Created household ${household.name}`, 'success', 5)
-  }).catch(err => {
-    displayMessage('Something went wrong with creating a household', 'success', 5)
-    console.log(err);
-    return
-  })
-}).catch(err => {
-  displayMessage('Something went wrong with creating a household', 'success', 5)
-  console.log(err);
-  return
-})
-}
 
 
 if (show) {

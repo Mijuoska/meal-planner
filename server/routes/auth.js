@@ -36,7 +36,8 @@ async (username, password, done) => {
        const sessionUser = {
            'first_name': user.first_name,
            'username': user.username,
-           'id': user.id
+           'id': user.id,
+           'households': user.households
        }
     return done(null, sessionUser);
    
@@ -77,20 +78,32 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, 10)
 
+        // Step 1: creating user
+        const newUserResult = await db.query(`INSERT INTO users 
+    (username, first_name, email, password) VALUES($1, $2, $3, $4) 
+    RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
 
-        const userResult = await db.query(`INSERT INTO users 
-    (username, first_name, email, password) VALUES($1, $2, $3, $4) RETURNING id, username, first_name`, [username, firstName, email, passwordHash])
+    // Step 2: Creating household
+    const newUser = newUserResult.rows[0]
+    const householdName = `${newUser.first_name}'s household`
+      const newHouseholdResult = await db.query(`INSERT INTO
+     households (name, members) values ($1, $2) RETURNING id, name`,
+          [householdName, [newUser.id]])
 
-        const user = userResult.rows[0]
+     // Step 3: Update user with household id
+     const updatedUserResult = await db.query(`UPDATE users SET households = $1 
+     WHERE id = $2 RETURNING id, username, first_name, households`, [[newHouseholdResult.rows[0].id], newUser.id])
 
+    const user = updatedUserResult.rows[0]
        req.login(user, function(err) {
            if (err) {
-           return next(new AppError('Something went wrong with loggin you in', 500))
+           return next(new AppError('Something went wrong with logging you in', 500))
            }
            return res.status(201).json({
                id: user.id,
                name: user.first_name,
-               username: user.username
+               username: user.username,
+               households: user.households
            })
        })
 
