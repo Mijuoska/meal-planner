@@ -13,6 +13,7 @@ const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
 const mealsRouter = require('./routes/meals')
 const ingredientsRouter = require('./routes/ingredients')
+const householdsRouter = require('./routes/households')
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
 app.use('/api/meals', mealsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/households', householdsRouter)
 app.use('/api/auth', authRouter)
 
 

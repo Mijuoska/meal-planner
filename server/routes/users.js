@@ -41,13 +41,13 @@ let { field_name, value } = body
 
 field_name = field_name == 'firstName' ? 'first_name' : field_name
 
-const allowedFields = ['first_name', 'email', 'password']
+const allowedFields = ['first_name', 'email', 'password', 'households']
 
 if (allowedFields.indexOf(field_name) == -1) {
   return next(new AppError('Updating this field is not allowed', 401))
 }
 
-const query = `UPDATE users SET ${field_name} = $1 WHERE id = $2`
+const query = `UPDATE users SET ${field_name} = $1 WHERE id = $2 RETURNING id, username, first_name, households`
 
 const {
   rows

@@ -1,15 +1,17 @@
 
 import { useState } from 'react'
 import Auth from '../services/Auth'
+import Households from '../services/Households'
+import Users from '../services/Users'
 
-const SignUpForm = ( { show, setUser, setPage, displayMessage } ) => {
+const SignUpForm = ( { show, user, setUser, setPage, displayMessage } ) => {
 
 const [username, setUsername] = useState('')
 const [firstName, setFirstName] = useState('')
 const [email, setEmail] = useState('')
 const [password, setPassword] = useState('')
 
-const createUser = (e) => {
+function createUser (e)  {
     e.preventDefault()
     const newUser = {
         username, 
@@ -26,11 +28,42 @@ const createUser = (e) => {
        setFirstName('')
        setEmail('')
        setPage('weekly-calendar')
-      }).catch(err => {
-        displayMessage(`Registration failed: ${err.response.data.message}`, 'error', 5)
-        console.log(err)
-    })
+      // Creating a default household for the user
+      createHouseholdForUser(data)
+       
+       }).catch(err => {
+             displayMessage(`Registration failed: ${err.response.data.message}`, 'error', 5)
+             console.log(err)
+             return
+       })   
+     
 }
+
+function createHouseholdForUser (user) {
+const household = {
+  name: `${user.name}'s household`,
+  members: [user.id]
+}
+Households.create(household).then(data => {
+  const update = {
+    field_name: 'households',
+    value: [data.id]
+  }
+  Users.update(user.id, update).then(data => {
+    setUser(data)
+    displayMessage(`Created household ${household.name}`, 'success', 5)
+  }).catch(err => {
+    displayMessage('Something went wrong with creating a household', 'success', 5)
+    console.log(err);
+    return
+  })
+}).catch(err => {
+  displayMessage('Something went wrong with creating a household', 'success', 5)
+  console.log(err);
+  return
+})
+}
+
 
 if (show) {
     return (
@@ -63,7 +96,7 @@ if (show) {
             <label>
           Email
           </label>
-          <input id='first-name'
+          <input id='email'
             type="email"
             value={email}
             name="email"

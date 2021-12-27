@@ -5,7 +5,6 @@ import Notification from './components/Notification'
 import LoginForm from './pages/LoginForm'
 import SignUpForm from './pages/SignUpForm'
 import Auth from './services/Auth'
-import Account from './pages/Account'
 
 
 const App = () => {
@@ -56,7 +55,6 @@ const AuthLinks = () => {
     return (
       <ul className="nav">
       <li>Logged in as {user.name}</li>
-      <li onClick={() => setPage('account')}>Account</li>
        <li className="auth" id="logout" onClick={() => logOut()}>
    Logout </li>
    
@@ -101,8 +99,8 @@ const AuthLinks = () => {
    />
    <WeeklyCalendar show={page === 'weekly-calendar'} displayMessage={displayMessage}/> 
    <LoginForm setPage={setPage} show={page === 'login'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
-   <SignUpForm show={page === 'sign-up'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
-   <Account loggedInUser={user} show={page === 'account'} displayMessage={displayMessage}/>
+   <SignUpForm show={page === 'sign-up'} displayMessage={displayMessage} user={user} setUser={setUser} setPage={setPage}/>
+   
 
     </div>
 

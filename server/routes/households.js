@@ -26,7 +26,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 }))
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
-   
+
         const { rows } = await db.query(`SELECT * FROM households WHERE id = $1`, [req.params.id])
         res.send(rows)
     
@@ -38,7 +38,7 @@ router.post('/', asyncWrapper(async (req, res, next) => {
     const { rows } = await db.query(`INSERT INTO
      households (name, members) values ($1, $2) RETURNING id, name`, 
      [name, members])
-     res.status(201).send(rows)
+     res.status(201).send(rows[0])
 
 
 
