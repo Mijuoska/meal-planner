@@ -155,6 +155,7 @@ console.log(weekdayConfig);
           meals={meals}
           setMeals={setMeals}
           weekdays={weekdayConfig}
+          mealConfig={mealConfig}
           setIsOpen={setIsOpen}
         />
       </Modal>

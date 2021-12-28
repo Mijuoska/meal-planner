@@ -24,13 +24,15 @@ const config = {
     },
 ],
 
-meals: [{
+meals: [
+    {
         value: "lunch",
     },
     {
         value: "dinner",
     },
 ],
+
 _getLabels: function (prop) {
         return this[prop].map((obj) => {
             obj['label'] = obj.value.replace(/^\w{1}/, obj.value[0].toUpperCase())

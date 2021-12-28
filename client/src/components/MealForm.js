@@ -3,7 +3,7 @@ import Meals from "../services/Meals";
 import Recipes from "../services/Recipes";
 import Users from "../services/Users";
 
-const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
+const MealForm = ({ meal, meals, setMeals, weekdays, mealConfig, setIsOpen }) => {
 
   const [editMode, setEditMode] = useState(meal.id ? true : false)
   const [day, setDay] = useState("");
@@ -121,8 +121,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
               value={mealType}
               onChange={({ target }) => setMealType(target.value)}
             >
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
+            {mealConfig.map(mealObj => <option value={mealObj.value}>{mealObj.label}</option>)}
             </select>
           </div>
           <div>
