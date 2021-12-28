@@ -61,6 +61,10 @@ button {
   margin: 1rem 2rem 1rem 1rem;
 }
 
+.account {
+  width: 14rem;
+}
+
 .auth {
   display: flex;
  
