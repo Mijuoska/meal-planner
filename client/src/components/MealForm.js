@@ -85,7 +85,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
       setRecipes(data);
       if (editMode) {
         setRecipe(meal.recipe_id);
-      } else if (data[0].id) {
+      } else if (data.length > 0) {
         setRecipe(data[0].id);
       }
     });
@@ -96,7 +96,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, setIsOpen }) => {
       setUsers(data)
       if (editMode) {
       setUser({id: meal.assigned_to, first_name: meal.assigned_to_name});
-    } else if (data[0].id) {
+    } else if (data.length > 0) {
     setUser(data[0])
         }
     });
