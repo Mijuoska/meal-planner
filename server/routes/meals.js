@@ -47,7 +47,11 @@ router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
 }))
 
 router.post('/', asyncWrapper(async (req, res, next) => {
-    const household = req.user ? req.user.household[0] : ''
+    
+    const household = req.user ? req.user.households[0] : ''
+
+    try {
+
     const {
         body
     } = req
@@ -55,6 +59,11 @@ router.post('/', asyncWrapper(async (req, res, next) => {
         VALUES ($1, $2, $3, $4, $5) RETURNING *`,
         [body.day, body.type, body.recipe_id, body.assigned_to, household])
     return res.status(201).send(result.rows)
+    } catch (ex) {
+        console.log(ex);
+        return next(new AppError('Something went wrong with creating a new meal', 500))
+        
+    }
 }))
 
 router.put('/:id', asyncWrapper(async (req, res, next) => {
