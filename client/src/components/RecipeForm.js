@@ -1,24 +1,31 @@
 import {useEffect, useState} from 'react'
 import Recipes from '../services/Recipes'
 import Ingredients from '../services/Ingredients'
+import Units from '../services/Units'
 import CreatableSelect from 'react-select/creatable';
 
 const RecipeForm = ({ displayMessage, toggleModal, recipes, setRecipes, recipeID }) => {
     const [showForm, toggleForm] = useState(true)
     const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
     const [name, setName] = useState()
+    const [units, setUnits] = useState([])
     const [ingredients, setIngredients] = useState([])
     const [ingredientOptions, setIngredientOptions] = useState([])
     const [duration, setDuration] = useState('')
     const [instructions, setInstructions] = useState('')
 
-const units = ['tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl', 'prk', 'pkt', 'tlk', 'rs', 'ps']
 
 /**
  * Ingredient options are fetched and default quantities and units need to be populated
  */
 
 useEffect(() => {
+Units.getAll().then(data => {
+    setUnits(data);
+}).catch(err => {
+    console.log(err);
+})
+
  Ingredients.getAll().then(data => {
      const options = data.map(i => {
          return {'value': i.value, 'label': i.label, 'quantity': 1, 'unit': 'tl'}
@@ -187,7 +194,7 @@ isSearchable={true}/>
 
     <select id={i.value} style={{border: 'none', width: '2.5rem', paddingLeft: '0.5rem',
     marginRight: '5px', webkitAppearance: 'none'}} value={i.unit} onChange={({target})=>populateUnit(target)}>
-    {units.map(u => <option value={u}>{u}</option>)}
+    {units.map(u => <option value={u.name}>{u.name}</option>)}
     </select>
     
     {i.label}

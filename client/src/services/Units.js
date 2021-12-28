@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3000/api/ingredients'
+const baseUrl = 'http://localhost:3000/api/units'
 
 
 const getAll = async () => {
@@ -13,15 +13,10 @@ const get = async (ID) => {
     return req.then(response => response.data)
 }
 
-const create = async (newIngredient) => {
-    const req = axios.post(`${baseUrl}`, newIngredient)
-    return req.then(response => response.data)
-}
 
 
 
 export default {
     getAll,
     get,
-    create,
 }
