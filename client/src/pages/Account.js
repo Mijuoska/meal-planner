@@ -100,7 +100,7 @@ useEffect(() => {
         console.log(err)
     })
 }
-}, [])
+}, [show])
     
 if (show) {
 
