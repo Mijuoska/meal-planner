@@ -34,7 +34,7 @@ useEffect(() => {
         console.log(err)
         displayMessage("We're having trouble fetching recipes. Please try again later", "error", 5)
     })
-}, [])
+}, [show])
 
 
 
