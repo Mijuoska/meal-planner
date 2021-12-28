@@ -4,6 +4,7 @@ import Recipes from './pages/Recipes'
 import Notification from './components/Notification'
 import LoginForm from './pages/LoginForm'
 import SignUpForm from './pages/SignUpForm'
+import Account from './pages/Account'
 import Auth from './services/Auth'
 
 
@@ -100,7 +101,8 @@ const AuthLinks = () => {
    <WeeklyCalendar show={page === 'weekly-calendar'} displayMessage={displayMessage}/> 
    <LoginForm setPage={setPage} show={page === 'login'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
    <SignUpForm show={page === 'sign-up'} displayMessage={displayMessage} user={user} setUser={setUser} setPage={setPage}/>
-   
+      <Account loggedInUser={user} show={page === 'account'} displayMessage={displayMessage}/>
+
 
     </div>
 
