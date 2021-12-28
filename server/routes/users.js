@@ -24,15 +24,19 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 }));
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
+    try {
+    const {
+      rows
+    } = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id])
+    
+    res.status(200).send(rows[0])
 
-  const {
-    rows
-  } = await db.query('SELECT * FROM users WHERE id = $1', [req.user.id])
+    } catch (ex) {
+       console.log(ex)
+       return next(new AppError('Something went wrong with fetching user', 500))
 
-
-  res.status(200).send(rows[0])
-
-
+    }
+ 
 }));
 
 router.put('/:id', asyncWrapper(async (req, res, next) => {
@@ -55,11 +59,16 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
 
   const query = `UPDATE users SET ${field_name} = $1 WHERE id = $2 RETURNING id, username, first_name, households`
 
-  const {
-    rows
-  } = await db.query(query, [value, req.params.id])
-  res.status(200).send(rows[0])
-
+try {
+const {
+  rows
+} = await db.query(query, [value, req.params.id])
+res.status(200).send(rows[0])
+} catch (ex) {
+  console.log(ex);
+  return next(new AppError('Something went wrong with updating the user', 500))
+  
+}
 }))
 
 
