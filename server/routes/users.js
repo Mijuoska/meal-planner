@@ -27,7 +27,9 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
     try {
     const {
       rows
-    } = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id])
+    } = await db.query(`SELECT first_name, username, password, email, households, households.name AS household_name FROM users
+                        INNER JOIN households ON users.households[1] = households.id
+                        WHERE users.id = $1`, [req.params.id])
     
     res.status(200).send(rows[0])
 

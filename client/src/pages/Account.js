@@ -1,7 +1,6 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import Users from '../services/Users'
 import Auth from '../services/Auth'
-import helpers from '../helpers/helpers'
 
 const Account = ( { show, displayMessage }) => {
 
@@ -86,11 +85,14 @@ const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
 useEffect(() => {    
     if (loggedInUser && loggedInUser.id) {
     Users.get(loggedInUser.id).then(data => {
+        console.log(data);
+        
         const fields = {
             'first_name': {'value': data.first_name},
             'username': {'value': data.username},
             'password': {'value': data.password},
-            'email': {'value': data.email}
+            'email': {'value': data.email},
+            'household_name': { 'value': data.household_name}
         };
         setFormFields(fields)
         setUserDetails(fields);
@@ -102,7 +104,7 @@ useEffect(() => {
     
 if (show) {
 
-    const { first_name, username, password, email } = formFields;
+    const { first_name, username, password, email, household_name } = formFields;
 
     return (
         <div className='form-container'>
@@ -126,6 +128,9 @@ if (show) {
         <label><b>Email:</b></label> <input name='email' onChange={(event) => handleChange(event)} value={email ? email.value : null} disabled/>
          {!editMode.email ? <span className='edit-save-field' id='edit_email' onClick={(event) => enableEditing(event)} >Edit</span> : null}
         {editMode.email ? <span className='edit-save-field' id='save_email' onClick={(event) => saveChanges(event)} >Save</span> : null}
+       </div>
+        <div id="email">
+        <label><b>Household name:</b></label> <input name='household_name' onChange={(event) => handleChange(event)} value={household_name ? household_name.value : null} disabled/>
        </div>
         </form>
         </div>
