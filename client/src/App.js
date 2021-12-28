@@ -56,6 +56,7 @@ const AuthLinks = () => {
     return (
       <ul className="nav">
       <li>Logged in as {user.name}</li>
+      <li onClick={() => setPage('account')}>Account</li>
        <li className="auth" id="logout" onClick={() => logOut()}>
    Logout </li>
    
