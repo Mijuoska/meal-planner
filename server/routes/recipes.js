@@ -1,4 +1,5 @@
 const express = require('express');
+const AppError = require('../AppError');
 const db = require('../db');
 const router = express.Router();
 const helper = require('../utils/helpers')
@@ -7,11 +8,18 @@ const { asyncWrapper } = helper
 
 router.get('/', asyncWrapper(async (req, res, next) => {
   
+  const household = req.user ? req.user.households[0] : ''
+
+try {
     const {
       rows
-    } = await db.query('SELECT * FROM recipes WHERE household_id = $1', [req.user.households[0]])
+    } = await db.query('SELECT * FROM recipes WHERE household_id = $1', [household])
     res.send(rows)
-
+} catch (ex) {
+  console.log(ex);
+  return next(new AppError('Something went wrong', 500))
+  
+}
 }))
 
 
