@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Meals from "../services/Meals";
 import Modal from "react-modal";
 import MealForm from "../components/MealForm";
+import config from '../config'
 
 const WeeklyCalendar = ({ displayMessage, show }) => {
 
@@ -11,25 +12,11 @@ const [isOpen, setIsOpen] = useState(false);
 const [meal, setMeal] = useState("");
 
 
-  const weekdayConfig = [
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
-    { value: "friday", label: "Friday" },
-    { value: "saturday", label: "Saturday" },
-    { value: "sunday", label: "Sunday" },
-  ];
+  const weekdayConfig = config.weekdayLabels
+console.log(weekdayConfig);
 
-  const mealConfig = [
-    { value: "lunch", label: "Lunch" },
-    { value: "dinner", label: "Dinner" },
-  ];
+  const mealConfig = config.mealLabels
 
-  const calendarStyle = {
-    gridTemplateColumns: `3fr ${weekdayConfig.map((n) => "5fr").join(" ")}`,
-    gridTemplateRows: `50px ${mealConfig.map((n) => "150px").join(" ")}`,
-  };
 
   const modalStyle = {
     content: {
@@ -91,6 +78,11 @@ const [meal, setMeal] = useState("");
       
     })
   }, [show]);
+
+  const calendarStyle = {
+    gridTemplateColumns: `3fr ${weekdayConfig.map((n) => "5fr").join(" ")}`,
+    gridTemplateRows: `50px ${mealConfig.map((n) => "150px").join(" ")}`,
+  };
 
   const generateHeader = () => {
     // Make a copy and create one empty slot
