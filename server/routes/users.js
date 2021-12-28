@@ -51,11 +51,16 @@ if (allowedFields.indexOf(field_name) == -1) {
 
 const query = `UPDATE users SET ${field_name} = $1 WHERE id = $2`
 
+try {
 const {
   rows
 } = await db.query(query, [value, req.params.id])
 res.status(200).send(rows[0])
-
+} catch (ex) {
+  console.log(ex);
+  return next(new AppError('Something went wrong with updating the user', 500))
+  
+}
 }))
 
 
