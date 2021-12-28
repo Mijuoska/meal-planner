@@ -14,21 +14,26 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     const {
       rows
     } = await db.query('SELECT id, first_name FROM users')
-    res.send(rows)
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      err: err.toString()
-    })
+    res.status(200).send(rows)
+  } catch (ex) {
+    console.log(ex)
+    return next(new AppError('Something went wrong with fetching users', 500))
   }
 }));
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
- 
+    try {
     const {
       rows
     } = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id])
-    res.send(rows[0])
+    
+    res.status(200).send(rows[0])
+
+    } catch (ex) {
+       console.log(ex)
+       return next(new AppError('Something went wrong with fetching user', 500))
+
+    }
  
 }));
 
