@@ -30,7 +30,7 @@ app.use(session({
   cookie: {
     sameSite: true,
     secure: config.NODE_ENV === 'production',
-    maxAge: parseInt(config.SESSION_AGE)
+   // maxAge: parseInt(config.SESSION_AGE)
   }
 }))
 app.use(passport.initialize());
