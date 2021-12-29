@@ -1,4 +1,5 @@
 body {
+  background-color:oldlace;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -264,7 +265,10 @@ button {
    list-style: none;
    display: inline;
    padding: 2rem;
+   width: 8rem;
    border: 1px solid black;
+   border-radius: 3px;
+   background-color: white;
    margin: 1rem;
    /* width: fit-content; */
    height: 6rem;

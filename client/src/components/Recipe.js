@@ -11,7 +11,7 @@ const { shortenString } = helpers
                     toggleModal()
                         
                     }}>
-    {shortenString(recipe.name, 30)}
+<b>{shortenString(recipe.name, 30)}</b>
     <div className="recipe-list-card-details">Preparation time: {recipe.preparation_time} min</div>
 
     <span className="edit-recipe"  
