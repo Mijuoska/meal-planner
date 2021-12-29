@@ -46,7 +46,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, mealConfig, setIsOpen }) =>
         });
     } else {
       Meals.update(newMeal, meal.id)
-        .then((data) => {
+        .then(() => {
           newMeal.id = meal.id;
           const updatedMeals = meals
             .filter((m) => m.id != meal.id)
@@ -63,7 +63,7 @@ const MealForm = ({ meal, meals, setMeals, weekdays, mealConfig, setIsOpen }) =>
   const remove = (e) => {
     e.preventDefault();
     Meals.remove(meal.id)
-      .then((data) => {
+      .then(() => {
         const updatedMeals = meals.filter((m) => m.id != meal.id);
         setMeals(updatedMeals);
         setIsOpen(false);

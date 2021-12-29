@@ -13,7 +13,6 @@ const [meal, setMeal] = useState("");
 
 
   const weekdayConfig = config.weekdayLabels
-console.log(weekdayConfig);
 
   const mealConfig = config.mealLabels
 
