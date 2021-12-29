@@ -12,16 +12,16 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
   const [recipe, setRecipe] = useState("");
   const [user, setUser] = useState("");
   const [users, setUsers] = useState([]);
-
+  
 
   const getAndSetUser = (id) => {    
-     const user = users.find((user) => user.id === id.toString())
+    const user = users.find((user) => user.id.toString() === id.toString())    
     setUser(user)
   }
 
   const submit = (e) => {
     e.preventDefault();
-    const recipeObj = recipes.find((r) => r.id === recipe);
+    const recipeObj = recipes.find((r) => r.id.toString() === recipe.toString());
     if (!recipeObj) {
       displayMessage('Cannot create a meal without a recipe. Please create a recipe first', 'error', 5)
       return;

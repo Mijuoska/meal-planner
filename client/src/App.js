@@ -66,7 +66,7 @@ const AuthLinks = () => {
           </IconContext.Provider>
       My Account</li>
        <li className="auth" id="logout" onClick={() => logOut()}>
-   Logout </li>
+   Logout </li>a
    
 </ul>
     )
@@ -93,7 +93,7 @@ const AuthLinks = () => {
  { user ? <li className="brand" onClick={() => setPage('weekly-calendar')}>
    Weekly planner
    </li> : null}
-  { user ? <li id="all-recipes" onClick={() => setPage('recipes')}>All recipes</li> : null }
+  { user ? <li id="all-recipes" onClick={() => setPage('recipes')}>Recipes</li> : null }
 
    </ul>
    {AuthLinks()}

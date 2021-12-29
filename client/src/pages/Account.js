@@ -55,7 +55,7 @@ const updateBody =
     
         }
 
-if (fieldName == 'password') {
+if (fieldName === 'password') {
 
     Auth.resetPassword({new_password: newValue}).then(data => {
     const newUserDetails = {...userDetails, password: data.password}
@@ -70,7 +70,7 @@ if (fieldName == 'password') {
 })
 } else {       
 
-Users.update(loggedInUser.id, updateBody).then(data => {
+Users.update(loggedInUser.id, updateBody).then(() => {
     setUserDetails(formFields)
     displayMessage(`Saved changes`, 'success', 5)
 }).catch(err => {
