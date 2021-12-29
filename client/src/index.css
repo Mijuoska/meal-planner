@@ -46,6 +46,7 @@ button {
   background-color: lightgray;
   padding: 1rem;
   display: flex;
+  justify-content: space-between;
 }
 
 
@@ -67,8 +68,9 @@ button {
 
 .auth {
   display: flex;
- 
+
 }
+
 
 .message-banner {
   color: white;
@@ -110,13 +112,14 @@ button {
 }
 
 .calendar > div {
-  border-right: 1px solid black;
+  border-right: 2px dotted lightgrey;
 }
 
 
 
 .calendar>div:nth-child(n) {
-  border-bottom: 1px solid black;
+  border-bottom: 1.5px dotted lightgrey;
+  ;
  
 }
 

@@ -6,6 +6,10 @@ import LoginForm from './pages/LoginForm'
 import SignUpForm from './pages/SignUpForm'
 import Account from './pages/Account'
 import Auth from './services/Auth'
+import { CgProfile } from 'react-icons/cg'
+import {
+  IconContext
+} from "react-icons";
 
 
 const App = () => {
@@ -22,6 +26,7 @@ const displayMessage = (content, type, secondsDuration) => {
     setMessage('')
   }, secondsDuration * 1000);
 }
+
 useEffect(() => {
   const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
   if (loggedInUser) {
@@ -55,8 +60,11 @@ const AuthLinks = () => {
   if (user) {
     return (
       <ul className="nav">
-      <li>Logged in as {user.name}</li>
-      <li onClick={() => setPage('account')}>Account</li>
+      <li onClick={() => setPage('account')}>
+      <IconContext.Provider value={{ size: '1.5rem'}}>
+      <CgProfile style={{marginRight: '0.5rem'}}/>
+          </IconContext.Provider>
+      My Account</li>
        <li className="auth" id="logout" onClick={() => logOut()}>
    Logout </li>
    
