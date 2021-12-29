@@ -3,7 +3,7 @@ import Meals from "../services/Meals";
 import Recipes from "../services/Recipes";
 import Users from "../services/Users";
 
-const MealForm = ({ meal, meals, setMeals, weekdays, mealConfig, setIsOpen }) => {
+const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig, setIsOpen }) => {
 
   const [editMode, setEditMode] = useState(meal.id ? true : false)
   const [day, setDay] = useState("");
@@ -15,13 +15,17 @@ const MealForm = ({ meal, meals, setMeals, weekdays, mealConfig, setIsOpen }) =>
 
 
   const getAndSetUser = (id) => {    
-     const user = users.find((user) => user.id == id.toString())
+     const user = users.find((user) => user.id === id.toString())
     setUser(user)
   }
 
   const submit = (e) => {
     e.preventDefault();
-    const recipeObj = recipes.find((r) => r.id == recipe);
+    const recipeObj = recipes.find((r) => r.id === recipe);
+    if (!recipeObj) {
+      displayMessage('Cannot create a meal without a recipe. Please create a recipe first', 'error', 5)
+      return;
+    }
     const newMeal = {
       day: day,
       type: mealType.value ? mealType.value : mealType,

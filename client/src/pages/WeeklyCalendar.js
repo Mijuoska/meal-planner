@@ -34,7 +34,7 @@ const [meal, setMeal] = useState("");
     e.stopPropagation();
     // get the dragged meal object from state
     const mealObj = JSON.parse(e.dataTransfer.getData("text/plain"));
-    const movedMeal = meals.find((meal) => meal.id == mealObj.id);
+    const movedMeal = meals.find((meal) => meal.id === mealObj.id);
     
     // update meal object with new day and meal type details
     const target = JSON.parse(e.currentTarget.id);
@@ -98,7 +98,7 @@ const [meal, setMeal] = useState("");
     const weekDays = weekdayConfig.map((day) => day);
     weekDays.unshift(meal);
     return weekDays.map((weekday) =>
-      weekDays.indexOf(weekday) == 0 ? (
+      weekDays.indexOf(weekday) === 0 ? (
         <div>
           <p>{weekday.label}</p>
         </div>
@@ -119,7 +119,7 @@ const [meal, setMeal] = useState("");
           {meals
             .filter(
               (mealObj) =>
-                mealObj.day == weekday.value && mealObj.type == meal.value
+                mealObj.day === weekday.value && mealObj.type === meal.value
             )
             .map((meal) => {
               return <Meal meal={meal} toggleModal={toggleModal} />;
@@ -150,6 +150,7 @@ const [meal, setMeal] = useState("");
           X
         </span>
         <MealForm
+          displayMessage={displayMessage}
           meal={meal}
           meals={meals}
           setMeals={setMeals}
