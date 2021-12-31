@@ -8,8 +8,7 @@ const {
     asyncWrapper
 } = helpers
 
-router.get('/', asyncWrapper(async (req, res, next) => {
-
+router.get('/', asyncWrapper(async (req, res, next) => {    
     const household = req.user ? req.user.households[0] : ''
     try {
         const {

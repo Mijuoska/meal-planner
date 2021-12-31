@@ -173,15 +173,15 @@ return (
 <label>
 Name
 </label>
-<input style={{width: 520}} type="text" value={name} onChange={({target}) => setName(target.value)}/>
+<input style={{width: 520}} id="recipe-name" type="text" value={name} onChange={({target}) => setName(target.value)}/>
 </div>
 <div>
 <label>Preparation time</label>
-<input style={{width: 100}} type="number" value={duration} onChange={({target}) => setDuration(target.value)}/> min
+<input style={{width: 100}} id="preparation-time" type="number" value={duration} onChange={({target}) => setDuration(target.value)}/> min
 </div>
 <div>
 <label>Ingredients</label>
-<CreatableSelect onCreateOption={createNewIngredient} onChange={setIngredients} value={ingredients} placeholder="Search ingredients" options={ingredientOptions} isMulti={true} 
+<CreatableSelect id="ingredients-picker" onCreateOption={createNewIngredient} onChange={setIngredients} value={ingredients} placeholder="Search ingredients" options={ingredientOptions} isMulti={true} 
 isSearchable={true}/>
 </div>
 <div>
@@ -192,7 +192,7 @@ isSearchable={true}/>
     value={i.quantity} className="quantity-input" 
     onChange={({ target }) => populateQuantity(target)}/>
 
-    <select id={i.value} style={{border: 'none', width: '2.5rem', paddingLeft: '0.5rem',
+    <select className="unit-input" id={i.value} style={{border: 'none', width: '2.5rem', paddingLeft: '0.5rem',
     marginRight: '5px', webkitAppearance: 'none'}} value={i.unit} onChange={({target})=>populateUnit(target)}>
     {units.map(u => <option value={u.name}>{u.name}</option>)}
     </select>
@@ -204,7 +204,7 @@ isSearchable={true}/>
 </div>
 <div>
 <label>Instructions</label>
-<textarea rows="15" cols="70" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
+<textarea id="instructions" rows="15" cols="70" value={instructions} onChange={({target}) => setInstructions(target.value)}></textarea>
 </div>
 <button className="submit-button" type="submit" onClick={submit}>Save</button>
 {recipeID ? <button className="delete-button" onClick={(e) => deleteRecipe(e, recipeID)}>Delete</button> : null}
@@ -225,7 +225,7 @@ isSearchable={true}/>
         </div>
         <p><strong>Instructions:</strong> {recipe.instructions}</p>
 
-        <button onClick={() => toggleForm(true)}>Edit</button>
+        <button id="edit-recipe-button" onClick={() => toggleForm(true)}>Edit</button>
         </div>
     )
 }

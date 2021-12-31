@@ -13,6 +13,8 @@ client/.pnp.js
 # testing
 client/coverage
 client/db.json
+client/cypress.json
+client/cypress
 
 # production
 client/build

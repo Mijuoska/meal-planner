@@ -9,8 +9,6 @@ const {
 } = helper
 
 router.get('/', asyncWrapper(async (req, res, next) => {
-console.log(req.user);
-
   const household = req.user ? req.user.households[0] : ''
 
   try {

@@ -15,7 +15,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     try {
         const {
             rows
-        } = await db.query('SELECT id AS value, name AS label FROM ingredients WHERE household = $1 OR household = NULL', [household]);
+        } = await db.query('SELECT id AS value, name AS label FROM ingredients WHERE household = $1 OR household IS NULL', [household]);
         res.send(rows)
     } catch (ex) {
         console.log(ex);

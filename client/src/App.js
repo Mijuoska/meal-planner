@@ -90,7 +90,7 @@ const AuthLinks = () => {
    <div className='navbar'>
    
    <ul className="nav">
- { user ? <li className="brand" onClick={() => setPage('weekly-calendar')}>
+ { user ? <li id="weekly-calendar" className="brand" onClick={() => setPage('weekly-calendar')}>
    Weekly planner
    </li> : null}
   { user ? <li id="all-recipes" onClick={() => setPage('recipes')}>Recipes</li> : null }

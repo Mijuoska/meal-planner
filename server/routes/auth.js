@@ -122,6 +122,8 @@ router.post('/login', passport.authenticate('local'), asyncWrapper(async (req, r
     const {
         user
     } = req
+    console.log('This is the user', user);
+    
     res.status(200).json({
         id: user.id,
         name: user.first_name,
