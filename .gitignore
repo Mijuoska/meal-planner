@@ -17,7 +17,7 @@ client/cypress.json
 client/cypress
 
 # production
-client/build
+# client/build
 
 # misc
 client/.DS_Store
