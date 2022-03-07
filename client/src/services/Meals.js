@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3000/api/meals'
+const baseUrl = '/api/meals'
 
 axios.defaults.withCredentials = true
 
@@ -24,4 +24,5 @@ const remove = async (id) => {
    const req = axios.delete(`${baseUrl}/${id}`, )
    return req.then(response => response.data)
 }
+
 export default { getAll, create, update, remove }

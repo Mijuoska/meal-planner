@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-const baseUrl = 'http://localhost:3000/api/households'
+const baseUrl = '/api/households'
 
 
 const getAll = async () => {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3000/api/units'
+const baseUrl = '/api/units'
 
 
 const getAll = async () => {
