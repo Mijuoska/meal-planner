@@ -2,6 +2,8 @@
 server/node_modules
 server/.env
 server/routes/*.rest
+server/certificates
+server/keys
 
 #CLIENT
 
