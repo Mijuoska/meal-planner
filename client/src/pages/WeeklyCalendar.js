@@ -68,14 +68,15 @@ const [meal, setMeal] = useState("");
   };
 
   useEffect(() => {
+    if (show) {
     Meals.getAll()
     .then((data) => {      
       setMeals(data);
     }).catch(err => {
       displayMessage("We're having trouble retrieving your meal plan. Please try again later", "error", 5)
-      console.log(err);
       
     })
+    }
   }, [show]);
 
   const calendarStyle = {
