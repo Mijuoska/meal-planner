@@ -1,9 +1,11 @@
 const { Pool, Client } = require('pg')
 const fs = require('fs')
 
-const configDev = {
-     user: process.env.DB_USER,
-     password: process.env.DB_PASSWORD,
+
+
+const pool = process.env.NODE_ENV == 'dev' ? new Pool({
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -14,16 +16,12 @@ const configDev = {
         key: fs.readFileSync(process.env.DB_CLIENT_KEY).toString(),
         cert: fs.readFileSync(process.env.DB_CLIENT_CERTIFICATE).toString()
     }
-}
-
-const configProd = {
+}): new Pool({
     connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-        }
-}
-
-const pool = process.env.NODE_ENV == 'dev' ? new Pool(configDev) : new Pool(configProd)
+    ssl: {
+        rejectUnauthorized: false
+    }
+})
  
 
 
