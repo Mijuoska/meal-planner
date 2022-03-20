@@ -14,6 +14,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
   const [users, setUsers] = useState([]);
   
 
+
   const getAndSetUser = (id) => {    
     const user = users.find((user) => user.id.toString() === id.toString())    
     setUser(user)

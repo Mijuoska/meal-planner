@@ -21,9 +21,9 @@ const [meal, setMeal] = useState("");
     content: {
       position: 'fixed',
       zIndex:2,
-      width: "50%",
+      width: "45%",
       margin: "auto",
-      height: "26rem",
+      height: "28rem",
     },
   };
 
