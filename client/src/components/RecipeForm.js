@@ -65,7 +65,7 @@ Units.getAll().then(data => {
 
 const populateQuantity = (target) => {
     const q = ingredients.map(i => {
-      return i.value === target.id.toString() ? 
+      return i.value.toString() === target.id.toString() ? 
       {...i, quantity: parseFloat(target.value)} : i
     })
     setIngredients(q)
@@ -73,7 +73,7 @@ const populateQuantity = (target) => {
 
 const populateUnit = (target) => {
     const q = ingredients.map(i => {
-        return i.value === target.id.toString() ? {
+        return i.value.toString() === target.id.toString() ? {
             ...i,
             unit: target.value
         } : i

@@ -15,7 +15,7 @@ const gridStyle = {
     display: 'grid',
     gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))",
 //    gridTemplateRows: `50px 200px 200px`,
-    gridGap: '0.2rem'
+    gridGap: '0.5rem'
 }
 
 const modalStyle = {

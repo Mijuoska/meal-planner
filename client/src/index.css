@@ -42,6 +42,10 @@ button {
   margin: 1rem 0.7rem 0 0;
 }
 
+.nav {
+  display: flex;
+  align-items: center;
+}
 
 .navbar {
   background-color: lightgray;
@@ -60,7 +64,8 @@ button {
 }
 
 .brand {
-  margin: 1rem 2rem 1rem 1rem;
+  font-weight: 800;
+  margin: 0 2rem 1rem;
 }
 
 .account {

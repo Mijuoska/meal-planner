@@ -7,6 +7,7 @@ import SignUpForm from './pages/SignUpForm'
 import Account from './pages/Account'
 import Auth from './services/Auth'
 import { CgProfile } from 'react-icons/cg'
+import { GiMeal } from 'react-icons/gi'
 import {
   IconContext
 } from "react-icons";
@@ -91,8 +92,17 @@ const AuthLinks = () => {
    <div className='navbar'>
    
    <ul className="nav">
- { user ? <li id="weekly-calendar" className="brand" onClick={() => setPage('weekly-calendar')}>
-   Weekly planner
+   <IconContext.Provider value={{ size: '2rem'}}>
+      <GiMeal style={{marginRight: '0.5rem'}}/>
+          </IconContext.Provider>
+   
+   <li class="brand">
+     
+           Meal Planner
+           </li>
+
+ { user ? <li id="weekly-calendar" onClick={() => setPage('weekly-calendar')}>
+   Weekly calendar
    </li> : null}
   { user ? <li id="all-recipes" onClick={() => setPage('recipes')}>Recipes</li> : null }
 
