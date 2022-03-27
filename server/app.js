@@ -49,7 +49,7 @@ app.use(cors({
   origin: process.env.NODE_ENV == 'dev' ? 'http://localhost:3001' : process.env.HOSTDOMAIN
 }))
 
-app.set('trusty proxy', true)
+app.set('trust proxy', true)
 
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
