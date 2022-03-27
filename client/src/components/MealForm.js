@@ -54,7 +54,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
         .then(() => {
           newMeal.id = meal.id;
           const updatedMeals = meals
-            .filter((m) => m.id.toSring() !== meal.id.toString())
+            .filter((m) => m.id.toString() !== meal.id.toString())
             .concat(newMeal);
           setMeals(updatedMeals);
         })

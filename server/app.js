@@ -41,13 +41,12 @@ app.use(passport.session());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 
 app.use(cors({
   credentials: true,
-  origin: "http://localhost:3001"
+  origin: process.env.NODE_ENV == 'dev' ? 'http://localhost:3001' : process.env.HOSTDOMAIN
 }))
 
 
