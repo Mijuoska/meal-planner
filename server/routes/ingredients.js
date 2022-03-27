@@ -32,7 +32,7 @@ router.post('/', asyncWrapper(async (req, res, next) => {
     try {
         const {
             rows
-        } = await db.query('INSERT INTO ingredients (name) VALUES($1) RETURNING *', [body.name])
+        } = await db.query('INSERT INTO ingredients (name, household) VALUES($1, $2) RETURNING *', [body.name, req.user.households[0]])
         res.status(200).send(rows);
     } catch (err) {
         next(err)
