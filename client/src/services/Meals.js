@@ -7,7 +7,8 @@ axios.defaults.withCredentials = true
 const getAll = async () => {
     const req = axios.get(`${baseUrl}`)
     return req.then(response => response.data)
-}
+    }
+
 
 const create = async (newMeal) => {
     const req = axios.post(`${baseUrl}`, newMeal)

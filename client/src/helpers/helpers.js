@@ -4,6 +4,7 @@ const extractToken = () => {
     return token
 }
 
+
 const createAuthHeader = () => {
     var token = extractToken();
     if (token) {
@@ -38,5 +39,10 @@ const debounce = (callback, wait) => {
 
 }
 
-export default { extractToken, createAuthHeader, shortenString, debounce }
+export default {
+    extractToken, 
+    createAuthHeader,
+    shortenString,
+    debounce
+}
 

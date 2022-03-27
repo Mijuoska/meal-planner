@@ -32,6 +32,7 @@ useEffect(() => {
   if (loggedInUser) {
     setUser(loggedInUser)
   } else {
+    setUser(null)
     setPage('login')
   }
   

@@ -31,8 +31,12 @@ useEffect(() => {
     Recipes.getAll().then(data => {
         setRecipes(data)
     }).catch(err => {
-        console.log(err)
+        if (err.response.status === 403) {
+            window.localStorage.removeItem('loggedInUser')
+    
+        } else {
         displayMessage("We're having trouble fetching recipes. Please try again later", "error", 5)
+        }
     })
 }, [show])
 

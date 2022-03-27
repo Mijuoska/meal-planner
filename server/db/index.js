@@ -1,10 +1,11 @@
 const { Pool, Client } = require('pg')
 const fs = require('fs')
+const config = require('../utils/config')
 
+const { NODE_ENV, DATABASE_URL } = config
 
-
-const pool = process.env.NODE_ENV == 'dev' ? new Pool({
-    connectionString: process.env.DATABASE_URL,
+const pool = NODE_ENV == 'dev' ? new Pool({
+    connectionString: DATABASE_URL,
 
 
     ssl: {
@@ -14,7 +15,7 @@ const pool = process.env.NODE_ENV == 'dev' ? new Pool({
         cert: fs.readFileSync(process.env.DB_CLIENT_CERTIFICATE).toString()
     }
 }): new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }

@@ -8,6 +8,7 @@ const logger = require('morgan');
 const session = require('express-session')
 const sessionStore = require('./db/sessionStore');
 const config = require('./utils/config')
+const middleware = require('./middleware')
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
@@ -51,13 +52,17 @@ app.use(cors({
 
 app.set('trust proxy', true)
 
+app.use('/api/auth', authRouter)
+
+
+// app.use(middleware.checkIfLoggedIn(req))
+
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
 app.use('/api/units', unitsRouter)
 app.use('/api/meals', mealsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/households', householdsRouter)
-app.use('/api/auth', authRouter)
 
 
 // catch 404 and forward to error handler

@@ -3,12 +3,19 @@ const AppError = require('../AppError');
 const db = require('../db');
 const router = express.Router();
 const helper = require('../utils/helpers')
+const middleware = require('../middleware')
 
 const {
   asyncWrapper
 } = helper
 
-router.get('/', asyncWrapper(async (req, res, next) => {
+const {
+  checkIfLoggedIn
+} = middleware
+
+
+router.get('/', checkIfLoggedIn, asyncWrapper(async (req, res, next) => {
+  console.log('inside recipes')
   const household = req.user ? req.user.households[0] : ''
 
   try {
