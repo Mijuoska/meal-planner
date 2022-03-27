@@ -12,8 +12,6 @@ const {
 const { checkIfLoggedIn } = middleware
 
 router.get('/', checkIfLoggedIn, asyncWrapper(async (req, res, next) => {    
-        console.log('inside meals')
-
     const household = req.user ? req.user.households[0] : ''
     try {
         const {

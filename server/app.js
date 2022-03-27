@@ -8,7 +8,6 @@ const logger = require('morgan');
 const session = require('express-session')
 const sessionStore = require('./db/sessionStore');
 const config = require('./utils/config')
-const middleware = require('./middleware')
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
@@ -34,7 +33,7 @@ app.use(session({
   cookie: {
     sameSite: true,
     secure: config.NODE_ENV === 'production',
-   // maxAge: parseInt(config.SESSION_AGE)
+    maxAge: parseInt(config.SESSION_AGE)
   }
 }))
 app.use(passport.initialize());
@@ -50,13 +49,12 @@ app.use(cors({
   origin: process.env.NODE_ENV == 'dev' ? 'http://localhost:3001' : process.env.HOSTDOMAIN
 }))
 
+
+
+
 app.set('trust proxy', true)
 
 app.use('/api/auth', authRouter)
-
-
-// app.use(middleware.checkIfLoggedIn(req))
-
 app.use('/api/recipes', recipesRouter)
 app.use('/api/ingredients', ingredientsRouter)
 app.use('/api/units', unitsRouter)
