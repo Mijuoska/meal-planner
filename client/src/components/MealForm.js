@@ -54,7 +54,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
         .then(() => {
           newMeal.id = meal.id;
           const updatedMeals = meals
-            .filter((m) => m.id != meal.id)
+            .filter((m) => m.id.toSring() !== meal.id.toString())
             .concat(newMeal);
           setMeals(updatedMeals);
         })
@@ -69,7 +69,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
     e.preventDefault();
     Meals.remove(meal.id)
       .then(() => {
-        const updatedMeals = meals.filter((m) => m.id != meal.id);
+        const updatedMeals = meals.filter((m) => m.id.toString() !== meal.id.toString());
         setMeals(updatedMeals);
         setIsOpen(false);
       })
@@ -116,7 +116,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
             <label>Weekday</label>
             <select value={day} onChange={({ target }) => setDay(target.value)}>
               {weekdays.map((weekday) => (
-                <option value={weekday.value}>{weekday.label}</option>
+                <option key={weekday.value} value={weekday.value}>{weekday.label}</option>
               ))}
             </select>
           </div>
@@ -126,7 +126,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
               value={mealType}
               onChange={({ target }) => setMealType(target.value)}
             >
-            {mealConfig.map(mealObj => <option value={mealObj.value}>{mealObj.label}</option>)}
+            {mealConfig.map(mealObj => <option key={mealObj.value} value={mealObj.value}>{mealObj.label}</option>)}
             </select>
           </div>
           <div>
@@ -136,7 +136,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
               onChange={({ target }) => setRecipe(target.value)}
             >
               {recipes.map((recipe) => (
-                <option value={recipe.id}>{recipe.name}</option>
+                <option key={recipe.id} value={recipe.id}>{recipe.name}</option>
               ))}
             </select>
           </div>
@@ -147,7 +147,7 @@ const MealForm = ({ displayMessage, meal, meals, setMeals, weekdays, mealConfig,
               onChange={({ target }) => getAndSetUser(target.value)}
             >
               {users.map((user) => (
-                <option value={user.id}>{user.first_name}</option>
+                <option key={user.id} value={user.id}>{user.first_name}</option>
               ))}
             </select>
           </div>

@@ -61,12 +61,12 @@ const AuthLinks = () => {
     return (
       <ul className="nav">
       <li onClick={() => setPage('account')}>
-      <IconContext.Provider value={{ size: '1.5rem'}}>
+      <IconContext.Provider value={{ size: '1.2rem'}}>
       <CgProfile style={{marginRight: '0.5rem'}}/>
           </IconContext.Provider>
       My Account</li>
        <li className="auth" id="logout" onClick={() => logOut()}>
-   Logout </li>a
+   Logout </li>
    
 </ul>
     )
@@ -108,7 +108,7 @@ const AuthLinks = () => {
    isOpen={isOpen}
    />
    <WeeklyCalendar show={page === 'weekly-calendar'} displayMessage={displayMessage}/> 
-   <LoginForm setPage={setPage} show={page === 'login'} displayMessage={displayMessage} setUser={setUser} setPage={setPage}/>
+   <LoginForm setPage={setPage} show={page === 'login'} displayMessage={displayMessage} setUser={setUser}/>
    <SignUpForm show={page === 'sign-up'} displayMessage={displayMessage} user={user} setUser={setUser} setPage={setPage}/>
       <Account loggedInUser={user} show={page === 'account'} displayMessage={displayMessage}/>
 

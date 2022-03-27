@@ -10,6 +10,8 @@ const {
 
 router.get('/', asyncWrapper(async (req, res, next) => {    
     const household = req.user ? req.user.households[0] : ''
+    console.log('user', req.user);
+    console.log("user's household", req.user.households)
     try {
         const {
             rows

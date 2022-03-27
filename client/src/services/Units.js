@@ -14,9 +14,6 @@ const get = async (ID) => {
 }
 
 
+const methods = { getAll, get }
 
-
-export default {
-    getAll,
-    get,
-}
+export default methods

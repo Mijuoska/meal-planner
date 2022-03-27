@@ -24,4 +24,11 @@ const req = axios.put(`${baseUrl}/reset_password`, body);
 return req.then(response => response.data)
 }
 
-export default { register, login, logout, resetPassword }
+const methods = {
+    register,
+    login,
+    logout,
+    resetPassword
+}
+
+export default methods

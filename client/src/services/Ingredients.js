@@ -18,10 +18,6 @@ const create = async (newIngredient) => {
     return req.then(response => response.data)
 }
 
+const methods = { getAll, get, create }
 
-
-export default {
-    getAll,
-    get,
-    create,
-}
+export default methods

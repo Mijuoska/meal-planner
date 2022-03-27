@@ -45,7 +45,7 @@ const [meal, setMeal] = useState("");
     movedMeal["type"] = target["meal"]["value"];
     // Generate new meals array and update state
     const updatedMeals = meals
-      .filter((meal) => meal.id != movedMeal.id)
+      .filter((meal) => meal.id !== movedMeal.id)
       .concat(movedMeal);
     setMeals(updatedMeals);
     Meals.update(movedMeal, movedMeal.id);
@@ -89,7 +89,7 @@ const [meal, setMeal] = useState("");
     const weekDays = weekdayConfig.map((day) => day);
     weekDays.unshift("");
     return weekDays.map((weekday) => (
-      <div className="calendar-heading" id={weekday.value}>
+      <div key={weekday.value} className="calendar-heading" id={weekday.value}>
         {weekday.label}
       </div>
     ));
@@ -100,11 +100,11 @@ const [meal, setMeal] = useState("");
     weekDays.unshift(meal);
     return weekDays.map((weekday) =>
       weekDays.indexOf(weekday) === 0 ? (
-        <div>
+        <div key={weekday.value}>
           <p>{weekday.label}</p>
         </div>
       ) : (
-        <div
+        <div key={weekday.value}
           className="meal-slot"
           id={JSON.stringify({
             day: weekday.value,
@@ -137,7 +137,7 @@ const [meal, setMeal] = useState("");
   }
 
   return (
-    <div class="calendar" style={calendarStyle}>
+    <div className="calendar" style={calendarStyle}>
       {generateHeader()}
       {mealConfig.map((meal) => generateMealTypeLane(meal))}
 

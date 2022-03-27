@@ -1,10 +1,8 @@
 
 import { useState } from 'react'
 import Auth from '../services/Auth'
-import Households from '../services/Households'
-import Users from '../services/Users'
 
-const SignUpForm = ( { show, user, setUser, setPage, displayMessage } ) => {
+const SignUpForm = ( { show, setUser, setPage, displayMessage } ) => {
 
 const [username, setUsername] = useState('')
 const [firstName, setFirstName] = useState('')

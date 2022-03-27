@@ -64,7 +64,7 @@ onChange={({target})=> setFilter(target.value.toLowerCase())}/>
 
 
 <ul className='recipes-list-container' style={gridStyle}>
-{recipes.filter(recipe => recipe.name.toLowerCase().indexOf(filter) != -1)
+{recipes.filter(recipe => recipe.name.toLowerCase().indexOf(filter) !== -1)
     .map(recipe => <Recipe recipe={recipe} selectRecipe={selectRecipe} toggleModal={toggleModal}/>)}
 
 </ul>

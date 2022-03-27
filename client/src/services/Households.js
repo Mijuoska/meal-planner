@@ -19,8 +19,10 @@ const create = async (newHousehold) => {
     return req.then(response => response.data)
 }
 
-export default {
+const methods = {
     getAll,
     get,
     create,
 }
+
+export default methods

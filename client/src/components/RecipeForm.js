@@ -6,7 +6,7 @@ import CreatableSelect from 'react-select/creatable';
 
 const RecipeForm = ({ displayMessage, toggleModal, recipes, setRecipes, recipeID }) => {
     const [showForm, toggleForm] = useState(true)
-    const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id == recipeID) : null)
+    const [recipe, setRecipe] = useState(recipeID ? recipes.find(r => r.id.toString() === recipeID) : null)
     const [name, setName] = useState()
     const [units, setUnits] = useState([])
     const [ingredients, setIngredients] = useState([])
@@ -65,7 +65,7 @@ Units.getAll().then(data => {
 
 const populateQuantity = (target) => {
     const q = ingredients.map(i => {
-      return i.value == target.id ? 
+      return i.value === target.id.toString() ? 
       {...i, quantity: parseFloat(target.value)} : i
     })
     setIngredients(q)
@@ -73,7 +73,7 @@ const populateQuantity = (target) => {
 
 const populateUnit = (target) => {
     const q = ingredients.map(i => {
-        return i.value == target.id ? {
+        return i.value === target.id.toString() ? {
             ...i,
             unit: target.value
         } : i
@@ -118,7 +118,7 @@ const createNewIngredient = (name) => {
 
 const updateRecipe = (id, recipe) => {
     Recipes.update(id, recipe).then(data => {
-    const updatedRecipes = recipes.filter(r => r.id != data[0].id).concat(data[0])
+    const updatedRecipes = recipes.filter(r => r.id.toString() !== data[0].id.toString()).concat(data[0])
     setRecipes(updatedRecipes)
  setName(data[0].name)
  setDuration(data[0].preparation_time)
@@ -135,7 +135,7 @@ const updateRecipe = (id, recipe) => {
 const deleteRecipe = (e, recipeID) => {
     e.preventDefault()
     Recipes.remove(recipeID).then(data => {
-        const updatedRecipes = recipes.filter(r => r.id != recipeID)
+        const updatedRecipes = recipes.filter(r => r.id.toString() !== recipeID)
         setRecipes(updatedRecipes)
         displayMessage('Recipe deleted','success', 5)
         toggleModal()

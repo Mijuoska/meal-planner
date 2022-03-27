@@ -25,4 +25,11 @@ const remove = async (id) => {
    return req.then(response => response.data)
 }
 
-export default { getAll, create, update, remove }
+const methods = {
+    getAll,
+    create,
+    update,
+    remove
+}
+
+export default methods

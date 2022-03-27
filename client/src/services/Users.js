@@ -25,4 +25,11 @@ const update = async (ID, user) => {
     return req.then(response => response.data)
 }
 
-export default { getAll, get, create, update }
+const methods = {
+    getAll,
+    get,
+    create,
+    update
+}
+
+export default methods
