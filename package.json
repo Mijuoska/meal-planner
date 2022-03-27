@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/app.js",
     "deploy": "cd client && npm run build && cd .. && git add . && git commit -m \"Production build\" && git push origin main"
-    
   },
   "keywords": [],
   "author": "",
@@ -16,8 +15,9 @@
     "@babel/core": "^7.13.15",
     "babel-loader": "^8.2.2"
   },
-  "dependencies": { 
+  "dependencies": {
     "bcrypt": "^5.0.1",
+    "connect-pg-simple": "^7.0.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

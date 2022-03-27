@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport')
 const logger = require('morgan');
 const session = require('express-session')
+const sessionStore = require('./db/sessionStore');
 const config = require('./utils/config')
-const middleware = require('./middleware')
 const usersRouter = require('./routes/users')
 const authRouter = require ('./routes/auth')
 const recipesRouter = require('./routes/recipes')
@@ -26,8 +26,10 @@ const port = config.PORT
 
 app.use(session({
   secret: config.SECRET,
+  store: new sessionStore().sessionHandler(session),
   saveUninitialized: false,
   resave: false,
+  unset: 'destroy',
   cookie: {
     sameSite: true,
     secure: config.NODE_ENV === 'production',
