@@ -10,7 +10,6 @@ const [recipes, setRecipes] = useState([])
 const [selectedRecipe, selectRecipe] = useState('')
 const [filter, setFilter] = useState('')
 
-
 const gridStyle = {
     display: 'grid',
     gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))",
@@ -28,6 +27,7 @@ const modalStyle = {
 }
 
 useEffect(() => {
+    if (show) {
     Recipes.getAll().then(data => {
         setRecipes(data)
     }).catch(err => {
@@ -38,6 +38,7 @@ useEffect(() => {
         displayMessage("We're having trouble fetching recipes. Please try again later", "error", 5)
         }
     })
+    }
 }, [show])
 
 

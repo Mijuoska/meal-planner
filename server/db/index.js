@@ -2,7 +2,7 @@ const { Pool, Client } = require('pg')
 const fs = require('fs')
 const config = require('../utils/config')
 
-const { NODE_ENV, DATABASE_URL } = config
+const { NODE_ENV, DATABASE_URL, LOG_QUERIES } = config
 
 const pool = NODE_ENV == 'dev' ? new Pool({
     connectionString: DATABASE_URL,
@@ -26,6 +26,9 @@ const pool = NODE_ENV == 'dev' ? new Pool({
 
 module.exports = {
     query: (text, params, callback) => {
+        if (LOG_QUERIES) {
+            console.log(`Executing query ${text}`)
+        }
         return pool.query(text, params, callback)
     },
 }

@@ -75,7 +75,6 @@ const [meal, setMeal] = useState("");
     }).catch(err => {
       if (err.response.status === 403) {
         window.localStorage.removeItem('loggedInUser')
-        console.log(show)
     
       } else {
       displayMessage("We're having trouble retrieving your meal plan. Please try again later", "error", 5)

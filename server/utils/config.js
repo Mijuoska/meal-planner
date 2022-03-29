@@ -5,6 +5,7 @@ const NODE_ENV = process.env.NODE_ENV
 const PORT = process.env.PORT
 const SESSION_AGE = 600000
 const DATABASE_URL = process.env.DATABASE_URL
+const LOG_QUERIES = process.env.LOG_QUERIES
 const EMAIL_USERNAME = process.env.EMAIL_USERNAME
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD
 

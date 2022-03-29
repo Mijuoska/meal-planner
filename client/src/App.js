@@ -32,7 +32,7 @@ useEffect(() => {
   const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
   if (loggedInUser) {
     setUser(loggedInUser)
-  } else {
+  } else if (!loggedInUser && page !== 'login') {
     setUser(null)
     setPage('login')
   }

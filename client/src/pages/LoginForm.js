@@ -6,6 +6,8 @@ const LoginForm = ( { show, setUser, setPage, displayMessage } ) => {
 
 const [username, setUsername] = useState('')
 const [password, setPassword] = useState('')
+const [forgotPassword, setForgotPassword] = useState(null)
+
 
 const handleLogin = (e) => {
     e.preventDefault()
@@ -23,7 +25,8 @@ const handleLogin = (e) => {
 
 }
 
-if (show) {
+
+ if (show) {
     return (
     <div className="form-container">
     <div className="form-wrapper" id="login-form-wrapper">
