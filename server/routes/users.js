@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const db = require('../db/index')
+const QueryBuilder = require('../db/querybuilder')
 const helper = require('../utils/helpers')
 const AppError = require('../AppError')
 
@@ -8,12 +8,17 @@ const {
   asyncWrapper
 } = helper
 
+
 /* GET users listing. */
 router.get('/', asyncWrapper(async (req, res, next) => {
+  const qb = new QueryBuilder('users')
+
   try {
     const {
-      rows
-    } = await db.query('SELECT id, first_name, tag_color FROM users WHERE $1 = any(households)', [req.user.households[0]])
+      rows 
+    }  = await qb.select('id,first_name,tag_color')
+      .where('ANY(households)', req.user.households[0])
+      .exec()
     res.send(rows)
   } catch (err) {
     console.error(err)
@@ -24,12 +29,21 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 }));
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
+    const qb = new QueryBuilder('users')
+
     try {
+
     const {
       rows
-    } = await db.query(`SELECT first_name, username, password, email, households, households.name AS household_name FROM users
-                        INNER JOIN households ON users.households[1] = households.id
-                        WHERE users.id = $1`, [req.params.id])
+    } = await qb.select('first_name,username,password,email,households,households.name AS household_name')
+      .innerJoin('households','users.households[1]', 'households.id')
+      .where('users.id', req.params.id)
+      .exec()
+    // const {
+    //   rows
+    // } = await db.query(`SELECT first_name, username, password, email, households, households.name AS household_name FROM users
+    //                     INNER JOIN households ON users.households[1] = households.id
+    //                     WHERE users.id = $1`, [req.params.id])
     
     res.status(200).send(rows[0])
 
@@ -42,6 +56,8 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
 }));
 
 router.put('/:id', asyncWrapper(async (req, res, next) => {
+    const qb = new QueryBuilder('users')
+
   const {
     body
   } = req
@@ -59,12 +75,15 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
     return next(new AppError('Updating this field is not allowed', 401))
   }
 
-  const query = `UPDATE users SET ${field_name} = $1 WHERE id = $2 RETURNING id, username, first_name, households`
+try {  
 
-try {
 const {
   rows
-} = await db.query(query, [value, req.params.id])
+} = qb.update({
+  field_name: value
+}).where('id', req.params.id).returning('id, username, first_name, households')
+.exec()
+
 res.status(200).send(rows[0])
 } catch (ex) {
   console.log(ex);

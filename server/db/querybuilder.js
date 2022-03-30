@@ -1,48 +1,60 @@
-const db = require('./db')
+const db = require('./index')
 
 module.exports = class QueryBuilder {
     constructor(table) {
         this.table = table;
         this.query = '';
+        this.fields = []
         this.values = []
     }
 
     select(fields) {
+        this.fields = fields.split(',')
         this.query = `SELECT ${fields ? fields : '*'} FROM ${this.table}`
         return this
     }
 
-    where(field, operator, value) {
-        this.query = this.query + ` WHERE ${field} ${operator} $1`
+    
+
+    where(field, value) {
+        const isAny = field.startsWith('ANY')
+        const param = `$${this.values.length + 1}`;
+        this.query = !isAny ? this.query + ` WHERE ${field} = ${param}` : this.query + ` WHERE $1 = ${field}`
         this.values.push(value)
         return this
     }
 
-    addCondition(field, operator, value) {
+    addAndCondition(field, operator, value) {
         this.query = `${this.query} AND ${field} ${operator} $1`
         this.values.push(value)
+        return this
     }
 
     addOrCondition(field, operator, value) {
          this.query = `${this.query} OR ${field} ${operator} $1`
          this.values.push(value)
+         return this
          }
     
-    innerJoin(joinTable1, joinField1, joinTable2, joinField2) {
-        this.query = `INNER JOIN ${joinTable1} ON ${joinTable1}.${joinField1} = ${joinTable2}.${joinField2}`
-    }
-
-
-    insert(fields, values) {
-        this.query = `INSERT INTO ${this.table} (${fields} VALUES (${this._getValueTemplates(values.length).join()})`
-        this.values = values;
+    innerJoin(tableToJoin, fieldToJoinOn, fieldToJoinWith) {
+        this.query = this.query + ` INNER JOIN ${tableToJoin} ON ${fieldToJoinOn} = ${fieldToJoinWith}`
         return this
     }
 
-    update(fields, values) {
+
+    insert(valuesMap) {
+        const fields = Object.keys(valuesMap).join()
+        this.values = Object.values(valuesMap)
+        this.query = `INSERT INTO ${this.table} (${fields}) VALUES (${this._getParams(this.values.length).join()})`
+        return this
+    }
+
+    update(valuesMap) {
+        const fields = Object.keys(valuesMap)
+        const values = Object.values(valuesMap)
         this.values = values;
         let updatesArray = [];
-        fields.split(',').forEach((field, index) => {
+        fields.forEach((field, index) => {
             updatesArray.push(`${field} = $${index + 1}` )
         })
         this.query = `UPDATE ${this.table} SET ${updatesArray.join()}`
@@ -77,15 +89,16 @@ module.exports = class QueryBuilder {
 
     // }
 
-    _getValueTemplates(numOfValues) {
+    _getParams(numOfValues) {
         let result = [];
-        for (let i = 0; i < numOfValues.length; i++) {
+        for (let i = 1; i <= numOfValues; i++) {
             result.push('$' + i)
         }
         return result
     }
 
     async exec() {
+        console.log(this.query)
         return await db.query(this.query, this.values)
         
     }
