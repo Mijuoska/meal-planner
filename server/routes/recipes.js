@@ -82,7 +82,7 @@ router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
   .addCondition('recipes.id','=', req.params.id)
   .getAsSubquery()
 
-  
+try {  
   const {
     rows
   } = await new QueryBuilder('ingredient_quantity')
@@ -91,7 +91,10 @@ router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
     .whereSubquery('ingredient_quantity.id', '=',`ANY(${subquery})`)
     .exec()
   res.send(rows)
-
+} catch (ex) {
+  console.log(ex)
+  return next(new AppError('Something went wrong with fetching ingredients', 500))
+}
 }))
 
 

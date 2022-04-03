@@ -23,7 +23,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     } catch (ex) {
         console.log(ex);
 
-        return next(new AppError('Something went wrong', 500))
+        return next(new AppError('Something went wrong with fetching ingredients', 500))
     }
 }));
 
@@ -41,7 +41,8 @@ router.post('/', asyncWrapper(async (req, res, next) => {
 
         res.status(200).send(rows);
     } catch (err) {
-        next(err)
+        console.log(err)
+        next(new AppError('Something went wrong with saving new ingredients', 500))
     }
 }))
 

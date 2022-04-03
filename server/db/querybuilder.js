@@ -104,9 +104,11 @@ module.exports = class QueryBuilder {
 
     _transposeValues(query) {
         let params = query.match(/\$\d/)
+        if (params) {
         params.forEach((param, index) => {
              query = query.replace(param, this.values[index])
           })
+        }
         return query;
     }
 
