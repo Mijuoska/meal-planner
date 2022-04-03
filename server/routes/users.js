@@ -17,7 +17,7 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     const {
       rows 
     }  = await qb.select('id,first_name,tag_color')
-      .where('ANY(households)', req.user.households[0])
+      .addCondition('ANY(households)','=', req.user.households[0])
       .exec()
     res.send(rows)
   } catch (err) {
@@ -37,7 +37,7 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
       rows
     } = await qb.select('first_name,username,password,email,households,households.name AS household_name')
       .innerJoin('households','users.households[1]', 'households.id')
-      .where('users.id', req.params.id)
+      .addCondition('users.id','=',req.params.id)
       .exec()
     // const {
     //   rows
@@ -81,7 +81,7 @@ const {
   rows
 } = qb.update({
   field_name: value
-}).where('id', req.params.id).returning('id, username, first_name, households')
+}).addCondition('id', '=', req.params.id).returning('id, username, first_name, households')
 .exec()
 
 res.status(200).send(rows[0])

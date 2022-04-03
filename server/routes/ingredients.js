@@ -1,6 +1,6 @@
 const express = require('express');
 const AppError = require('../AppError');
-const db = require('../db');
+const QueryBuilder = require('../db/querybuilder')
 const router = express.Router();
 const helper = require('../utils/helpers')
 
@@ -15,7 +15,10 @@ router.get('/', asyncWrapper(async (req, res, next) => {
     try {
         const {
             rows
-        } = await db.query('SELECT id AS value, name AS label FROM ingredients WHERE household = $1 OR household IS NULL', [household]);
+        } = await new QueryBuilder('ingredients').select('id AS value, name AS label')
+        .addCondition('household', '=', household)
+        .addOrCondition('household', 'IS NULL').exec()
+
         res.send(rows)
     } catch (ex) {
         console.log(ex);
@@ -30,9 +33,12 @@ router.post('/', asyncWrapper(async (req, res, next) => {
         body
     } = req
     try {
-        const {
-            rows
-        } = await db.query('INSERT INTO ingredients (name, household) VALUES($1, $2) RETURNING *', [body.name, req.user.households[0]])
+           const { rows } = await
+            new QueryBuilder('ingredients').insert({
+                name: body.name,
+                household: req.user.households[0]
+            }).returning('*').exec()
+
         res.status(200).send(rows);
     } catch (err) {
         next(err)

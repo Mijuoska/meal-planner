@@ -24,7 +24,7 @@ router.get('/', checkIfLoggedIn, asyncWrapper(async (req, res, next) => {
                  recipe_id, recipes.name AS recipe_name`)
             .innerJoin('recipes','recipes.id', 'meals.recipe_id')
             .innerJoin('users','users.id', 'meals.assigned_to')
-            .where('household', household)
+            .addCondition('household','=', household)
             .exec();
 
         res.status(200).send(rows);
@@ -40,7 +40,7 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
 
     const {
         rows
-    } = await qb.select().where('id', req.params.id).exec()
+    } = await qb.select().addCondition('id','=', req.params.id).exec()
 
     res.send(rows);
 
@@ -51,7 +51,7 @@ router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
 
     const {
         rows
-    } = await qb.select().where('id', req.params.id).exec()
+    } = await qb.select().addCondition('id','=', req.params.id).exec()
     res.send(rows);
 
 }))
@@ -105,7 +105,7 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
             recipe_id,
             assigned_to
         })
-        .where('id', req.params.id)
+        .addCondition('id','=',req.params.id)
         .returning('*')
         .exec()
     return res.status(200).send(result.rows)
@@ -115,7 +115,7 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
 
 router.delete('/:id', asyncWrapper(async (req, res, next) => {
     const qb = new QueryBuilder('meals');
-    await qb.delete().where('id', req.params.id)
+    await qb.delete().addCondition('id','=',req.params.id).exec()
     res.status(204).send(`Record with id ${req.params.id} deleted`)
 }))
 

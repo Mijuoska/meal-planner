@@ -1,9 +1,9 @@
 const express = require('express');
 const AppError = require('../AppError');
-const db = require('../db');
 const router = express.Router();
 const helper = require('../utils/helpers')
-const middleware = require('../middleware')
+const middleware = require('../middleware');
+const QueryBuilder = require('../db/querybuilder');
 
 const {
   asyncWrapper
@@ -15,13 +15,15 @@ const {
 
 
 router.get('/', checkIfLoggedIn, asyncWrapper(async (req, res, next) => {
-  console.log('inside recipes')
   const household = req.user ? req.user.households[0] : ''
-
+  const qb = new QueryBuilder('recipes')
   try {
+
+
     const {
       rows
-    } = await db.query('SELECT * FROM recipes WHERE household_id = $1', [household])
+    } = await qb.select().addCondition('household_id','=',household).exec()
+
     res.send(rows)
   } catch (ex) {
     console.log(ex);
@@ -32,16 +34,20 @@ router.get('/', checkIfLoggedIn, asyncWrapper(async (req, res, next) => {
 
 
 router.get('/:id', asyncWrapper(async (req, res, next) => {
-
+  const qb = new QueryBuilder('recipes')
 
   const {
     rows
-  } = await db.query(`SELECT recipes.id, recipes.name, instructions, preparation_time, created_by, 
-    ingredients.id AS ingredient_id, ingredients.name AS ingredient_name, ingredient_quantity.id AS iq_id, ingredient_quantity.unit, ingredient_quantity.quantity, ingredient_quantity.recipe_id
-    FROM recipes 
-    INNER JOIN ingredient_quantity ON ingredient_quantity.id = ANY(recipes.ingredients)
-    INNER JOIN ingredients ON ingredients.id = ingredient_quantity.ingredient
-    WHERE recipes.id = $1`, [req.params.id])
+  } = await qb.select(`recipes.id, recipes.name, instructions, preparation_time, created_by, 
+      ingredients.id AS ingredient_id, ingredients.name AS ingredient_name, 
+      ingredient_quantity.id AS iq_id, ingredient_quantity.unit, 
+      ingredient_quantity.quantity, ingredient_quantity.recipe_id`).
+  innerJoin('ingredient_quantity', 'ingredient_quantity.id', 'ANY(recipes.ingredients)').
+  innerJoin('ingredients', 'ingredients.id', 'ingredient_quantity.ingredient').
+  addCondition('recipes.id','=', req.params.id)
+  .exec()
+
+
   const result = {
     id: rows[0].id,
     name: rows[0].name,
@@ -60,6 +66,7 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
 
     })
   }
+  
   res.send(result)
 
 
@@ -70,19 +77,26 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
  */
 
 router.get('/:id/ingredients', asyncWrapper(async (req, res, next) => {
+  const qb = new QueryBuilder('recipes')
+  const subquery = await qb.select('UNNEST(ingredients)')
+  .addCondition('recipes.id','=', req.params.id)
+  .getAsSubquery()
+
+  
   const {
     rows
-  } = await db.query(`SELECT ingredient_quantity.id, ingredient AS value, quantity, unit, name AS label FROM ingredient_quantity 
-    INNER JOIN ingredients ON ingredients.id = ingredient 
-    WHERE ingredient_quantity.id IN 
-      (SELECT UNNEST(ingredients) FROM recipes 
-      WHERE recipes.id = $1)`, [req.params.id])
+  } = await new QueryBuilder('ingredient_quantity')
+  .select('ingredient_quantity.id, ingredient AS value, quantity, unit, name AS label')
+    .innerJoin('ingredients', 'ingredients.id', 'ingredient')
+    .whereSubquery('ingredient_quantity.id', '=',`ANY(${subquery})`)
+    .exec()
   res.send(rows)
 
 }))
 
 
 router.post('/', asyncWrapper(async (req, res, next) => {
+
   const {
     body
   } = req
@@ -94,16 +108,33 @@ router.post('/', asyncWrapper(async (req, res, next) => {
 try {
   const ingredientIDs = []
   body.ingredients.forEach(async (ingredient) => {
+    const { value, quantity, unit } = ingredient
+   console.log('households', req.user.households[0])
     const {
       rows
-    } = await db.query(`INSERT INTO ingredient_quantity (ingredient, quantity, unit, household)
-    VALUES($1, $2, $3, $4) RETURNING id`, [ingredient.value, ingredient.quantity, ingredient.unit, req.user.households[0]])
+    } = await new QueryBuilder('ingredient_quantity')
+    .insert({
+        ingredient: value,
+        quantity: quantity,
+        unit: unit,
+        household: req.user.households[0]
+      })
+      .returning('id').exec()
     ingredientIDs.push(rows[0].id)
   })
+
+  const { name, duration, instructions } = body
   const {
     rows
-  } = await db.query(`INSERT INTO recipes (name, preparation_time, ingredients, instructions, created_by, household_id) 
-    values ($1,$2,$3,$4, $5, $6) RETURNING *`, [body.name, body.duration, ingredientIDs, body.instructions, req.user.username, req.user.households[0]])
+  } = await new QueryBuilder('recipes')
+  .insert({
+    name: name,
+    preparation_time: duration,
+    ingredients: ingredientIDs,
+    instructions: instructions,
+    created_by: req.user.username,
+    household_id: req.user.households[0]
+  }).returning('*').exec()
 
   res.status(201).send(rows)
 
@@ -120,7 +151,6 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
     body
   } = req
 
-  const ingredientIDs = []
 
   /**
    *  First we have to compare the ingredients in the request list to the one in the db so that we can
@@ -129,15 +159,17 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
 
   try {
 
-  const existingIngredientsResult = await db.query(`SELECT UNNEST(ingredients) 
-    FROM recipes WHERE id = $1`, [req.params.id])
+  const existingIngredientsResult = 
+  await new QueryBuilder('recipes').select('UNNEST(ingredients)').addCondition('id', '=', req.params.id).exec()
 
-  deletedIngredient = existingIngredientsResult.rows
+
+  deletedIngredients = existingIngredientsResult.rows
     .filter(r => body.ingredients.map(i => i.id).indexOf(r.unnest) == -1)
 
-  if (deletedIngredient.length > 0) {
-    deletedIngredient.forEach(async (ingredient) => {
-      await db.query(`DELETE FROM ingredient_quantity WHERE id = $1`, [ingredient.unnest])
+
+  if (deletedIngredients.length > 0) {
+    deletedIngredients.forEach(async (ingredient) => {
+      await new QueryBuilder('ingredient_quantity').delete().addCondition('ingredient','IN', ingredient.unnest).exec()
     })
   }
 
@@ -145,17 +177,33 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
    * We then have to either add new ingredient instances or update them (if quantity or units have changed)
    */
 
+  const ingredientIDs = []
+
   for (ingredient of body.ingredients) {
+      
+
     let ingredientsResult
     if (!ingredient.id) {
-      ingredientsResult = await db.query(`INSERT INTO ingredient_quantity (ingredient, quantity, unit, household) 
-      VALUES ($1, $2, $3, $4) RETURNING id`, [ingredient.value, ingredient.quantity, ingredient.unit, req.user.households[0]])
-      ingredientIDs.push(ingredientsResult.rows[0].id)
+      const { value, quantity, unit} = ingredient
+      
+      ingredientsResult = await new QueryBuilder('ingredient_quantity').insert({
+          ingredient: value,
+          quantity: quantity,
+          unit: unit,
+          household: req.user.households[0]
+        })
+        .returning('id').exec()
+        ingredientIDs.push(ingredientsResult.rows[0].id)
+
     } else {
-      ingredientsResult = await db.query(`UPDATE ingredient_quantity 
-        SET ingredient = $1, quantity = $2, unit = $3 
-        WHERE id = $4`, [ingredient.value, ingredient.quantity, ingredient.unit, ingredient.id])
-      ingredientIDs.push(ingredient.id)
+      const { value, quantity, unit, id} = ingredient
+      ingredientsResult = await new QueryBuilder('ingredient_quantity').update({
+        ingredient: value,
+        quantity: quantity,
+        unit: unit
+      }).addCondition('id', '=', id).returning('id').exec()
+      ingredientIDs.push(ingredientsResult.rows[0].id)
+
     }
 
   }
@@ -164,11 +212,17 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
    * Finally, we update the recipe
    */
 
+  const {name, duration, instructions} = body
+  
   const {
     rows
-  } = await db.query(`UPDATE recipes SET name = $1, preparation_time = $2, 
-    ingredients = $3, instructions = $4 WHERE id = $5 RETURNING *`,
-    [body.name, body.duration, ingredientIDs, body.instructions, req.params.id])
+  } = await new QueryBuilder('recipes').update({
+      name: name,
+      preparation_time: duration,
+      ingredients: ingredientIDs,
+      instructions: instructions
+    }).addCondition('id','=', req.params.id)
+    .returning('*').exec()
   res.send(rows)
 
   } catch (ex) {
@@ -183,12 +237,16 @@ router.put('/:id', asyncWrapper(async (req, res, next) => {
 router.delete('/:id', asyncWrapper(async (req, res, next) => {
   // get the ingredients array and delete matching ingredient instances
   // delete the ingredient
-  await db.query(`DELETE from ingredient_quantity WHERE id IN 
-(SELECT UNNEST(ingredients) FROM recipes WHERE id = $1)`, [req.params.id])
+  try {
+  const subquery = await new QueryBuilder('recipes').select('UNNEST(ingredients)').addCondition('id','=',req.params.id).getAsSubquery()
+  await new QueryBuilder('ingredient_quantity').delete().whereSubquery('id', 'IN', subquery).exec()
 
-  await db.query(`DELETE FROM recipes WHERE id = $1`, [req.params.id])
+  await new QueryBuilder('recipes').delete().addCondition('id','=', req.params.id).exec()
+// TODO: check if the resource has really been deleted
   res.status(204).send(`Successfully deleted recipe with the id ${req.params.id}`)
-
+  } catch (ex) {
+    console.log(ex)
+  }
 }))
 
 
