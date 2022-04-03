@@ -2,7 +2,6 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const passport = require('passport')
 const logger = require('morgan');
 const session = require('express-session')
