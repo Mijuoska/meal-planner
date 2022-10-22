@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import WeeklyCalendar from './pages/WeeklyCalendar'
 import Recipes from './pages/Recipes'
 import Notification from './components/Notification'
@@ -57,6 +57,7 @@ const logOut = () => {
   })
 }
 
+
 const AuthLinks = () => {
 
   if (user) {
@@ -96,7 +97,7 @@ const AuthLinks = () => {
       <GiMeal style={{marginRight: '0.5rem'}}/>
           </IconContext.Provider>
    
-   <li class="brand">
+   <li className="brand">
      
            Meal Planner
            </li>

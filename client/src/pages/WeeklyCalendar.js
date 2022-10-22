@@ -1,5 +1,5 @@
 import Meal from "../components/Meal";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState} from 'react'
 import Meals from "../services/Meals";
 import Modal from "react-modal";
 import MealForm from "../components/MealForm";

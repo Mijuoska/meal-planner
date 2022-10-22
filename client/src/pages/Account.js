@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import Users from '../services/Users'
 import Auth from '../services/Auth'
 
@@ -8,6 +8,7 @@ const [formFields, setFormFields] = useState({})
 const [userDetails, setUserDetails] = useState({})
 const [editMode, setEditMode] = useState({})
 
+const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
 
 
 const enableEditing = (event) => {
@@ -80,7 +81,6 @@ Users.update(loggedInUser.id, updateBody).then(() => {
 
 }
 
-const loggedInUser = JSON.parse(window.localStorage.getItem('loggedInUser'))
 
 useEffect(() => {    
     if (loggedInUser && loggedInUser.id) {
