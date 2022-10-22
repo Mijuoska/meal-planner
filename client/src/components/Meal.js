@@ -1,4 +1,4 @@
-import { React } from 'react'
+import React from 'react'
 import helpers from '../helpers/helpers'
 
 const Meal = ({ meal, toggleModal }) => {

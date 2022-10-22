@@ -100,15 +100,12 @@ router.post('/register', asyncWrapper(async (req, res, next) => {
 
 
     // Step 3: Update user with household id
-
-
     const updatedUserResult = await new QueryBuilder('users').update({
         households: [newHouseholdResult.rows[0].id],
     }).addCondition('id', '=', newUser.id)
     .returning('id,username,first_name,password,households').exec()
 
     const user = updatedUserResult.rows[0]
-    console.log(user)
     req.login(user, function (err) {
         if (err) {
             console.log(err)

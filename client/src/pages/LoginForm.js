@@ -1,5 +1,5 @@
 
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import Auth from '../services/Auth'
 
 const LoginForm = ( { show, setUser, setPage, displayMessage } ) => {

@@ -1,4 +1,4 @@
-const { Pool, Client } = require('pg')
+const { Pool } = require('pg')
 const fs = require('fs')
 const config = require('../utils/config')
 
