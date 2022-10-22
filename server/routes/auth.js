@@ -141,11 +141,19 @@ router.post('/login', passport.authenticate('local'), asyncWrapper(async (req, r
 
 
 router.post('/logout', asyncWrapper(async (req, res, next) => {
-    req.logout()
-    req.session.destroy()
-    res.status(200).json({
-        success: `Logged out user`
+    req.logout((err)=>{
+        if (err) {
+            return next(err)
+        }
+        req.session.destroy()
+        res.status(200).json({
+            success: `Logged out user`
+        })
+    
     })
+  
+
+    
 }))
 
 router.put('/reset_password', asyncWrapper(async (req, res, next) => {
